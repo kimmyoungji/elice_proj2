@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import IntroPage from './components/pages/IntroPage';
+import IntroPage  from './components/pages/IntroPage';
 import LoginPage from './components/pages/LoginPage';
 import RegisterPage from './components/pages/RegisterPage';
 import HabitPage from './components/pages/HabitPage';

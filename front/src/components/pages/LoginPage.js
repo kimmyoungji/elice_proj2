@@ -1,10 +1,85 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Button, Form, Stack, Row, Col } from 'react-bootstrap';
+import { useNavigate } from "react-router";
+
 
 export default function LoginPage() {
+
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // 이메일, 패스워드 입력 시, 각 state에 저장
+  const submitEmail = (e) => setEmail(e.target.value);
+  const submitPassword = (e) => setPassword(e.target.value);
+
+  // 정규표현식으로 이메일 유효성 검사
+  const regexp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+  const validateEmail = (email) => email.match(regexp);
+
+  // 이메일, 패스워드 규칙 확인 (안내 문구 표시, 로그인 버튼 활성화)
+  const isEmailValid = validateEmail(email);
+  const isPasswordValid = password.length >= 8;
+  const isAllValid = isEmailValid && isPasswordValid;
+
+  const onClickLogin = (e) => {
+    e.preventDefault();
+
+    console.log(email);
+    console.log(password);
+
+  }
+
   return (
-    <div>
-      로그인 페이지입니다.
-    </div>
+    <Row className="justify-content-md-center mt-5">
+      <Col lg={5}>
+        <h1>LOGIN</h1>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>이메일</Form.Label>
+          <Form.Control
+            type="email"
+            placeholder="이메일을 입력해주세요."
+            value={email}
+            onChange={submitEmail}
+            autoComplete="off"
+          />
+          {email && !isEmailValid &&
+            (<Form.Text className="text-danger">
+            올바른 형식의 이메일을 입력해주세요.
+            </Form.Text>)
+          }
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label>비밀번호</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="비밀번호를 입력해주세요."
+            value={password}
+            onChange={submitPassword}
+            autoComplete="off"
+          />
+          {password && !isPasswordValid &&
+            (<Form.Text className="text-danger">
+              올바른 비밀번호를 입력해주세요.
+            </Form.Text>)
+          }
+        </Form.Group>
+
+        <Stack gap={2} className="col-md-5 mx-auto">
+          <Button variant="primary" type="submit" onClick={onClickLogin} disabled={!isAllValid}>
+            로그인
+          </Button>
+          <Form.Text className="text-muted mx-auto" >
+            또는
+          </Form.Text>
+          <Button variant="secondary" type="submit" onClick={()=> navigate("/register")}>
+            회원가입
+          </Button>
+        </Stack>
+      </Col>
+    </Row>
   );
 }
 
