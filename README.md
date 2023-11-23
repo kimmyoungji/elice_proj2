@@ -31,7 +31,7 @@
 
 ### 라이브러리 <br/>
  - 데이터분석 <br/>
-  <img src="https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=NumPy&logoColor=white"/>
+  <img src="https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas&logoColor=white"/>
   <img src="https://img.shields.io/badge/matplotlib-0ABF53?style=flat-square&logo=multer&logoColor=white"/> <br/>
 
  - Front-end <br/>
