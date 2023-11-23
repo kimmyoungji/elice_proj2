@@ -1,0 +1,20 @@
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 100vh; 화면 높이에 맞춰 가운데 정렬 */
+}
+
+.center-content {
+    text-align: center;
+}
+
+/* .email {
+    margin: 0 0 0 0;
+}
+
+.snsImg {
+    width: 50px;
+} */
+
+/* className="mb-3 email-group" */
