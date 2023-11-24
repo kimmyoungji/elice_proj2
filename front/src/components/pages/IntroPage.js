@@ -1,16 +1,22 @@
-import React from 'react';
+import { ScrollAniDiv } from "../features/IntroContents/IntroStyle";
 
-import { useNavigate } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+export default function IntroPage() {
 
-const IntroPage = () => {
-    const navigate = useNavigate();
-
-    return (
-        <>
-            <div>IntroPage입니다</div>
-        </>
-    )
+  return (
+    <>
+      <ScrollAniDiv>
+        <h1>TUTINE1</h1>
+        <h3>느려도 하나씩 실천해나가는 환경을 위한 습관</h3>
+      </ScrollAniDiv>
+      <ScrollAniDiv>
+        <h1>TUTINE2</h1>
+        <h3>느려도 하나씩 실천해나가는 환경을 위한 습관</h3>
+      </ScrollAniDiv>
+      <ScrollAniDiv>
+        <h1>TUTINE3</h1>
+        <h3>느려도 하나씩 실천해나가는 환경을 위한 습관</h3>
+      </ScrollAniDiv>
+    </>
+    
+  );
 }
-
-export default IntroPage;
