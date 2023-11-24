@@ -1,4 +1,5 @@
 import React from 'react';
+import { UserProvider } from "./Context/UserStateContext";
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import IntroPage  from './components/pages/IntroPage';
@@ -11,17 +12,19 @@ import UserPage from "./components/pages/UserPage";
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<IntroPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/userpage" element={<UserPage />} />
-        <Route path="/community" element={<CoummunityPage />} />
-        <Route path="/habit" element={<HabitPage />} />
-        <Route path="/calendar" element={<CalendarPage />} />
-        <Route path="*" element={<IntroPage />} />
-      </Routes>
-    </BrowserRouter>
+    <UserProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<IntroPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/userpage" element={<UserPage />} />
+          <Route path="/community" element={<CoummunityPage />} />
+          <Route path="/habit" element={<HabitPage />} />
+          <Route path="/calendar" element={<CalendarPage />} />
+          <Route path="*" element={<IntroPage />} />
+        </Routes>
+      </BrowserRouter>
+    </UserProvider>
   );
 }

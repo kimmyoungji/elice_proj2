@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Button, Form, Stack, Row, Col } from 'react-bootstrap';
 import { useNavigate } from "react-router";
+import axios from 'axios';
+import { UserDispatchContext } from "../../Context/UserStateContext";
 
 
 export default function LoginPage() {
 
   const navigate = useNavigate();
+  const dispatch = useContext(UserDispatchContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,18 +26,41 @@ export default function LoginPage() {
   const isPasswordValid = password.length >= 8;
   const isAllValid = isEmailValid && isPasswordValid;
 
-  const onClickLogin = (e) => {
+  // 로그인 버튼 클릭 시, API post 요청
+  const onClickLogin = async (e) => {
     e.preventDefault();
 
-    console.log(email);
-    console.log(password);
+    await axios.post("http://"+ window.location.hostname +":5001/users/login",
+      JSON.stringify({
+        email,
+        password,
+      }), {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
+      },
+      withCredentials: true,
+    })
+      .then((res) => {
+        const user = res.data;
+        const jwtToken = user.token;
+        sessionStorage.setItem("userToken", jwtToken);
+        dispatch({
+          type: "LOGIN_SUCCESS",
+          payload: user,
+        });
+        alert(`${user.name}님 환영합니다!`);
+        navigate("/habit", { replace: true });
+  
+      })
+      .catch((err) => console.log("로그인 실패!",err));
 
   }
 
   return (
     <Row className="justify-content-md-center mt-5">
       <Col lg={5}>
-        <h1>LOGIN</h1>
+        <h1 className="text-center">LOGIN</h1><br/>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>이메일</Form.Label>
           <Form.Control
@@ -65,7 +91,7 @@ export default function LoginPage() {
               올바른 비밀번호를 입력해주세요.
             </Form.Text>)
           }
-        </Form.Group>
+        </Form.Group><br/>
 
         <Stack gap={2} className="col-md-5 mx-auto">
           <Button variant="primary" type="submit" onClick={onClickLogin} disabled={!isAllValid}>
