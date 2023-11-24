@@ -20,21 +20,47 @@ const UserPageForm = ( {...userInfo} ) => {
     });
 
     // 다른 page에서도 filereader 필요하면 따로 컴포넌트로
-    const onChange = (e) => {
+    // const onChange = (e) => {
+    //     handleInputChange(e)
+    //     const uploadFile = e.target.files[0]
+
+    //     const reader = new FileReader();
+    //     reader.onload = () => {
+    //         setImage(reader.result)
+    //     }
+    //     if (uploadFile) {
+    //         reader.readAsDataURL(uploadFile)
+    //     } else {
+    //         return
+    //     }
+    // }
+    // const handleInputChange = (e) => {
+    //     if (e.target.type === "file") {
+    //         const id = "userFormImg";
+    //         const value = e.target.files[0];
+    //         setForm((prevData) => ({
+    //             ...prevData,
+    //             [id]: value,
+    //             }));
+    //     } else {
+    //         const { id, value } = e.target;
+    //         setForm((prevData) => ({
+    //         ...prevData,
+    //         [id]: value,
+    //         }));
+    //     }
+    //   };
+
+    // createObjectURL 방식
+    const onImageChange = (e) => {
         handleInputChange(e)
-        const uploadFile = e.target.files[0]
-
-        const reader = new FileReader();
-        reader.onload = () => {
-            setImage(reader.result)
-        }
-        if (uploadFile) {
-            reader.readAsDataURL(uploadFile)
-        } else {
-            return
-        }
-    }
-
+        const uploadImg = e.target.files[0]
+        if (image) URL.revokeObjectURL(image);
+    
+        const imgUrl = URL.createObjectURL(uploadImg);
+        setImage(imgUrl)
+      };
+    
     const handleInputChange = (e) => {
         if (e.target.type === "file") {
             const id = "userFormImg";
@@ -66,13 +92,13 @@ const UserPageForm = ( {...userInfo} ) => {
         // formData.append("data", new Blob([JSON.stringify(formData)], {type: 'application/json'}));
 
         // FormData 확인
-        // for (let key of formData.keys()){
-        //     console.log(key);
-        // }
-        // console.log('-----');
-        // for (let value of formData.values()){
-        //     console.log(value);
-        // }
+        for (let key of formData.keys()){
+            console.log(key);
+        }
+        console.log('-----');
+        for (let value of formData.values()){
+            console.log(value);
+        }
 
 
         // post api 호출
@@ -99,7 +125,7 @@ const UserPageForm = ( {...userInfo} ) => {
                     <input type="file" id="fileInput"
                             accept='image/jpg, image/png, image/jpeg, image/gif'
                             style={{ display: 'none' }}
-                            onChange={onChange}
+                            onChange={onImageChange}
                             ref={fileInput}/>
                 </label>
                 <Row className="mt-3">
