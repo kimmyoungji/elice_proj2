@@ -7,6 +7,8 @@ import CoummunityPage from './components/pages/CommunityPage';
 import CalendarPage from './components/pages/CalendarPage';
 import UserPage from "./components/pages/UserPage";
 
+
+
 function App() {
   return (
     <>
@@ -21,7 +23,7 @@ function App() {
           <Route path="/calendar" element={<CalendarPage />} />
           <Route path="*" element={<IntroPage />} />
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter>      
     </>
   );
 }

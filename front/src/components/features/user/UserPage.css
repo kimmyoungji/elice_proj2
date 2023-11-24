@@ -1,3 +1,10 @@
+.username{
+    /* display: flex;
+    justify-content: center; */
+    background: linear-gradient(to top, #bfffa1 40%, transparent 50%);
+    width: 100%;
+}
+
 .center-container {
     display: flex;
     justify-content: center;
@@ -7,6 +14,11 @@
 
 .center-content {
     text-align: center;
+}
+
+#fileInput-text {
+    color: blue;
+    /* font-style: ; */
 }
 
 /* .email {
