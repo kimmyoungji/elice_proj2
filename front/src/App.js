@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Navigation from "./components/common/header/Navigation";
 import IntroPage from './components/pages/IntroPage';
 import LoginPage from './components/pages/LoginPage';
 import RegisterPage from './components/pages/RegisterPage';
@@ -13,6 +15,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
+        <Navigation />
         <Routes>
           <Route path="/" element={<IntroPage />} />
           <Route path="/login" element={<LoginPage />} />
