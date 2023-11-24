@@ -1,10 +1,12 @@
-import React from 'react';
+import { BrowserRouter } from "react-router-dom";
+import RegisterForm from "../features/Register/RegisterForm";
 
-export default function RegisterPage() {
+const Register = () => {
   return (
-    <div>
-      회원가입 페이지입니다.
-    </div>
+    <BrowserRouter>
+      <RegisterForm />
+    </BrowserRouter>
   );
-}
+};
 
+export default Register;
