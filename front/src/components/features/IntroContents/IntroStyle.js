@@ -1,6 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import useScrollAni from "./useScrollAnimation";
 
+// Fadein 효과 
 const FadeinAnimation = keyframes`
   0% {
     opacity: 0;
@@ -13,6 +14,7 @@ const FadeinAnimation = keyframes`
   }
 `;
 
+// 애니메이션 효과 확인 위해 임의로 작성한 div
 export const Article = styled.div`
   display: flex;
   flex-direction: column;
@@ -27,6 +29,7 @@ export const Article = styled.div`
   }
 `;
 
+// viewport 내에 해당 DOM이 있을 때, frame-in 클래스 추가
 export const ScrollAniDiv = ({ children }) => {
   const { ref, isInViewport } = useScrollAni();
   return (

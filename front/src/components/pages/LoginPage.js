@@ -27,10 +27,10 @@ export default function LoginPage() {
   const isAllValid = isEmailValid && isPasswordValid;
 
   // 로그인 버튼 클릭 시, API post 요청
-  const onClickLogin = async (e) => {
+  const onClickLogin = (e) => {
     e.preventDefault();
 
-    await axios.post("http://"+ window.location.hostname +":5001/users/login",
+    axios.post("http://"+ window.location.hostname +":5001/users/login",
       JSON.stringify({
         email,
         password,
