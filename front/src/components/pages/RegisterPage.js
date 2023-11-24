@@ -1,7 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import RegisterForm from "../features/Register/RegisterForm";
 
-const Register = () => {
+const RegisterPage = () => {
   return (
     <BrowserRouter>
       <RegisterForm />
@@ -9,4 +9,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default RegisterPage;
