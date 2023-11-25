@@ -1,0 +1,21 @@
+.calender-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.calender-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+  
+.full-calendar {
+    width: 70%;
+}
+  
+.calendar-text {
+    width: 30%;
+    margin-left: 5%;
+}
