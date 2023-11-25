@@ -144,12 +144,12 @@ const UserPageForm = ( {...userInfo} ) => {
                         <Form.Group className="mb-3" controlId="userFormPasswordCheck">
                             <Form.Control type="password" placeholder="비밀번호 확인" onChange={handleInputChange}/>
                         </Form.Group>
-                        <Button className="mb-3" variant="primary" type="submit"
+                        <Button className="mb-5" variant="primary" type="submit"
                             onClick={(e) => editing(e)}>
                             변경사항 저장
                         </Button>
                     </Form>
-                    <Button variant="secondary" type="submit" size="sm"
+                    <Button className="bg-body-tertiary btn text-black" variant="secondary" type="submit" size="sm"
                         onClick={() => navigate('/')}>
                         회원탈퇴
                     </Button>

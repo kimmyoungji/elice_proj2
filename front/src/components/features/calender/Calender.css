@@ -19,3 +19,18 @@
     width: 30%;
     margin-left: 5%;
 }
+
+/* 일요일 날짜: 빨간색 */
+.fc-day a {
+    color: black;
+}
+  
+/* 일요일 날짜: 빨간색 */
+.fc-day-sun a {
+    color: red;
+}
+  
+/* 토요일 날짜: 파란색 */
+.fc-day-sat a {
+    color: blue;
+}
