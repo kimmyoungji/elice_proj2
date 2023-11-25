@@ -6,6 +6,7 @@ export default function useScrollAnimation() {
   const ref = useRef();
 
   useEffect(() => {
+    if (!ref.current) return;
     // 요소들의 가시성 확인하여 뷰포트 상태 전달
     const callback = (entries) => {
       entries.forEach((entry) => {
@@ -16,7 +17,7 @@ export default function useScrollAnimation() {
         }
       });
     };
-    const options = { root: null, rootMargin: "0px", threshold: 0 };
+    const options = { root: null, rootMargin: "0px", threshold: 0.5 };
 
     const observer = new IntersectionObserver(callback, options);
     // 모든 요소들 관찰
