@@ -3,7 +3,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import check from "../../../assets/imgs/check.png"
 import { Col, Container, Row, Card, ListGroup } from 'react-bootstrap';
-import './Calender.css';
+import './Calendar.css';
 
 const CalendarForm = ( habitlist ) => {
   const [habitList, setHabitList] = useState(habitlist.habitlist);
@@ -11,16 +11,17 @@ const CalendarForm = ( habitlist ) => {
     {title: 'event 1', date: "2023-10-12"},
     {title: 'event 2', date: "2023-11-04"},
     {title: 'event 1', date: "2023-11-12"},
-    {title: 'event 2', date: "2023-11-14"}
+    {title: 'event 2', date: "2023-11-14"},
+    {title: 'event 3', date: "2023-11-21"}
   ]
 
   const renderEventContent = (eventInfo) => {
     return (
-          <img className="check-image" src={check} alt="check"
-          onClick={() => handleCheckClick(eventInfo.event)}
-          width="40%"
-          style={{ display: 'block', margin: '0 auto' }}
-          />
+        <img className="check-image" src={check} alt="check"
+        onClick={() => handleCheckClick(eventInfo.event)}
+        width="40%"
+        style={{ display: 'block', margin: '0 auto' }}
+        />
     )
   }
 
@@ -67,8 +68,8 @@ const CalendarForm = ( habitlist ) => {
   };
 
   return (
-    <Container className="calender-container">
-      <Col className='calender-box'>
+    <Container className="calendar-container">
+      <Col className='calendar-box'>
         <Row className='full-calendar'>
           <FullCalendar
                   defaultView="dayGridMonth" 

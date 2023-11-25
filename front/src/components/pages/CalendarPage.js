@@ -1,5 +1,5 @@
 import React from 'react';
-import CalendarForm from '../features/calender/CalendarForm';
+import CalendarForm from '../features/calender/CalendarPageForm';
 import axios from 'axios';
 
 function CalendarPage() {
@@ -7,7 +7,7 @@ function CalendarPage() {
 
   // get api로 기본 정보 가져오기
   // userName, userImg, userEmail
-  axios.get("url")
+  axios.get("http://"+ window.location.hostname +":5001/fullfilled_habit/{user_id}")
       .then((res) => {
           console.log(res)
           // response 

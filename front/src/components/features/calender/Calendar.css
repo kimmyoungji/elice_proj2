@@ -1,10 +1,10 @@
-.calender-container {
+.calendar-container {
     display: flex;
     justify-content: center;
     align-items: center;
 }
   
-.calender-box {
+.calendar-box {
     display: flex;
     justify-content: space-between;
     align-items: center;
