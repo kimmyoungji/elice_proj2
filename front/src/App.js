@@ -1,14 +1,14 @@
 import React from "react";
 import { UserProvider } from "./Context/UserStateContext";
-
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./components/common/header/Navigation";
-import IntroPage from "./components/pages/IntroPage";
-import LoginPage from "./components/pages/LoginPage";
-import RegisterPage from "./components/pages/RegisterPage";
-import HabitPage from "./components/pages/HabitPage";
-import CoummunityPage from "./components/pages/CommunityPage";
-import CalendarPage from "./components/pages/CalendarPage";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+// TODO : 코드 스플리팅 필요
+import IntroPage  from './components/pages/IntroPage';
+import LoginPage from './components/pages/LoginPage';
+import RegisterPage from './components/pages/RegisterPage';
+import HabitPage from './components/pages/HabitPage';
+import CoummunityPage from './components/pages/CommunityPage';
+import CalendarPage from './components/pages/CalendarPage';
 import UserPage from "./components/pages/UserPage";
 
 export default function App() {
