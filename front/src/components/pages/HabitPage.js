@@ -9,11 +9,12 @@ export default function HabitPage() {
   }
 
   const habitList = {
-    habit1: "배달 시 안쓰는 플라스틱 거절하기",
-    habit2: "플라스틱 빨대 사용 줄이기",
-    habit3: "무라벨 제품 구매하기",
-    habit4: "음식 포장 시 다회용기 사용하기",
-    habit5: "플라스틱 깨끗하게 씻어서 분리배출"
+    habit1: "장바구니(에코백) 사용하기",
+    habit2: "음식 포장 시 다회용기 사용하기",
+    habit3: "텀블러나 머그컵 사용하기",
+    habit4: "플라스틱 빨대 안 쓰기",
+    habit5: "플라스틱 세척해서 분리배출하기",
+    habit6: "무라벨 제품 구매하기"
   }
 
   return (
