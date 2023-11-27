@@ -14,7 +14,7 @@ const UserPage = () => {
 
     // get api로 기본 정보 가져오기
     // userName, userImg, userEmail
-    axios.get("http://"+ window.location.hostname +":5001/users/{user_id}")
+    axios.get("http://"+ window.location.hostname +":5001/users/{user_id}", userInfo)
     .then((res) => {
         console.log(res)
          // response 
@@ -25,7 +25,7 @@ const UserPage = () => {
 
     return (
       <>
-        <UserPageForm userinfo={userInfo} />
+        <UserPageForm userInfo={userInfo} />
       </>
     )
 }

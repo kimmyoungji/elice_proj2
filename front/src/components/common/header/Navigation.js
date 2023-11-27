@@ -5,7 +5,7 @@ import logo from "./logo.png"
 const navMenus = [
   { href: "/", label: "서비스 소개", public: true },
   { href: "/commuity", label: "커뮤니티", public: true },
-  { href: "/habits", label: "나의 습관", public: false }
+  { href: "/habit", label: "나의 습관", public: false }
 ]
 
 const sideMenus = [
