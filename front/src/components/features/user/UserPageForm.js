@@ -5,8 +5,9 @@ import { Col, Button, Container, Image, Form, Row } from 'react-bootstrap';
 import './UserPage.css';
 
 
-const UserPageForm = ( {...userInfo} ) => {
-    const { userName, userImg, userEmail, password, passwordCheck } = userInfo.userinfo;
+const UserPageForm = ( props ) => {
+    const { userInfo } = props;
+    const { userName, userImg, userEmail, password, passwordCheck } = userInfo;
     const [image, setImage] = useState(userImg) //filereader를 위한 image
     const fileInput = useRef(null)
 
@@ -107,6 +108,7 @@ const UserPageForm = ( {...userInfo} ) => {
             url: '', // 서버 url에 따라
             data: formData,
         })
+        // 통신 연결 후 에러 상태코드에 따라 수정 예정
         .then((result) => {console.log('요청성공', result)})
         .catch((error) => {console.log('요청실패', error)})
     }
