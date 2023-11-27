@@ -15,7 +15,6 @@ const sideMenus = [
   { href: "/register", label: "회원가입", public: true }
 ]
 
-
 function Navigation() {
   const [isLogin, setIsLogin] = useState(true);
   const filteredNavMenus = navMenus.filter((menu) => menu.public !== isLogin);
@@ -27,12 +26,15 @@ function Navigation() {
               <Navbar.Brand href="/">
                 <Image src={logo} alt="logo" height="30" width="200"/>
               </Navbar.Brand>
-              <Nav className="d-flex flex-row ms-auto"> 
-                {(isLogin ? navMenus : filteredNavMenus).map((menu, index) => <Nav.Link key={`nav-menu-${index}`} href={menu.href} className="me-4">{menu.label}</Nav.Link>)}
+              <Nav className="d-flex flex-row ms-auto">
+                {(isLogin ? navMenus : filteredNavMenus).map((menu, index) =>
+                <Nav.Link key={`nav-menu-${index}`} href={menu.href} className="me-3" style={{ fontSize: "85%" }}>
+                  {menu.label}
+                </Nav.Link>)}
               </Nav>
               <Navbar.Toggle>
                 <Image src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                    alt="profile" roundedCircle height="40" width="40"/>
+                    alt="profile" roundedCircle height="30" width="30"/>
               </Navbar.Toggle>
               <Navbar.Offcanvas
                     id="offcanvasNavbar-expand-false"

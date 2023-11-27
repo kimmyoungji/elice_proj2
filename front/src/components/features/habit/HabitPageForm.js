@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Container, Button, Col, Row, Dropdown, ListGroup, Image, Form } from 'react-bootstrap';
+import { Card, Container, Button, Col, Row, ListGroup, Image, Form } from 'react-bootstrap';
 import './HabitPage.css';
 import calendar from "../../../assets/imgs/calendar.png";
 import axios from 'axios';
@@ -10,6 +10,7 @@ export function HabitForm ({ userInfo, habitList }) {
     const { userName, turtleLevel } = userInfo;
     const [ addButton, setAddButton ] = useState(true);
     const [ selectedHabit, setSelectedHabit ] = useState([]);
+    const [ selectedDay, setSelectedDay ] = useState(null);
     const habits = habitList;
 
     const navigate = useNavigate();
@@ -37,20 +38,31 @@ export function HabitForm ({ userInfo, habitList }) {
         })
     }
 
+    const handleRadioChange = (key) => {
+        setSelectedDay(key)
+    }
+
     const getHabitList = Object.keys(habits).map((key) => (
-        // <ListGroup.Item key={key} eventKey={key} onClick={() => handleCheckboxChange(key)}>{habits[key]}</ListGroup.Item>
-        <Form.Check key={key}
-            block
-            label={habits[key]}
-            type="checkbox" className="block-checkbox mb-2"
-            style={{ fontSize: '15px' }}
-            onChange={() => handleCheckboxChange(key)}
-          />
+        <ListGroup.Item key={key} eventKey={key}>
+                <Form.Check inline key={key} type="checkbox"
+                onClick={() => handleCheckboxChange(key)}/>
+            {habits[key]}
+        </ListGroup.Item>
+    ));
+
+    const getDayList = ["3일", "5일", "7일"].map((day) => (
+        <ListGroup.Item>
+            <Form.Check key={day} 
+            label={day}
+            type='radio' name="group" onClick={() => handleRadioChange(day)}/>
+        </ListGroup.Item> // name="group"으로 group 이름이 같아야 중복 선택 안됨
     ));
 
     const handleSelectButton = () => {
         console.log(selectedHabit);
-        axios.post("http://"+ window.location.hostname +":5001/habits/habits_id", selectedHabit)
+        console.log(selectedDay);
+        axios.post("http://"+ window.location.hostname +":5001/habits/habits_id",
+            selectedHabit)
         .then((res) => {
             console.log(res)
         }).catch((error) => {
@@ -61,32 +73,54 @@ export function HabitForm ({ userInfo, habitList }) {
 
     return (
         <>
-            <Container className="habits-container" style={{ marginTop: '50px'}}>
+            <Container className="habits-container" style={{ marginTop: '20px'}}>
                 <Row>
                     <Col xs={12} className="d-flex justify-content-end">
-                        <Image src={calendar} alt="Calendar image" style={{ width: '5%' }} onClick={() => navigate('/calendar')}/>
+                        <Image src={calendar} alt="Calendar image"
+                            style={{ width: '5%' }}
+                            onClick={() => navigate('/calendar')}/>
                     </Col>
-                    <Col className="turtle-container">
+                    <Col xs={12} sm={6} className="turtle-container">
                         <Card style={{ height: '400px' }}>
                             <Card.Body>
                                 <Card.Title>{userName}의 거북잉</Card.Title>
                             </Card.Body>
-                            {turtleLevel >= 1 && turtleLevel <= 5 && getTurtleImage(turtleLevel)}          
+                            {turtleLevel >= 1 && turtleLevel <= 5
+                            && getTurtleImage(turtleLevel)}          
                         </Card>
                     </Col>
-                    <Col className="habit-container" >
+                    <Col xs={12} sm={6} className="habit-container" >
                         <Card style={{ height: '400px' }}>
-                            <Card.Body>
-                                <Card.Title style={{ marginBottom: '150px' }}>{userName}의 습관</Card.Title>
-                                <Card.Body className="d-flex justify-content-center align-items-center">
-                                    {addButton === true && <Button variant="primary" size="lg" onClick={() => handleAddButton()}>+</Button>}
-                                    {/* {addButton === false && <ListGroup style={{ position: 'absolute', top: '50%', left: '50%', bottom: '0', transform: 'translate(-50%, -50%)', width: '90%'}}>{getHabitList}</ListGroup>} */}
-                                    {addButton === false && <Form style={{ position: 'absolute', left: '5%', right: '5%'}}>{getHabitList}</Form>}
-                                </Card.Body>
+                            <Card.Body style={{ height: "100%", paddingBottom: "5px" }}>
+                                <Card.Title>{userName}의 습관</Card.Title>
+                                <div style={{ color: "grey", marginBottom: '10px', fontSize: "80%" }}>
+                                    습관을 추가해보세요 !
+                                </div>
+                                    {addButton === true &&
+                                    <div className="d-flex justify-content-center" style={{ marginTop: '100px' }}>
+                                        <Button variant="primary" size="lg"
+                                        onClick={() => handleAddButton()}>+
+                                    </Button>
+                                    </div>
+                                    }
+                                    {addButton === false &&
+                                    <ListGroup style={{ position: 'relative', width: '100%', fontSize: "83%"}}>
+                                        {getHabitList}
+                                    </ListGroup>}
                             </Card.Body>
-                            <div className="d-flex justify-content-center align-items-center"  style={{ marginBottom: '5%' }}>
-                            {addButton === false  && <Button className="select-button" variant="primary" size="lg" onClick={() => handleSelectButton()} style={{ width: "30%", fontSize: '15px'}}>선택완료</Button>}
-                            </div>
+                            {addButton === false  &&
+                            <>
+                                <ListGroup horizontal="sm" className="d-flex justify-content-center" style={{ border: "none" }}>
+                                    {getDayList}
+                                </ListGroup>
+                                <div className="d-flex justify-content-center">
+                                    <Button className="select-button" variant="primary" size="lg"
+                                        onClick={() => handleSelectButton()}
+                                        style={{ width: "30%", fontSize: '13px', margin: "10px"}}>
+                                            선택완료
+                                    </Button>
+                                </div>
+                            </>}
                         </Card>
                     </Col>
                 </Row> 
@@ -109,11 +143,12 @@ export function HabitListForm (habitList) {
     const randomIndex = Math.floor(Math.random() * cheerUpTexts.length);
 
     const cards = Object.keys(habits).map((key) => (
-        <Col key={key} xs={12} md={6} lg={4} className="mb-4" style={{ marginRight: '0'}}>
-            <Card border="light" style={{ width: '18rem' }}>
+        <Col key={key} xs={6} sm={4} md={6} lg={4}
+            className="mb-4" style={{ marginRight: '0'}}>
+            <Card border="light" style={{ width: '80%' }}>
                 <Card.Body>
-                    <Card.Img src={turtleImg} alt="Card image" />
-                    <Card.Title>{habits[key]}</Card.Title>
+                    <Card.Img src={turtleImg} alt="Card image"/>
+                    <Card.Title style={{fontSize: "15px"}}>{habits[key]}</Card.Title>
                 </Card.Body>
             </Card>
         </Col>
@@ -121,11 +156,14 @@ export function HabitListForm (habitList) {
 
     return (
         <>
-            <Container className='text-center' style={{ marginTop: '100px', marginBottom: '100px' }}>
-                <h1>{cheerUpTexts[randomIndex]}</h1>
-            </Container>
-            <Container>
-                <h6 style={{ color: "grey", marginTop: '50px', marginBottom: '50px' }}>▼ 아래로 내려서 습관들을 확인해보세요</h6><br />
+            <Container
+                className='text-center'
+                style={{ marginTop: '50px'}}>
+                <h2>{cheerUpTexts[randomIndex]}</h2>
+
+                <h6 style={{ color: "grey", marginTop: '50px', marginBottom: '50px' }}>
+                    ▼ 아래로 내려서 습관들을 확인해보세요
+                </h6><br />
                 <Row>{cards}</Row>
             </Container>
         </>

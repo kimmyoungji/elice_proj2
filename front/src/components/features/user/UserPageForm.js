@@ -35,6 +35,7 @@ const UserPageForm = ( props ) => {
     //         return
     //     }
     // }
+
     // const handleInputChange = (e) => {
     //     if (e.target.type === "file") {
     //         const id = "userFormImg";
