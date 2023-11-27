@@ -1,5 +1,5 @@
 import styled, { keyframes } from "styled-components";
-import useScrollAnimation from "./useScrollAnimation";
+import useScrollAnimation from "../../../hooks/useScrollAnimation";
 
 // Fadein 효과
 const FadeinAnimation = keyframes`

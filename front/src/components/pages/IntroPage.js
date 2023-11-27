@@ -1,6 +1,6 @@
 import { ScrollAniDiv } from "../features/IntroContents/AnimationStyled";
 import "../features/IntroContents/IntroPage.css";
-import { Button, Row, Col, Stack, Card, Container } from "react-bootstrap";
+import { Button, Row, Col, Stack } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Creditcard from"../features/IntroContents/credit-card.png";
 import Eat from "../features/IntroContents/restaurant.png";
@@ -87,11 +87,13 @@ export default function IntroPage() {
 
       {/* TODO: 로그인 되어있는 상태라면 시작하기 눌렀을 때, 해빗페이지로 이동할까요? */}
       <Row className="vh-100">
-        <ScrollAniDiv>
-          <p>해양생물을 위해, 나를 위해</p>
-          <p>환경 습관을 형성하기 위한 여정</p>
-          <Button variant="primary" onClick={() => navigate('/register')}>시작하기</Button>
-        </ScrollAniDiv>
+        <Col>
+          <ScrollAniDiv>
+            <p>해양생물을 위해, 나를 위해</p>
+            <p>환경 습관을 형성하기 위한 여정</p>
+            <Button variant="primary" onClick={() => navigate('/register')}>시작하기</Button>
+          </ScrollAniDiv>
+        </Col>
       </Row>
     </div>
     

@@ -29,14 +29,15 @@ export default function LoginPage() {
   // 로그인 버튼 클릭 시, API post 요청
   const onClickLogin = (e) => {
     e.preventDefault();
-
+    // TODO : API_URL 정의해두고 사용, api config 파일 추가
     axios.post("http://"+ window.location.hostname +":5001/users/login",
       JSON.stringify({
         email,
         password,
       }), {
       headers: {
-        "Content-Type": "application/json",
+          "Content-Type": "application/json",
+        // TODO : 백단에서 처리하는 방식 후 수정 예정 (sessionStorage X)
         Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
       },
       withCredentials: true,
