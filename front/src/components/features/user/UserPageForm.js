@@ -5,8 +5,9 @@ import { Col, Button, Container, Image, Form, Row } from 'react-bootstrap';
 import './UserPage.css';
 
 
-const UserPageForm = ( {...userInfo} ) => {
-    const { userName, userImg, userEmail, password, passwordCheck } = userInfo.userinfo;
+const UserPageForm = ( props ) => {
+    const { userInfo } = props;
+    const { userName, userImg, userEmail, password, passwordCheck } = userInfo;
     const [image, setImage] = useState(userImg) //filereader를 위한 image
     const fileInput = useRef(null)
 
@@ -107,6 +108,7 @@ const UserPageForm = ( {...userInfo} ) => {
             url: '', // 서버 url에 따라
             data: formData,
         })
+        // 통신 연결 후 에러 상태코드에 따라 수정 예정
         .then((result) => {console.log('요청성공', result)})
         .catch((error) => {console.log('요청실패', error)})
     }
@@ -144,12 +146,12 @@ const UserPageForm = ( {...userInfo} ) => {
                         <Form.Group className="mb-3" controlId="userFormPasswordCheck">
                             <Form.Control type="password" placeholder="비밀번호 확인" onChange={handleInputChange}/>
                         </Form.Group>
-                        <Button className="mb-3" variant="primary" type="submit"
+                        <Button className="mb-5" variant="primary" type="submit"
                             onClick={(e) => editing(e)}>
                             변경사항 저장
                         </Button>
                     </Form>
-                    <Button variant="secondary" type="submit" size="sm"
+                    <Button className="bg-body-tertiary btn text-black" variant="secondary" type="submit" size="sm"
                         onClick={() => navigate('/')}>
                         회원탈퇴
                     </Button>
