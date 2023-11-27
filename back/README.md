@@ -1,6 +1,7 @@
 ### 백엔드 실행 방법
+
 ```shell
-# 0) .env 파일 공유받아서 back폴더에 추가하기
+# 0) .env 파일 공유받아서 back/src폴더에 추가하기
 
 # 1) back 폴더로 이동하기
 cd back
@@ -35,4 +36,3 @@ null ResultSetHeader {
   changedRows: 0
 } undefined
 ```
-
