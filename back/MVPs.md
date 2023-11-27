@@ -22,8 +22,8 @@
 
 1. DailyHabitMVP (습관 추가, 수정 / 실천습관 (기본)조회, (체크했을 때)추가, (체크풀었을 때)삭제 )
    1. 습관 목록 컴포넌트
-      - 현재 로그인한 사용자가 실천하고 있는 습관 목록 - planned_habits TABLE / GET, POST, (DELETE)
-      - 현재 로그인한 사용자가 실천한 습관 체크 표시 - fullfilled_habits TABLE / GET, POST, DELETE
+      - 현재 로그인한 사용자가 실천하고 있는 습관 목록 - planned_habits TABLE / GET, POST, (DELETE) - 배열로 받아온다.
+      - 현재 로그인한 사용자가 실천한 습관 체크 표시 - fullfilled_habits TABLE / GET, POST, DELETE - 배열로 받아온다. 12시정각에
 
 ---
 
