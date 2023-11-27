@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import HabitCard from "../features/HabitContents/HabitCard";
-import { Row, Col, Container } from "react-bootstrap";
+import { Row, Container } from "react-bootstrap";
 
 
 export default function CommunityPage() {
@@ -53,13 +53,11 @@ export default function CommunityPage() {
   return (
     <Container className="justify-content-md-center mt-5">
       <Row>
-        <h2>거북이 구경하기</h2>
+        <h3 className="text-center">🐢 거북이 구경하기 🐢</h3>
       </Row>
       <Row className="justify-content-center mt-5">
         {turtleCards.map((turtleCard) => (
-          <Col>
             <HabitCard key={turtleCard.idx} turtleCard={turtleCard} />
-          </Col>
         ))}
       </Row>
     </Container>

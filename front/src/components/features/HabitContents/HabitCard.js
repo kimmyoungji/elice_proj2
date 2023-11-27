@@ -6,17 +6,15 @@ export default function HabitCard({ turtleCard }) {
   const getTurtleImage = (level) => {
     const turtleImg = require(`../../../assets/imgs/거북이${level}.png`);
     return (
-      <Card.Img src={turtleImg} alt="Card image" className="justify-content-md-center"  />
+      <Card.Img src={turtleImg} alt="Card image" className="mx-auto" style={{ width: "18rem" }}/>
     )
 };
 
 
   return (
-    <div>
-      <Card className="mb-5" style={{ width: "23rem" }}>
+      <Card className="mb-5 mx-2 p-0" style={{ width: "20rem" }}>
         <Card.Header>{turtleCard.userName}의 거북이</Card.Header>
         {turtleCard.level >= 1 && turtleCard.level <= 5 && getTurtleImage(turtleCard.level)}
       </Card>
-    </div>
   );
 }
