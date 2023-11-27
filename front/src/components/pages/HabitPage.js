@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { HabitForm, HabitListForm } from '../features/habit/HabitPageForm';
+import HabitForm from '../features/habit/HabitPageForm';
+import HabitListForm from '../features/habit/HabitListForm';
 
 export default function HabitPage() {
   const [isEditing, setIsEditing] = useState(true);
@@ -20,7 +21,7 @@ export default function HabitPage() {
   return (
     <>
       <HabitForm userInfo={userInfo} habitList={habitList} />
-      {isEditing === true && <HabitListForm habitlist={habitList} />}
+      {isEditing === true && <HabitListForm habitList={habitList} />}
     </>
   );
 }

@@ -34,3 +34,15 @@
 .fc-day-sat a {
     color: blue;
 }
+
+.fc-button-today {
+    width: 2px; /* 원하는 크기로 조절 */
+    padding: 2px 6px; /* 원하는 패딩으로 조절 */
+}
+
+@media (max-width: 600px) {
+    .fc-button-today {
+      font-size: 2px; /* 원하는 크기로 조절 */
+      padding: 2px 6px; /* 원하는 패딩으로 조절 */
+    }
+  }

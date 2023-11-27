@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import check from "../../../assets/imgs/check.png"
+import white from "../../../assets/imgs/white.png"
 import { Col, Container, Row, Card, ListGroup } from 'react-bootstrap';
 import './Calendar.css';
 
@@ -83,6 +84,7 @@ const CalendarForm = ( habitlist ) => {
                   events={eventData}
                   datesSet={(e) => handleDatesSet(e)}
                 />
+                
         </Row>
         <Card className="calendar-text" style={{ width: '30rem' }}>
           <ListGroup variant="flush">
@@ -91,7 +93,6 @@ const CalendarForm = ( habitlist ) => {
         </Card>
       </Col>
     </Container>
-    
   );
 }
 
