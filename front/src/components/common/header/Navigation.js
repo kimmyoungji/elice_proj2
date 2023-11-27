@@ -1,9 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Nav, Navbar, Container, Image, Offcanvas } from "react-bootstrap";
 import logo from "./logo.png"
 
+const navMenus = [
+  { href: "/", label: "서비스 소개", public: true },
+  { href: "/commuity", label: "커뮤니티", public: true },
+  { href: "/habits", label: "나의 습관", public: false }
+]
+
+const sideMenus = [
+  { href: "/userpage", label: "내 정보", public: false },
+  { href: "/", label: "로그아웃", public: false },
+  { href: "/login", label: "로그인", public: true },
+  { href: "/register", label: "회원가입", public: true }
+]
+
 
 function Navigation() {
+  const [isLogin, setIsLogin] = useState(true);
+  const filteredNavMenus = navMenus.filter((menu) => menu.public !== isLogin);
+  const filteredSideMenus = sideMenus.filter((menu) => menu.public !== isLogin);
+
     return (
         <Navbar expand="False" className="bg-body-tertiary mb-3">
             <Container fluid>
@@ -11,9 +28,7 @@ function Navigation() {
                 <Image src={logo} alt="logo" height="30" width="200"/>
               </Navbar.Brand>
               <Nav className="d-flex flex-row ms-auto"> 
-                  <Nav.Link href="/" className="me-4">서비스 소개</Nav.Link>
-                  <Nav.Link href="/community" className="me-4">커뮤니티</Nav.Link>              
-                  <Nav.Link href="/habit" className="me-4">나의 습관</Nav.Link>
+                {(isLogin ? navMenus : filteredNavMenus).map((menu, index) => <Nav.Link key={`nav-menu-${index}`} href={menu.href} className="me-4">{menu.label}</Nav.Link>)}
               </Nav>
               <Navbar.Toggle>
                 <Image src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
@@ -31,8 +46,7 @@ function Navigation() {
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                   <Nav className="justify-content-end flex-grow-1 pe-3">
-                    <Nav.Link href="/userpage">내 정보</Nav.Link>
-                    <Nav.Link href="/">로그아웃</Nav.Link>
+                    {filteredSideMenus.map((menu, index) => <Nav.Link key={`nav-menu-${index}`} href={menu.href}>{menu.label}</Nav.Link>)}
                   </Nav>
                 </Offcanvas.Body>
               </Navbar.Offcanvas>
