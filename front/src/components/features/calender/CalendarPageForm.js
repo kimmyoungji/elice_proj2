@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import check from "../../../assets/imgs/check.png"
-import white from "../../../assets/imgs/white.png"
+// import white from "../../../assets/imgs/white.png"
 import { Col, Container, Row, Card, ListGroup } from 'react-bootstrap';
 import './Calendar.css';
 
@@ -60,7 +60,8 @@ const CalendarForm = ( habitlist ) => {
   const handleDatesSet = (e) => {
     const startDate = new Date(e.startStr);
     const endDate = new Date(e.endStr);
-    const middleDate = new Date(startDate.getTime() + (endDate.getTime() - startDate.getTime()) / 2);
+    const middleDate = new Date(startDate.getTime() 
+                        + (endDate.getTime() - startDate.getTime()) / 2);
     const middleMonth = middleDate.getMonth() + 1;
 
     if (middleMonth === new Date().getMonth() + 1) {
@@ -77,8 +78,7 @@ const CalendarForm = ( habitlist ) => {
                   plugins={[ dayGridPlugin ]}
                   eventContent={renderEventContent}
                   titleFormat={function(date) {
-                        return date.date.year +"년 "+(date.date.month +1)+"월"; 
-                        }}
+                        return date.date.year +"년 "+(date.date.month +1)+"월" }}
                   eventBackgroundColor='transparent'
                   eventBorderColor='transparent'
                   events={eventData}
