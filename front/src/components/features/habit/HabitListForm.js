@@ -30,7 +30,7 @@ export default function HabitListForm ({ habitList }) {
                 >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        {name}
+                    <span style={{ fontSize: "30px" }}>{name}</span>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -67,8 +67,8 @@ export default function HabitListForm ({ habitList }) {
                             style={{ width: '200px', height: '200px' }}
                             onClick={() => handleModal(habits[key], key)}/>
                         <Card.Title
-                            style={{ fontSize: "15px", marginTop: "10px" }}>
-                            {habits[key]}
+                            style={{ marginTop: "10px" }}>
+                            <span style={{ fontSize: "20px" }}>{habits[key]}</span>
                         </Card.Title>
                     </Card.Body>
                 </Card>
@@ -81,10 +81,10 @@ export default function HabitListForm ({ habitList }) {
         <>
             <Container
                 className='text-center'
-                style={{ marginTop: '50px'}}>
-                <h2>{cheerUpTexts[randomIndex]}</h2>
+                style={{ marginTop: '40px'}}>
+                <span>{cheerUpTexts[randomIndex]}</span>
 
-                <h6 style={{ color: "grey", marginTop: '30px', marginBottom: '50px' }}>
+                <h6 style={{ color: "grey", marginTop: '20px', marginBottom: '50px' }}>
                     ▼ 아래로 내려서 습관들을 확인해보세요
                 </h6><br />
                 <Row>{cards}</Row>

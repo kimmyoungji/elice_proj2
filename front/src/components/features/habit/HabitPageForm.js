@@ -46,7 +46,7 @@ const TurtleForm = ({ userName, turtleLevel }) => {
                 <Card style={{ height: '450px' }}>
                     <Card.Body>
                         <Card.Title>
-                            <span style={{ fontWeight: "bold", fontSize: "30px" }}>
+                            <span style={{ fontSize: "30px" }}>
                                 {userName}</span>의 거북잉
                         </Card.Title>
                     </Card.Body>
@@ -120,7 +120,7 @@ const HabitAddForm = ({ userName, habits }) => {
                 <Card style={{ height: '450px' }}>
                     <Card.Body style={{ height: "100%" }}>
                         <Card.Title>
-                            <span style={{ fontWeight: "bold", fontSize: "30px" }}>
+                            <span style={{ fontSize: "30px" }}>
                                 {userName}</span>의 습관
                         </Card.Title>
                         <div style={{ color: "grey", marginBottom: '20px', fontSize: "80%" }}>

@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
 import check from "../../../assets/imgs/check.png"
-// import white from "../../../assets/imgs/white.png"
 import { Col, Container, Row, Card, ListGroup } from 'react-bootstrap';
 import './Calendar.css';
 
+
+// fullfilledDate만 받아올 것
 const CalendarForm = ( habitlist ) => {
   const [habitList, setHabitList] = useState(habitlist.habitlist);
-  const eventData = [
-    {title: 'event 1', date: "2023-10-12"},
-    {title: 'event 2', date: "2023-11-04"},
-    {title: 'event 1', date: "2023-11-12"},
-    {title: 'event 2', date: "2023-11-14"},
-    {title: 'event 3', date: "2023-11-21"}
-  ]
+  const eventData = [{date:'2023-10-12'}, {date:'2023-11-04'},
+                    {date:'2023-11-06'}, {date:'2023-11-15'}];
 
   const renderEventContent = (eventInfo) => {
     return (
@@ -41,26 +38,14 @@ const CalendarForm = ( habitlist ) => {
     const clickMonth = (month.length <2 ? '0'+month : month);
     const clickDate = (date.length <2 ? '0'+date : date);
     const clickFullDate = `${startDate.getFullYear()}-${clickMonth}-${clickDate}`
-    if (event.title === 'event 1') {
-      setHabitList(() => ({
-        date: clickFullDate,
-        habit1: "배달 시 일회용품 안쓰기",
-        habit2: "마트에서 비닐 안쓰기"
-      }));
-    } else if (event.title === 'event 2') {
-      setHabitList(() => ({
-        date: clickFullDate,
-        habit1: "빨대 안쓰기"
-      }));
-    } else {
-      setHabitList(() => ({
-        date: clickFullDate,
-        habit1: "달성한 습관이 없습니다😭"
-      }))
-    }
+    // api 요청으로 받은 데이터로 변경
+    setHabitList(() => ({
+          date: clickFullDate,
+          habit1: "😊😊"
+        }))
   };
 
-  // today 버튼 클릭하면 오늘 날짜 기준의 습관 출력하도록
+  // 월 전환 버튼 클릭하면 오늘 날짜 기준의 습관 출력하도록
   // 🤔 setState로 변경하는 방식보다 더 효율적인 방법이 있을까?
   const handleDatesSet = (e) => {
     const startDate = new Date(e.startStr);
@@ -73,10 +58,6 @@ const CalendarForm = ( habitlist ) => {
         setHabitList(habitlist.habitlist)
     }
   };
-
-  const handleDateClick = (arg) => { // bind with an arrow function
-    alert("arg")
-  };
   
 
   return (
@@ -85,18 +66,23 @@ const CalendarForm = ( habitlist ) => {
         <Col className='calendar-box'>
           <Row className='full-calendar'>
             <FullCalendar
-                    defaultView="dayGridMonth" 
-                    plugins={[ dayGridPlugin ]}
-                    eventContent={renderEventContent}
-                    titleFormat={function(date) {
-                          return date.date.year +"년 "+(date.date.month +1)+"월" }}
-                    eventBackgroundColor='transparent'
-                    eventBorderColor='transparent'
-                    events={eventData}
-                    datesSet={(e) => handleDatesSet(e)}
-                    dateClick={handleDateClick}
-                    height="550px"
-                  />
+                  defaultView="dayGridMonth" 
+                  plugins={[ dayGridPlugin, interactionPlugin ]}
+                  eventContent={renderEventContent}
+                  titleFormat={(date) => {
+                        return date.date.year +"년 "+(date.date.month +1)+"월" }}
+                  eventBackgroundColor='transparent'
+                  eventBorderColor='transparent'
+                  events={eventData}
+                  dateClick={(info) => {
+                    setHabitList(() => ({
+                      date: info.dateStr,
+                      habit1: "달성한 습관이 없습니다😭"
+                    }))
+                  }}
+                  datesSet={(e) => handleDatesSet(e)}
+                  height="550px"
+                />
                   
           </Row>
           <Card className="calendar-text" style={{ width: '30rem', height: "300px" }}>
@@ -116,9 +102,10 @@ const CalendarForm = ( habitlist ) => {
         </h6><br />
         <Row></Row>
     </Container>
-
     </>
   );
 }
+
+// 데이터 서비스 진행하면, 컴포넌트로 따로 뺄 것.
 
 export default CalendarForm;
