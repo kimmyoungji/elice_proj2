@@ -32,34 +32,36 @@ pool.getConnection((error, connection) => {
 });
 
 // Your Express routes and middleware go here
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+// app.get("/", (req, res) => {
+//   res.send("Hello World!");
+// });
 
 // test query
-app.get("/users", (req, res) => {
-  console.log("get users is working");
-  pool.getConnection((error, connection) => {
-    connection.connect(function (err) {
-      if (err) {
-        console.error("Database connection failed: " + err.stack);
-        connection.release();
-        return;
-      }
-      console.log("Connected to database.");
-      connection.query("USE turtine");
-      connection.query("SELECT * FROM users;", (error, result, fields) => {
-        console.log(error, result, fields);
-      });
-      connection.release();
-      console.log("connection pool released");
-    });
-  });
-});
+// app.get("/users", (req, res) => {
+//   console.log("get users is working");
+//   pool.getConnection((error, connection) => {
+//     connection.connect(function (err) {
+//       if (err) {
+//         console.error("Database connection failed: " + err.stack);
+//         connection.release();
+//         return;
+//       }
+//       console.log("Connected to database.");
+//       connection.query("USE turtine");
+//       connection.query("SELECT * FROM users;", (error, result, fields) => {
+//         console.log(error, result, fields);
+//       });
+//       connection.release();
+//       console.log("connection pool released");
+//     });
+//   });
+// });
 
-// Start the Express server
-app.listen(process.env.SERVER_PORT, () => {
-  console.log(
-    `Server is running on http://localhost:${process.env.SERVER_PORT}`
-  );
-});
+// // Start the Express server
+// app.listen(process.env.SERVER_PORT, () => {
+//   console.log(
+//     `Server is running on http://localhost:${process.env.SERVER_PORT}`
+//   );
+// });
+
+module.exports = pool;
