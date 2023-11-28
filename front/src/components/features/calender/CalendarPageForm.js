@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from "@fullcalendar/interaction"
 import check from "../../../assets/imgs/check.png"
 // import white from "../../../assets/imgs/white.png"
 import { Col, Container, Row, Card, ListGroup } from 'react-bootstrap';
@@ -69,13 +70,18 @@ const CalendarForm = ( habitlist ) => {
     }
   };
 
+  const handleDateClick = (arg) => { // bind with an arrow function
+    alert("arg")
+  };
+  
+
   return (
     <Container className="calendar-container">
       <Col className='calendar-box'>
         <Row className='full-calendar'>
           <FullCalendar
                   defaultView="dayGridMonth" 
-                  plugins={[ dayGridPlugin ]}
+                  plugins={[ dayGridPlugin, interactionPlugin ]}
                   eventContent={renderEventContent}
                   titleFormat={function(date) {
                         return date.date.year +"년 "+(date.date.month +1)+"월" }}
@@ -83,6 +89,7 @@ const CalendarForm = ( habitlist ) => {
                   eventBorderColor='transparent'
                   events={eventData}
                   datesSet={(e) => handleDatesSet(e)}
+                  dateClick={handleDateClick}
                 />
                 
         </Row>
