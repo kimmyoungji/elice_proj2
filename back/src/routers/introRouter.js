@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const connectDB = require("../middleware/connectDB");
+const connectDB = require("../middlewares/connectDB");
 const router = Router();
 
 // router.get("/", connectDB, (req, res, next) => {
