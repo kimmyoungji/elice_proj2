@@ -1,9 +1,13 @@
-import React from 'react';
-import { Card, Container, Col, Row, } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Card, Container, Col, Row, Modal, Button, Image } from 'react-bootstrap';
 import './HabitPage.css';
+import { ScrollAniDiv } from "../IntroContents/AnimationStyled";
+
 // import axios from 'axios';
 
 export default function HabitListForm ({ habitList }) {
+    const [modalShow, setModalShow] = useState(false);
+    const [selectedHabit, setSelectedHabit] = useState(null);
     const habits = habitList;
     const cheerUpTexts = [
         "같이 시작해봐요, 플라스틱 줄이기! 😊",
@@ -12,22 +16,64 @@ export default function HabitListForm ({ habitList }) {
         "👍🏻👍🏻👍🏻",
         "충분히 잘하고 있어요👍🏻 우리 계속 도전해봐요"
     ];
+
+    
+
+    const HabitModal = (props) => {
+        const { key, name } = props.habitInfo;
+        return (
+            <Modal
+                {...props}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+                >
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        {name}
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Image
+                        src={require(`../../../assets/imgs/${key}.png`)}
+                        alt="Habit image"
+                        style={{ width: '200px', height: '200px' }}/>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={props.onHide}>Close</Button>
+                </Modal.Footer>
+            </Modal>
+        );
+    }
+
+    const handleModal = ( name, key ) => {
+        setSelectedHabit({
+            key: key,
+            name: name });
+        setModalShow(true)
+    }
+
+
     const randomIndex = Math.floor(Math.random() * cheerUpTexts.length);
     const cards = Object.keys(habits).map((key) => (
         <Col key={key} xs={6} sm={4} md={6} lg={4}
             className="mb-4" style={{ marginRight: '0'}}>
-            <Card border="light" style={{ width: '80%' }}>
-                <Card.Body>
-                    <Card.Img
-                        src={require(`../../../assets/imgs/${key}.png`)}
-                        alt="Card image"
-                        style={{ width: '200px', height: '200px' }}/>
-                    <Card.Title
-                        style={{fontSize: "15px", marginTop: "10px"}}>
-                        {habits[key]}
-                    </Card.Title>
-                </Card.Body>
-            </Card>
+            <ScrollAniDiv>
+                <Card border="light" style={{ width: '80%' }}>
+                    <Card.Body>
+                        <Card.Img
+                            src={require(`../../../assets/imgs/${key}.png`)}
+                            alt="Card image"
+                            style={{ width: '200px', height: '200px' }}
+                            onClick={() => handleModal(habits[key], key)}/>
+                        <Card.Title
+                            style={{ fontSize: "15px", marginTop: "10px" }}>
+                            {habits[key]}
+                        </Card.Title>
+                    </Card.Body>
+                </Card>
+            </ScrollAniDiv>
+            
         </Col>
     ))
 
@@ -38,10 +84,17 @@ export default function HabitListForm ({ habitList }) {
                 style={{ marginTop: '50px'}}>
                 <h2>{cheerUpTexts[randomIndex]}</h2>
 
-                <h6 style={{ color: "grey", marginTop: '50px', marginBottom: '50px' }}>
+                <h6 style={{ color: "grey", marginTop: '30px', marginBottom: '50px' }}>
                     ▼ 아래로 내려서 습관들을 확인해보세요
                 </h6><br />
                 <Row>{cards}</Row>
+                {modalShow && (
+                <HabitModal
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                    habitInfo={selectedHabit}
+                />
+                )}
             </Container>
         </>
     )

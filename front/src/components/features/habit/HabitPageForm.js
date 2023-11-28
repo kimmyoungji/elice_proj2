@@ -12,7 +12,7 @@ export default function HabitForm ({ userInfo, habitList }) {
 
     return (
         <>
-            <Container className="habits-container" style={{ marginTop: '20px'}}>
+            <Container className="habits-container">
                 <Row>
                     <TurtleForm userName={userName} turtleLevel={turtleLevel}/>
                     <HabitAddForm userName={userName} habits={habits}/>

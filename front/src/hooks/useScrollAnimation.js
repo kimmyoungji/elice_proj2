@@ -11,7 +11,7 @@ export default function useScrollAnimation() {
   const callback = (entries) => {
     if (entries[0].isIntersecting) {
       setIsInViewport(true);
-      console.log(entries);
+      // console.log(entries);
     } else {
       setIsInViewport(false);
     }

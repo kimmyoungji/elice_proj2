@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from "@fullcalendar/interaction"
 import check from "../../../assets/imgs/check.png"
 // import white from "../../../assets/imgs/white.png"
 import { Col, Container, Row, Card, ListGroup } from 'react-bootstrap';
@@ -53,6 +52,11 @@ const CalendarForm = ( habitlist ) => {
         date: clickFullDate,
         habit1: "빨대 안쓰기"
       }));
+    } else {
+      setHabitList(() => ({
+        date: clickFullDate,
+        habit1: "달성한 습관이 없습니다😭"
+      }))
     }
   };
 
@@ -76,30 +80,44 @@ const CalendarForm = ( habitlist ) => {
   
 
   return (
-    <Container className="calendar-container">
-      <Col className='calendar-box'>
-        <Row className='full-calendar'>
-          <FullCalendar
-                  defaultView="dayGridMonth" 
-                  plugins={[ dayGridPlugin, interactionPlugin ]}
-                  eventContent={renderEventContent}
-                  titleFormat={function(date) {
-                        return date.date.year +"년 "+(date.date.month +1)+"월" }}
-                  eventBackgroundColor='transparent'
-                  eventBorderColor='transparent'
-                  events={eventData}
-                  datesSet={(e) => handleDatesSet(e)}
-                  dateClick={handleDateClick}
-                />
-                
-        </Row>
-        <Card className="calendar-text" style={{ width: '30rem' }}>
-          <ListGroup variant="flush">
-            <HabitListGroup/>
-          </ListGroup>
-        </Card>
-      </Col>
+    <>
+      <Container className="calendar-container">
+        <Col className='calendar-box'>
+          <Row className='full-calendar'>
+            <FullCalendar
+                    defaultView="dayGridMonth" 
+                    plugins={[ dayGridPlugin ]}
+                    eventContent={renderEventContent}
+                    titleFormat={function(date) {
+                          return date.date.year +"년 "+(date.date.month +1)+"월" }}
+                    eventBackgroundColor='transparent'
+                    eventBorderColor='transparent'
+                    events={eventData}
+                    datesSet={(e) => handleDatesSet(e)}
+                    dateClick={handleDateClick}
+                    height="550px"
+                  />
+                  
+          </Row>
+          <Card className="calendar-text" style={{ width: '30rem', height: "300px" }}>
+            <ListGroup variant="flush">
+              <HabitListGroup/>
+            </ListGroup>
+          </Card>
+        </Col>
+      </Container>
+      <Container
+        className='text-center'
+        style={{ marginTop: '30px'}}>
+        <h3>지난 주 *회 달성 ! 0회 남았어요😊</h3>
+
+        <h6 style={{ color: "grey", marginTop: '30px', marginBottom: '50px' }}>
+            ▼ 아래로 내려서 나만의 Data를 확인해보세요
+        </h6><br />
+        <Row></Row>
     </Container>
+
+    </>
   );
 }
 
