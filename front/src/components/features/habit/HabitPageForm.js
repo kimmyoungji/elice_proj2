@@ -98,7 +98,7 @@ const HabitAddForm = ({ userName, habits }) => {
             type='radio' name="group" 
             onClick={() => handleRadioChange(day)}
             style={{ fontSize: "14px"}}/>
-        </ListGroup.Item> // name="group"으로 group 이름이 같아야 중복 선택 안됨
+        </ListGroup.Item>
     ));
 
     const handleSelectButton = () => {
