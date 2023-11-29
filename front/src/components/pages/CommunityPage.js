@@ -68,8 +68,9 @@ export default function CommunityPage() {
       setIsLoading(true);
     } else {
       setIsLoading(false);
-    } 
-  }, [])
+    }
+  }, [isInViewport]);
+
 
 
   return (
