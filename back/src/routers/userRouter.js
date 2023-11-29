@@ -1,18 +1,58 @@
 const userRouter = require("express").Router();
 const knex = require("../db/knex");
 const UsersModel = require("../db/models/users");
-const { NotFoundError } = require("../lib/custom-error");
 const users = new UsersModel(knex);
+const { NotFoundError, INVALID_USER_Error } = require("../lib/custom-error");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const isLoggedIn = require("../middlewares/isLoggedIn.js");
 
 // GET /users/login
-userRouter.get("/users/login", (req, res, next) => {
+userRouter.get("/users/login", async (req, res, next) => {
   try {
-    // cookie에서 email, password 받아오기
-    // FindByEmail로 유저 조회
+    // 요청 바디 데이터 받아오기
+    const { email, password } = req.body;
+    // DB: user_id로 유저 조회
+    const result = await users.findByEmail(email);
+    const user = result[0];
+    // user 유무 검증
+    if (!user) {
+      throw new INVALID_USER_Error("등록되지 않은 이메일입니다.");
+    }
     // password 검증
+    const correctPasswordHash = user.password;
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      correctPasswordHash
+    );
+    if (!isPasswordCorrect) {
+      throw new INVALID_USER_Error("잘못된 비밀번호입니다.");
+    }
+    // jwt 생성
+    const accessToken = await jwt.sign(
+      { user_id: user.user_id, username: user.username, email: user.email },
+      process.env.JWT_SECRET_KEY,
+      {
+        algorithm: "HS256", // 암호화 알고리즘
+        expiresIn: 60 * 60 * 24, // 유효기간
+      }
+    );
     // cookie 전송
+    const cookieOption = {
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 14 * 24 * 60 * 60 * 1000,
+    };
+    res.cookie("accessToken", accessToken, cookieOption);
+    // 응답
+    res.send({
+      statusCode: 200,
+      message: "로그인 성공",
+      data: {},
+    });
+
     // OR
     // passport.authenticate() 함수 호출하여 후속처리
   } catch (err) {
@@ -21,27 +61,23 @@ userRouter.get("/users/login", (req, res, next) => {
 });
 
 // GET /users/user
-userRouter.get("/users/user", async (req, res, next) => {
+userRouter.get("/users/user", isLoggedIn, async (req, res, next) => {
   try {
     // 요청 쿠키 데이터 가져오기
-    const { user_id } = req.cookies;
+    const user_id = req.currentUserId;
     // DB:  user_id로 users 조회
     const result = await users.findById(user_id);
-    // 응답 데이터 구성하기
-    delete result[0].password;
-
     // 빈 배열일 경우 에러처리
     if (result.length === 0) {
       throw new NotFoundError("데이터가 존재하지 않습니다.");
     }
+    // 응답 데이터 구성하기
+    delete result[0].password;
 
     // 응답
-    res.send({
-      statusCode: 200,
-      message: "DB 데이터 조회 성공",
-      data: {
-        user: result,
-      },
+    res.status(200).send({
+      statusMessage: "DB 데이터 조회 성공",
+      user: result,
     });
   } catch (err) {
     next(err);
@@ -58,6 +94,11 @@ userRouter.get("/users", async (req, res, next) => {
       delete user.password;
       return user;
     });
+
+    // 빈 배열일 경우 에러처리
+    if (userArr.length === 0) {
+      throw new NotFoundError("데이터가 존재하지 않습니다.");
+    }
 
     // 응답
     res.send({
@@ -88,7 +129,7 @@ userRouter.post("/users", async (req, res, next) => {
       level: 0,
     };
     // DB: user 데이터 DB에 추가하기
-    await users.create(newUser); //왜 반환 값이 0이 나올까?..
+    const result = await users.create(newUser); //왜 반환 값이 0이 나올까?..
 
     //응답
     res.send({
@@ -102,10 +143,10 @@ userRouter.post("/users", async (req, res, next) => {
 });
 
 // DELETE /users
-userRouter.delete("/users", async (req, res, next) => {
+userRouter.delete("/users", isLoggedIn, async (req, res, next) => {
   try {
     // cookie에서 user_id 받아오기
-    const user_id = req.cookies.user_id;
+    const user_id = req.currentUserId;
     // DB: db 데이터 삭제
     const result = await users.deleteById(user_id);
 
@@ -121,12 +162,11 @@ userRouter.delete("/users", async (req, res, next) => {
 });
 
 // UPDATE /users
-userRouter.put("/users", async (req, res, next) => {
+userRouter.put("/users", isLoggedIn, async (req, res, next) => {
   try {
     // 요청 쿠키, 바디에서 값 받아오기
-    const user_id = req.cookies.user_id;
+    const user_id = req.currentUserId;
     const toUpdate = { ...req.body };
-    console.log(user_id, toUpdate);
     // DB: DB 데이터 수정하기
     const result = await users.update(user_id, toUpdate);
 

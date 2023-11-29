@@ -14,7 +14,7 @@ CREATE TABLE users (
     user_id VARCHAR(36) PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL,
-    password VARCHAR(50) NOT NULL,
+    password VARCHAR(100) NOT NULL,
     level INT NOT NULL DEFAULT 0,
 );
 
