@@ -9,7 +9,7 @@ const jwt = require("jsonwebtoken");
 const isLoggedIn = require("../middlewares/isLoggedIn.js");
 
 // GET /users/login
-userRouter.get("/users/login", async (req, res, next) => {
+userRouter.post("/users/login", async (req, res, next) => {
   try {
     // 요청 바디 데이터 받아오기
     const { email, password } = req.body;

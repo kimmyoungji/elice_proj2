@@ -2,10 +2,10 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const { errorMiddleware } = require("./middlewares/errorMiddleware");
 
 const knex = require("./db/knex");
 const UsersModel = require("./db/models/users");
-const { errorMiddleware } = require("./middlewares/errorMiddleware");
 const testKnex = require("./db/models/modelTestCodes/knex_test");
 
 //라우터 가져오기
@@ -29,11 +29,6 @@ app.use(
 // knex 연결 test
 testKnex();
 
-// Your Express routes and middleware go here
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
 // 라우터
 app.use(userRouter);
 // 에러처리 미들웨어
@@ -45,5 +40,3 @@ app.listen(process.env.SERVER_PORT, () => {
     `Server is running on http://localhost:${process.env.SERVER_PORT}`
   );
 });
-
-module.exports = pool;
