@@ -47,10 +47,9 @@ userRouter.get("/users/login", async (req, res, next) => {
     };
     res.cookie("accessToken", accessToken, cookieOption);
     // 응답
-    res.send({
+    res.status(200).send({
       statusCode: 200,
       message: "로그인 성공",
-      data: {},
     });
 
     // OR
