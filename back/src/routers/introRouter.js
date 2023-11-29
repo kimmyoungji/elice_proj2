@@ -43,15 +43,17 @@ router.get("/", connectDB, async (req, res, next) => {
     const result = await req.dbConnection.select("*").from("intro");
     const data = JSON.parse(result[0].data); //json타입 으로 형변환
     console.log(data);
-    res.status(200).json(data);
+    res.status(200).json({
+      status: 200,
+      message: "인포그래픽 데이터 전송 성공",
+      data: data,
+    });
   } catch (error) {
     console.error("Error in introRouter", error.stack);
     res.status(500).json({
-      body: {
-        status: 500,
-        message: "Internal Server Error",
-        data: null,
-      },
+      status: 500,
+      message: "Internal Server Error",
+      data: null,
     });
   }
 });
