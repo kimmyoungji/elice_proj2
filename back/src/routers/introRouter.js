@@ -43,13 +43,7 @@ router.get("/", connectDB, async (req, res, next) => {
     const result = await req.dbConnection.select("*").from("intro");
     const data = JSON.parse(result[0].data); //json타입 으로 형변환
     console.log(data);
-    res.json({
-      body: {
-        status: 200,
-        message: "인포그래픽 데이터 전송 성공",
-        data: data,
-      },
-    });
+    res.status(200).json(data);
   } catch (error) {
     console.error("Error in introRouter", error.stack);
     res.status(500).json({
