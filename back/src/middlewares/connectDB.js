@@ -1,10 +1,10 @@
-const pool = require("../server");
+const pool = require("../db/db");
 
 const connectDB = async (req, res, next) => {
   console.log("Connecting to the turtineDB...");
 
   try {
-    const connection = await pool.promise().getConnection();
+    const connection = await pool.getConnection();
     await connection.query("USE turtine");
     console.log("Connected to the turtineDB.");
     req.dbConnection = connection;
