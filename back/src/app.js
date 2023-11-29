@@ -7,18 +7,15 @@ const introRouter = require("./routers/introRouter");
 // const calenderRouter = require("./routers/calenderRouter");
 
 const app = express();
-const corsOptions = {
-  origin: "http://localhost:3000",
-  optionsSuccessStatus: 200,
-};
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
 
 const connectDB = require("./middlewares/connectDB");
 app.get("/", connectDB, async (req, res, next) => {
+  //연결 테스트 입니다. 콘솔에 "Connected to the turtineDB." 가 찍히면 연결 성공입니다.
   try {
     await req.connectDB;
     res.send("turtine에 오신걸 환영합니다 야호");
