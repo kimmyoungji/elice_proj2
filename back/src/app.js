@@ -2,10 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 // const cookieParser = require("cookie-parser");
+const errorMiddleware = require("./middlewares/errorMiddleware");
 
 //라우터 가져오기
 const introRouter = require("./routers/introRouter");
-// const calenderRouter = require("./routers/calenderRouter");
+const calenderRouter = require("./routers/calenderRouter");
 
 //라우터 가져오기
 const app = express();
@@ -27,7 +28,9 @@ app.get("/", connectDB, async (req, res, next) => {
 });
 
 app.use("/graphs", introRouter);
-// app.use("/calender", calenderRouter);
+app.use("/fulfilled_habits", calenderRouter);
+
+app.use(errorMiddleware);
 
 app.listen(process.env.SERVER_PORT, () => {
   console.log(

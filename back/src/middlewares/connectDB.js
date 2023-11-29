@@ -1,5 +1,5 @@
 // const pool = require("../db/db");
-const knex = require("knex")(require("../db/knexConfig"));
+const knex = require("../db/knexConfig");
 
 // SQL2 라이브러리를 사용해 DB 연결하고 SQL 문 사용하여 데이터 조작
 // const connectDB = async (req, res, next) => {
