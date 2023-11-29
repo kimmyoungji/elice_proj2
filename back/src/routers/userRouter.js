@@ -101,12 +101,9 @@ userRouter.get("/users", async (req, res, next) => {
     }
 
     // 응답
-    res.send({
-      statusCode: 200,
+    res.status(200).send({
       message: "db 조회 성공",
-      data: {
-        users: userArr,
-      },
+      users: userArr,
     });
   } catch (err) {
     next(err);
@@ -132,10 +129,8 @@ userRouter.post("/users", async (req, res, next) => {
     const result = await users.create(newUser); //왜 반환 값이 0이 나올까?..
 
     //응답
-    res.send({
-      statusCode: 200,
+    res.status(200).send({
       message: "DB 데이터 추가 성공",
-      data: { result },
     });
   } catch (err) {
     next(err);
@@ -151,10 +146,9 @@ userRouter.delete("/users", isLoggedIn, async (req, res, next) => {
     const result = await users.deleteById(user_id);
 
     //응답
-    res.send({
+    res.status(200).end({
       statusCode: 200,
       message: "DB 데이터 삭제 성공",
-      data: { result },
     });
   } catch (err) {
     next(err);
@@ -171,10 +165,8 @@ userRouter.put("/users", isLoggedIn, async (req, res, next) => {
     const result = await users.update(user_id, toUpdate);
 
     // 응답
-    res.send({
-      statusCode: 200,
+    res.status(200).send({
       message: "DB 데이터 수정 성공",
-      data: { result },
     });
     console.log(result);
   } catch (err) {

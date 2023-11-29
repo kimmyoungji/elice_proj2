@@ -5,6 +5,7 @@ const UsersModel = require("./db/models/users");
 const { errorMiddleware } = require("./middlewares/errorMiddleware");
 const cookieParser = require("cookie-parser");
 const testKnex = require("./db/models/modelTestCodes/knex_test");
+const cors = require("cors");
 //라우터 가져오기
 const userRouter = require("./routers/userRouter");
 
@@ -15,6 +16,13 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+    credentials: true,
+  })
+);
 
 // knex 연결 test
 testKnex();
