@@ -1,11 +1,13 @@
-const express = require("express");
 require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+
 const knex = require("./db/knex");
 const UsersModel = require("./db/models/users");
 const { errorMiddleware } = require("./middlewares/errorMiddleware");
-const cookieParser = require("cookie-parser");
 const testKnex = require("./db/models/modelTestCodes/knex_test");
-const cors = require("cors");
+
 //라우터 가져오기
 const userRouter = require("./routers/userRouter");
 
@@ -28,20 +30,20 @@ app.use(
 testKnex();
 
 // Your Express routes and middleware go here
-// app.get("/", (req, res) => {
-//   res.send("Hello World!");
-// });
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
 // 라우터
 app.use(userRouter);
 // 에러처리 미들웨어
 app.use(errorMiddleware);
 
-// // Start the Express server
-// app.listen(process.env.SERVER_PORT, () => {
-//   console.log(
-//     `Server is running on http://localhost:${process.env.SERVER_PORT}`
-//   );
-// });
+// Start the Express server
+app.listen(process.env.SERVER_PORT, () => {
+  console.log(
+    `Server is running on http://localhost:${process.env.SERVER_PORT}`
+  );
+});
 
 module.exports = pool;

@@ -1,11 +1,13 @@
 require("dotenv").config();
 const express = require("express");
-// const cookieParser = require("cookie-parser");
 const cors = require("cors");
+// const cookieParser = require("cookie-parser");
 
+//라우터 가져오기
 const introRouter = require("./routers/introRouter");
 // const calenderRouter = require("./routers/calenderRouter");
 
+//라우터 가져오기
 const app = express();
 
 app.use(cors());
