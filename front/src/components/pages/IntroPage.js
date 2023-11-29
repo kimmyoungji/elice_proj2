@@ -54,7 +54,7 @@ export default function IntroPage() {
         </Col>
         <Col>
           <ScrollAniDiv>
-            <img src={Chat} alt="img" style={{ width: "70%" }}/>
+            <img src={Chat} alt="img" style={{ width: "60%" }}/>
           </ScrollAniDiv>
         </Col>
       </Row>
@@ -127,7 +127,7 @@ export default function IntroPage() {
         <ScrollAniDiv>
           <p>"지금 노력하지 않으면,</p>
           <p>2050년 바다에는</p>
-          <p><span className="important">해양생물</span>보다 <span>플라스틱</span>이 더 많아질 것입니다."</p>
+          <p><span className="important">해양생물</span>보다 <span className="important">플라스틱</span>이 더 많아질 것입니다."</p>
           <p>- 2017 세계 경제 포럼</p>
         </ScrollAniDiv>
       </Row>
