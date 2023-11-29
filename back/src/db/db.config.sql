@@ -63,7 +63,8 @@ VALUES
     ('fh4', '456def', '4d5e6f', '2023-11-16'),
     ('fh5', '789ghi', '7g8h9i', '2023-11-15'),
     ('fh6', 'abc123', 'jklmno', '2023-11-17'),
-    ('fh7', 'def456', 'pqrstu', '2023-11-16');
+    ('fh7', 'def456', 'pqrstu', '2023-11-16'),
+    ('fh8', '123abc', '1a2b3c', '2023-11-30'),;
 
 -- Sample data for 'planned_habits' table
 INSERT INTO planned_habits (planned_habit_id, user_id, habit_id, start_date, end_date) 

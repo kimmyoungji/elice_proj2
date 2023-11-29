@@ -43,12 +43,18 @@ router.get("/", connectDB, async (req, res, next) => {
     const result = await req.dbConnection.select("*").from("intro");
     const data = JSON.parse(result[0].data); //json타입 으로 형변환
     console.log(data);
-    res.status(200).json({
-      status: 200,
-      message:
-        "인포그래픽 데이터 전송 성공: [0]koreaTrashGraph, [1]worldOceanPlasticsGraph",
-      data: [data.koreaTrashGraph, data.worldOceanPlasticsGraph],
-    });
+    res
+      .status(200)
+      .send({
+        message:
+          "인포그래픽 데이터 전송 성공: [0]koreaTrashGraph, [1]worldOceanPlasticsGraph",
+      })
+      .json({
+        status: 200,
+        message:
+          "인포그래픽 데이터 전송 성공: [0]koreaTrashGraph, [1]worldOceanPlasticsGraph",
+        data: [data.koreaTrashGraph, data.worldOceanPlasticsGraph],
+      });
   } catch (error) {
     console.error("Error in introRouter", error.stack);
     res.status(500).json({

@@ -2,9 +2,10 @@ require("dotenv").config();
 const express = require("express");
 // const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const errorMiddleware = require("./middlewares/errorMiddleware");
 
 const introRouter = require("./routers/introRouter");
-// const calenderRouter = require("./routers/calenderRouter");
+const calenderRouter = require("./routers/calenderRouter");
 
 const app = express();
 
@@ -25,7 +26,9 @@ app.get("/", connectDB, async (req, res, next) => {
 });
 
 app.use("/graphs", introRouter);
-// app.use("/calender", calenderRouter);
+app.use("/fulfilled_habits", calenderRouter);
+
+app.use(errorMiddleware);
 
 app.listen(process.env.SERVER_PORT, () => {
   console.log(

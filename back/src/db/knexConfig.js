@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-module.exports = {
+const knex = require("knex")({
   client: "mysql",
   connection: {
     host: process.env.RDS_HOSTNAME,
@@ -13,4 +13,6 @@ module.exports = {
     tableName: "knex_migrations",
     directory: "./migrations",
   },
-};
+});
+
+module.exports = knex;
