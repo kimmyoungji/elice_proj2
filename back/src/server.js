@@ -15,21 +15,21 @@ const pool = mysql.createPool({
 });
 
 // test connection
-pool.getConnection((error, connection) => {
-  connection.connect(function (err) {
-    if (err) {
-      console.error("Database connection failed: " + err.stack);
-      connection.release();
-      return;
-    }
-    console.log("Connected to database.");
-    connection.query("USE turtine;", (error, result, fields) => {
-      console.log(error, result, fields);
-    });
-    connection.release();
-    console.log("connection pool released");
-  });
-});
+// pool.getConnection((error, connection) => {
+//   connection.connect(function (err) {
+//     if (err) {
+//       console.error("Database connection failed: " + err.stack);
+//       connection.release();
+//       return;
+//     }
+//     console.log("Connected to database.");
+//     connection.query("USE turtine;", (error, result, fields) => {
+//       console.log(error, result, fields);
+//     });
+//     connection.release();
+//     console.log("connection pool released");
+//   });
+// });
 
 // Your Express routes and middleware go here
 // app.get("/", (req, res) => {
