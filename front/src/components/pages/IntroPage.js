@@ -7,6 +7,7 @@ import Eat from "../features/IntroContents/restaurant.png";
 import Toothbrush from "../features/IntroContents/toothbrush.png";
 import Logo from "../common/header/logo.png";
 import Chat from "../features/IntroContents/kakaotalk.png";
+import Chart from "../features/IntroContents/Chart";
 
 
 export default function IntroPage() {
@@ -34,26 +35,44 @@ export default function IntroPage() {
         </Col>
         <Col>
           <ScrollAniDiv>
-            <img src={Chat} alt="img" />
+            <img src={Chat} alt="img" style={{ width: "70%" }}/>
           </ScrollAniDiv>
         </Col>
       </Row>
 
+      <Row className="vh-100">
+        <Col>
+          <ScrollAniDiv>
+            <p>1일 기준</p>
+            <p>국내 플라스틱 배출량</p>
+            <span>매년 꾸준히 증가</span>
+          </ScrollAniDiv>
+        </Col>
+        <Col>
+          <ScrollAniDiv>
+            <Chart />
+          </ScrollAniDiv>
+        </Col>
+      </Row>
 
       <Row className="vh-100">
-        <ScrollAniDiv>
-          <p>"지금 노력하지 않으면,</p>
-          <p>2050년 바다에는</p>
-          <p><span>해양생물</span>보다 <span>플라스틱</span>이 더 많아질 것입니다."</p>
-          <p>- 2017 세계 경제 포럼</p>
-        </ScrollAniDiv>
+        <Col>
+          <ScrollAniDiv>
+            <Chart />
+          </ScrollAniDiv>
+        </Col>
+        <Col>
+          <ScrollAniDiv>
+            <p>바다로 가는</p>
+            <p>플라스틱 쓰레기</p>
+            <span>세계적으로 증가</span>
+          </ScrollAniDiv>
+        </Col>
       </Row>
-      <br/>
-      <br/>
       
 
       <Row className="vh-100">
-        <Stack>
+        <Stack className="my-auto">
           <Row>
             <ScrollAniDiv>
               <p>1인당 섭취하는 미세플라스틱의 양</p>
@@ -83,6 +102,15 @@ export default function IntroPage() {
             </Col>
           </Row>
         </Stack>
+      </Row>
+
+      <Row className="vh-100">
+        <ScrollAniDiv>
+          <p>"지금 노력하지 않으면,</p>
+          <p>2050년 바다에는</p>
+          <p><span>해양생물</span>보다 <span>플라스틱</span>이 더 많아질 것입니다."</p>
+          <p>- 2017 세계 경제 포럼</p>
+        </ScrollAniDiv>
       </Row>
 
       {/* TODO: 로그인 되어있는 상태라면 시작하기 눌렀을 때, 해빗페이지로 이동할까요? */}
