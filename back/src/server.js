@@ -1,60 +1,41 @@
 const express = require("express");
 require("dotenv").config();
+const knex = require("./db/knex");
+const UsersModel = require("./db/models/users");
+const { errorMiddleware } = require("./middlewares/errorMiddleware");
+const cookieParser = require("cookie-parser");
+const testKnex = require("./db/models/modelTestCodes/knex_test");
+const cors = require("cors");
+//라우터 가져오기
+const userRouter = require("./routers/userRouter");
 
-const mysql = require("mysql2");
+// express 연결하기
+const app = express();
 
-console.log(process.env.SERVER_PORT);
+// 필요한 미들웨어 연결
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+    credentials: true,
+  })
+);
 
-// Create a MySQL connection
-const pool = mysql.createPool({
-  host: process.env.RDS_HOSTNAME,
-  user: process.env.RDS_USERNAME,
-  password: process.env.RDS_PASSWORD,
-  port: process.env.RDS_PORT,
-});
-
-// test connection
-// pool.getConnection((error, connection) => {
-//   connection.connect(function (err) {
-//     if (err) {
-//       console.error("Database connection failed: " + err.stack);
-//       connection.release();
-//       return;
-//     }
-//     console.log("Connected to database.");
-//     connection.query("USE turtine;", (error, result, fields) => {
-//       console.log(error, result, fields);
-//     });
-//     connection.release();
-//     console.log("connection pool released");
-//   });
-// });
+// knex 연결 test
+testKnex();
 
 // Your Express routes and middleware go here
 // app.get("/", (req, res) => {
 //   res.send("Hello World!");
 // });
 
-// test query
-// app.get("/users", (req, res) => {
-//   console.log("get users is working");
-//   pool.getConnection((error, connection) => {
-//     connection.connect(function (err) {
-//       if (err) {
-//         console.error("Database connection failed: " + err.stack);
-//         connection.release();
-//         return;
-//       }
-//       console.log("Connected to database.");
-//       connection.query("USE turtine");
-//       connection.query("SELECT * FROM users;", (error, result, fields) => {
-//         console.log(error, result, fields);
-//       });
-//       connection.release();
-//       console.log("connection pool released");
-//     });
-//   });
-// });
+// 라우터
+app.use(userRouter);
+// 에러처리 미들웨어
+app.use(errorMiddleware);
 
 // // Start the Express server
 // app.listen(process.env.SERVER_PORT, () => {
