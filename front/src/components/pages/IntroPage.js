@@ -8,11 +8,30 @@ import Toothbrush from "../features/IntroContents/toothbrush.png";
 import Logo from "../common/header/logo.png";
 import Chat from "../features/IntroContents/kakaotalk.png";
 import Chart from "../features/IntroContents/Chart";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 
 export default function IntroPage() {
 
   const navigate = useNavigate();
+  const [charts, setCharts] = useState();
+
+  const getCharts = () => {
+    axios.get("http://"+ window.location.hostname +":5001/graphs")
+      .then((res) => {
+        setCharts(res.data.data);
+    })
+      .catch((err) => {
+        // TODO :  에러 핸들링
+        console.log(err);
+    })
+  };
+
+  useEffect(() => {
+    getCharts();
+  }, []);
+
 
   return (
     <div className="back">
@@ -43,14 +62,14 @@ export default function IntroPage() {
       <Row className="vh-100">
         <Col>
           <ScrollAniDiv>
-            <p>1일 기준</p>
-            <p>국내 플라스틱 배출량</p>
-            <span>매년 꾸준히 증가</span>
+            {charts && (<Chart data={charts[0]} />)}
           </ScrollAniDiv>
         </Col>
         <Col>
           <ScrollAniDiv>
-            <Chart />
+            <p>1일 기준</p>
+            <p>국내 플라스틱 배출량</p>
+            <span>매년 꾸준히 증가</span>
           </ScrollAniDiv>
         </Col>
       </Row>
@@ -58,14 +77,14 @@ export default function IntroPage() {
       <Row className="vh-100">
         <Col>
           <ScrollAniDiv>
-            <Chart />
+            <p>바다로 가는</p>
+            <p>플라스틱 쓰레기</p>
+            <span>세계적으로 증가</span>
           </ScrollAniDiv>
         </Col>
         <Col>
           <ScrollAniDiv>
-            <p>바다로 가는</p>
-            <p>플라스틱 쓰레기</p>
-            <span>세계적으로 증가</span>
+            {charts && (<Chart data={charts[1]}/>)}
           </ScrollAniDiv>
         </Col>
       </Row>
