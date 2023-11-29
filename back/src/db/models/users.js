@@ -1,15 +1,52 @@
-const promisePool = require("../db");
+class UsersModel {
+  constructor(knex) {
+    this.knex = knex;
+  }
 
-const UsersModel = {
-  async findOne(user_id) {
-    return await promisePool.query(`SELECT * FROM users WHERE user_id=?;`, [
-      user_id,
-    ]);
-  },
+  async create(user) {
+    try {
+      return await this.knex("users").insert(user);
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
 
-  //CRUD
-  //쿼리문
-  //최대한, 기본에 가깝게, 최대한 작은 기능으로 메소들르 정의해야한느데 --> 여기 정의 되는 메소드는 재활용될 가능성이 높기 때문에 범용적인 기능
-};
+  async findById(user_id) {
+    try {
+      if (!user_id) {
+        return await this.knex("users").select("*").from("users");
+      }
+      return await this.knex("users").select("*").where("user_id", user_id);
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  async findByEmail(email) {
+    try {
+      return await this.knex("users").select("*").where("email", email);
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  async update(user_id, toUpdate) {
+    try {
+      return await this.knex("users")
+        .where("user_id", user_id)
+        .update(toUpdate);
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  async deleteById(user_id) {
+    try {
+      return await this.knex("users").where("user_id", user_id).delete();
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+}
 
 module.exports = UsersModel;

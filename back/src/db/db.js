@@ -20,4 +20,3 @@ const testPromisePool = async () => {
 };
 
 module.exports = promisePool;
-// module.exports = testPromisePool;
