@@ -41,14 +41,14 @@ export default function IntroPage() {
           <hr/>
           <p>조금 느려도</p>
           <p>하나씩 실천해 나가는</p>
-          <p><span>해양환경</span>을 위한 습관</p>
+          <p><span className="important">해양환경</span>을 위한 습관</p>
         </ScrollAniDiv>
       </Row>
 
       <Row className="vh-100">
         <Col>
           <ScrollAniDiv>
-            <p>왜 <span>해양환경</span>을 위한</p>
+            <p>왜 <span className="important">해양환경</span>을 위한</p>
             <p>습관을 형성해야할까?</p>
           </ScrollAniDiv>
         </Col>
@@ -62,14 +62,14 @@ export default function IntroPage() {
       <Row className="vh-100">
         <Col>
           <ScrollAniDiv>
-            {charts && (<Chart data={charts[0]} />)}
+            {charts && (<Chart data={charts[0]}/>)}
           </ScrollAniDiv>
         </Col>
         <Col>
           <ScrollAniDiv>
             <p>1일 기준</p>
             <p>국내 플라스틱 배출량</p>
-            <span>매년 꾸준히 증가</span>
+            <span className="important">매년 꾸준히 증가</span>
           </ScrollAniDiv>
         </Col>
       </Row>
@@ -79,7 +79,7 @@ export default function IntroPage() {
           <ScrollAniDiv>
             <p>바다로 가는</p>
             <p>플라스틱 쓰레기</p>
-            <span>세계적으로 증가</span>
+            <span className="important">세계적으로 증가</span>
           </ScrollAniDiv>
         </Col>
         <Col>
@@ -102,21 +102,21 @@ export default function IntroPage() {
               <ScrollAniDiv>
                 <img className="contents" src={Eat} alt="TURTINE logo" />
                 <p>일주일 간</p>
-                <span>약 2000개</span>
+                <span className="important">약 2000개</span>
               </ScrollAniDiv>
             </Col>
             <Col xs={12} md={4}>
               <ScrollAniDiv>
                 <img className="contents" src={Creditcard} alt="TURTINE logo" />
                 <p>일주일 간 5g</p>
-                <span>신용카드 1장</span>
+                <span className="important">신용카드 1장</span>
               </ScrollAniDiv>
             </Col>
             <Col xs={12} md={4}>
               <ScrollAniDiv>
                 <img className="contents" src={Toothbrush} alt="TURTINE logo" />
                 <p>월간 21g</p>
-                <span>칫솔 1개</span>
+                <span className="important">칫솔 1개</span>
               </ScrollAniDiv>
             </Col>
           </Row>
@@ -127,7 +127,7 @@ export default function IntroPage() {
         <ScrollAniDiv>
           <p>"지금 노력하지 않으면,</p>
           <p>2050년 바다에는</p>
-          <p><span>해양생물</span>보다 <span>플라스틱</span>이 더 많아질 것입니다."</p>
+          <p><span className="important">해양생물</span>보다 <span>플라스틱</span>이 더 많아질 것입니다."</p>
           <p>- 2017 세계 경제 포럼</p>
         </ScrollAniDiv>
       </Row>
