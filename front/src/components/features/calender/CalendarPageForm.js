@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -12,6 +12,8 @@ const CalendarForm = ( habitlist ) => {
   const [habitList, setHabitList] = useState(habitlist.habitlist);
   const eventData = [{date:'2023-10-12'}, {date:'2023-11-04'},
                     {date:'2023-11-06'}, {date:'2023-11-15'}];
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [scroll, setScroll] = useState(false);
 
   const renderEventContent = (eventInfo) => {
     return (
@@ -58,6 +60,36 @@ const CalendarForm = ( habitlist ) => {
         setHabitList(habitlist.habitlist)
     }
   };
+
+  const MyHabitData = () => {
+    return (
+      <>
+        <Card style={{ height: "200px" }}>
+          <Card.Title>
+            <h2>데이터 서비스</h2>
+          </Card.Title>
+        </Card>
+      </>
+    )
+  }
+
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(window.scrollY);
+    };
+    window.addEventListener('scroll', handleScroll);
+  }, []);
+
+  
+  // 한 번만 API 요청하도록
+  useEffect(() => {
+    const { offsetHeight } = document.documentElement;
+    if (!scroll && window.innerHeight >= Math.floor(offsetHeight - scrollPosition)) {
+      console.log('API 요청');
+      setScroll(true);
+    }
+  }, [scroll, scrollPosition]);
   
 
   return (
@@ -100,7 +132,7 @@ const CalendarForm = ( habitlist ) => {
         <h6 style={{ color: "grey", marginTop: '30px', marginBottom: '50px' }}>
             ▼ 아래로 내려서 나만의 Data를 확인해보세요
         </h6><br />
-        <Row></Row>
+        {scroll && <MyHabitData/>}
     </Container>
     </>
   );

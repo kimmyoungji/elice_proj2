@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Container, Col, Row, Modal, Button, Image } from 'react-bootstrap';
 import './HabitPage.css';
 import { ScrollAniDiv } from "../IntroContents/AnimationStyled";
@@ -16,11 +16,11 @@ export default function HabitListForm ({ habitList }) {
         "👍🏻👍🏻👍🏻",
         "충분히 잘하고 있어요👍🏻 우리 계속 도전해봐요"
     ];
+    const [randomIndex, setRandomIndex] = useState(() => Math.floor(Math.random() * cheerUpTexts.length));
 
-    
 
     const HabitModal = (props) => {
-        const { key, name } = props.habitInfo;
+        const { key, name } = props.habitinfo;
         return (
             <Modal
                 {...props}
@@ -53,8 +53,13 @@ export default function HabitListForm ({ habitList }) {
         setModalShow(true)
     }
 
+    useEffect(() => {
+        if (!modalShow) {
+          // modalShow가 false일 때만 새로운 랜덤 인덱스를 생성하여 상태 업데이트
+          setRandomIndex(() => Math.floor(Math.random() * cheerUpTexts.length));
+        }
+      }, [modalShow, cheerUpTexts.length]);
 
-    const randomIndex = Math.floor(Math.random() * cheerUpTexts.length);
     const cards = Object.keys(habits).map((key) => (
         <Col key={key} xs={6} sm={4} md={6} lg={4}
             className="mb-4" style={{ marginRight: '0'}}>
@@ -68,12 +73,11 @@ export default function HabitListForm ({ habitList }) {
                             onClick={() => handleModal(habits[key], key)}/>
                         <Card.Title
                             style={{ marginTop: "10px" }}>
-                            <span style={{ fontSize: "20px" }}>{habits[key]}</span>
+                            <span style={{ fontSize: "17px" }}>{habits[key]}</span>
                         </Card.Title>
                     </Card.Body>
                 </Card>
             </ScrollAniDiv>
-            
         </Col>
     ))
 
@@ -83,7 +87,6 @@ export default function HabitListForm ({ habitList }) {
                 className='text-center'
                 style={{ marginTop: '40px'}}>
                 <span>{cheerUpTexts[randomIndex]}</span>
-
                 <h6 style={{ color: "grey", marginTop: '20px', marginBottom: '50px' }}>
                     ▼ 아래로 내려서 습관들을 확인해보세요
                 </h6><br />
@@ -92,7 +95,7 @@ export default function HabitListForm ({ habitList }) {
                 <HabitModal
                     show={modalShow}
                     onHide={() => setModalShow(false)}
-                    habitInfo={selectedHabit}
+                    habitinfo={selectedHabit}
                 />
                 )}
             </Container>
