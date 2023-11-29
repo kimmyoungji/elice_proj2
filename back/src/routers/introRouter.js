@@ -45,8 +45,9 @@ router.get("/", connectDB, async (req, res, next) => {
     console.log(data);
     res.status(200).json({
       status: 200,
-      message: "인포그래픽 데이터 전송 성공",
-      data: data,
+      message:
+        "인포그래픽 데이터 전송 성공: [0]koreaTrashGraph, [1]worldOceanPlasticsGraph",
+      data: [data.koreaTrashGraph, data.worldOceanPlasticsGraph],
     });
   } catch (error) {
     console.error("Error in introRouter", error.stack);
