@@ -1,31 +1,40 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { UserProvider } from "./Context/UserStateContext";
 import Navigation from "./components/common/header/Navigation";
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 // TODO : 코드 스플리팅 필요
-import IntroPage  from './components/pages/IntroPage';
-import LoginPage from './components/pages/LoginPage';
-import RegisterPage from './components/pages/RegisterPage';
-import HabitPage from './components/pages/HabitPage';
-import CoummunityPage from './components/pages/CommunityPage';
-import CalendarPage from './components/pages/CalendarPage';
-import UserPage from "./components/pages/UserPage";
+
+const IntroPage = React.lazy(() => import("./components/pages/IntroPage"));
+const LoginPage = React.lazy(() => import("./components/pages/LoginPage"));
+const RegisterPage = React.lazy(() =>
+  import("./components/pages/RegisterPage")
+);
+const HabitPage = React.lazy(() => import("./components/pages/HabitPage"));
+const CommunityPage = React.lazy(() =>
+  import("./components/pages/CommunityPage")
+);
+const CalendarPage = React.lazy(() =>
+  import("./components/pages/CalendarPage")
+);
+const UserPage = React.lazy(() => import("./components/pages/UserPage"));
 
 export default function App() {
   return (
     <UserProvider>
       <BrowserRouter>
         <Navigation />
-        <Routes>
-          <Route path="/" element={<IntroPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/userpage" element={<UserPage />} />
-          <Route path="/community" element={<CoummunityPage />} />
-          <Route path="/habit" element={<HabitPage />} />
-          <Route path="/calendar" element={<CalendarPage />} />
-          <Route path="*" element={<IntroPage />} />
-        </Routes>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route path="/" element={<IntroPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/userpage" element={<UserPage />} />
+            <Route path="/community" element={<CommunityPage />} />
+            <Route path="/habit" element={<HabitPage />} />
+            <Route path="/calendar" element={<CalendarPage />} />
+            <Route path="*" element={<IntroPage />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </UserProvider>
   );
