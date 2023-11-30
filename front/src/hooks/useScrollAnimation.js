@@ -1,5 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
-
+import { useState, useRef, useEffect } from "react";
 
 export default function useScrollAnimation() {
   // 뷰포트 내부에 존재하는 지 확인하는 상태
@@ -31,5 +30,3 @@ export default function useScrollAnimation() {
 
   return { isInViewport, ref };
 }
-
-
