@@ -2,7 +2,6 @@ import React, { Suspense } from "react";
 import { UserProvider } from "./Context/UserStateContext";
 import Navigation from "./components/common/header/Navigation";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-// TODO : 코드 스플리팅 필요
 
 const IntroPage = React.lazy(() => import("./components/pages/IntroPage"));
 const LoginPage = React.lazy(() => import("./components/pages/LoginPage"));
