@@ -23,7 +23,7 @@ export default function LoginPage() {
 
   // 이메일, 패스워드 규칙 확인 (안내 문구 표시, 로그인 버튼 활성화)
   const isEmailValid = validateEmail(email);
-  const isPasswordValid = password.length >= 8;
+  const isPasswordValid = password.length >= 4;
   const isAllValid = isEmailValid && isPasswordValid;
 
   // 로그인 버튼 클릭 시, API post 요청
@@ -34,23 +34,20 @@ export default function LoginPage() {
       JSON.stringify({
         email,
         password,
-      }), {
+      }),
+      {
       headers: {
-          "Content-Type": "application/json",
-        // TODO : 백단에서 처리하는 방식 후 수정 예정 (sessionStorage X)
-        Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
+        "Content-Type": "application/json",
       },
       withCredentials: true,
     })
       .then((res) => {
-        const user = res.data;
-        const jwtToken = user.token;
-        sessionStorage.setItem("userToken", jwtToken);
+        const user = res.data.user;
         dispatch({
           type: "LOGIN_SUCCESS",
           payload: user,
         });
-        alert(`${user.name}님 환영합니다!`);
+        alert(`${user.username}님 환영합니다!`);
         navigate("/habit", { replace: true });
   
       })
@@ -111,5 +108,3 @@ export default function LoginPage() {
     </Container>
   );
 }
-
-
