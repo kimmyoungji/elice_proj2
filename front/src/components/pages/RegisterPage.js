@@ -32,33 +32,6 @@ export default function RegisterPage() {
   const isFormValid =
     isEmailValid && isPasswordValid && isPasswordSame && isUsernameValid;
 
-  // 이메일 중복검사 success시 닉네임 중복검사
-  // const onClickRegister = (e) => {
-  //   e.preventDefault();
-
-  //   axios
-  //     .post("http://" + window.location.hostname + ":5001/users")
-  //     .then((res) => {
-  //       const resMessage = res.data.message;
-  //       if (resMessage === "FAIL") {
-  //         alert("이미 사용중인 이메일입니다.");
-  //       } else if (resMessage === "SUCCESS") {
-  //         axios.get("/users").then((res) => {
-  //           const resMessage = res.data.message;
-  //           if (resMessage === "FAIL") {
-  //             alert("이미 사용중인 닉네임입니다.");
-  //           } else if (resMessage === "SUCCESS") {
-  //             alert("회원가입이 정상적으로 완료되었습니다.");
-  //           }
-  //         });
-  //       }
-  //     });
-  // };
-  // post를 보내서, 중복값이면 에러메세지를 백에서 보내주고, 그럼 포스트가 안되고, 사용자한테 "중복된 이메일or 닉네임 입니다" 띄워주고,
-  // 제대로 된 이 or 닉 쓰면 post가 되도록 !! post가 되면 데이터베이스에 정보가 저장이 되고 ! 큐키에 jwt 토큰 담아서 줌 (민정님의 로그인으로 넘어가는!)
-
-  // 회원가입 버튼 눌렀을 때 post 요청 보내서 회원가입 처리하기: 백 일단 정리되면 정리하기로 함
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -70,8 +43,12 @@ export default function RegisterPage() {
         username,
       });
       navigate("/login");
-    } catch (err) {
-      console.log("회원가입에 실패하였습니다.", err);
+    } catch (e) {
+      if (e.response.data.message === "이미 등록된 이메일입니다.") {
+        alert("이미 사용중인 이메일입니다.");
+      } else if (e.response.data.message === "이미 사용중인 사용자명입니다.") {
+        alert("이미 사용중인 닉네임입니다.");
+      }
     }
   };
 
