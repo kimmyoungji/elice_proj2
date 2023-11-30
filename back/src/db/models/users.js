@@ -30,6 +30,14 @@ class UsersModel {
     }
   }
 
+  async findByUsername(username) {
+    try {
+      return await this.knex("users").select("*").where("username", username);
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
   async update(user_id, toUpdate) {
     try {
       return await this.knex("users")
