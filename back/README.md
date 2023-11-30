@@ -13,26 +13,9 @@ npm install
 cd src
 
 # 4) server.js 실행하기
-node server.js
+node app.js
 
 # 5) 아래와 같이 뜨면 실행 성공
-5001
 Server is running on http://localhost:5001
-Connected to database.
-connection pool released
-null ResultSetHeader {
-  fieldCount: 0,
-  affectedRows: 0,
-  insertId: 0,
-  info: '',
-  serverStatus: 16386,
-  warningStatus: 0,
-  stateChanges: {
-    systemVariables: {},
-    schema: 'turtine',
-    gtids: [],
-    trackStateChange: null
-  },
-  changedRows: 0
-} undefined
+Knex Successfully connected
 ```
