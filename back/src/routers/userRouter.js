@@ -2,7 +2,11 @@ const userRouter = require("express").Router();
 const knex = require("../db/knex");
 const UsersModel = require("../db/models/users");
 const users = new UsersModel(knex);
-const { NotFoundError, INVALID_USER_Error } = require("../lib/custom-error");
+const {
+  NotFoundError,
+  INVALID_USER_Error,
+  ConflictError,
+} = require("../lib/custom-error");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -147,6 +151,14 @@ userRouter.post("/users", async (req, res, next) => {
       message: "DB 데이터 추가 성공",
     });
   } catch (err) {
+    const errStr = JSON.stringify(err.message);
+    if (errStr.includes("ER_DUP_ENTRY")) {
+      if (errStr.includes("for key 'users.username'")) {
+        next(new ConflictError("이미 사용중인 사용자명입니다."));
+      } else if (errStr.includes("for key 'users.email'")) {
+        next(new ConflictError("이미 등록된 이메일입니다."));
+      }
+    }
     next(err);
   }
 });

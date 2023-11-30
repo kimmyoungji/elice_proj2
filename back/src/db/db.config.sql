@@ -3,7 +3,7 @@ CREATE DATABASE turtine;
 USE turtine;
 
 CREATE TABLE habits (
-    habit_id VARCHAR(36) PRIMARY KEY,
+    habit_id VARCHAR(36) PRIMARY KEY ,
     habit_title VARCHAR(50) NOT NULL,
     discription VARCHAR(300),
     target_days INT NOT NULL,
@@ -11,9 +11,9 @@ CREATE TABLE habits (
 );
 
 CREATE TABLE users (
-    user_id VARCHAR(36) PRIMARY KEY,
-    username VARCHAR(50) NOT NULL,
-    email VARCHAR(50) NOT NULL,
+    user_id VARCHAR(36) PRIMARY KEY ,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(50) NOT NULL,
     level INT NOT NULL DEFAULT 0,
 );
