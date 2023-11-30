@@ -8,6 +8,6 @@ export const validateEmail = (email) => {
 
 export const validatePassword = (password) => password.length >= 8;
 
-export const validateNickname = (nickname) => {
-  return nickname.toLowerCase().match(/^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|].{2,8}$/);
+export const validateUsername = (username) => {
+  return username.toLowerCase().match(/^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|].{2,8}$/);
 };
