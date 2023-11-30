@@ -19,3 +19,4 @@ node app.js
 Server is running on http://localhost:5001
 Knex Successfully connected
 ```
+making commit for merging
