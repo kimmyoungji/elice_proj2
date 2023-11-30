@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 import { UserProvider } from "./Context/UserStateContext";
-
+import Navigation from "./components/common/header/Navigation";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // TODO : 코드 스플리팅 필요
 import IntroPage  from './components/pages/IntroPage';
@@ -15,6 +15,7 @@ export default function App() {
   return (
     <UserProvider>
       <BrowserRouter>
+        <Navigation />
         <Routes>
           <Route path="/" element={<IntroPage />} />
           <Route path="/login" element={<LoginPage />} />
