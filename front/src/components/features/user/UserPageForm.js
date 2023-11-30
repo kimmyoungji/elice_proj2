@@ -119,9 +119,9 @@ const UserPageForm = ( props ) => {
         <Container className="mb-3 center-container mt-5">
             <Col className="center-content mb-3">
                 <div className="mb-3 username" style={{ fontSize: '1.5rem' }}>
-                    {userName}님의 마이페이지
+                <span style={{ fontWeight: "bold", fontSize: "30px" }}>{userName}</span>님의 마이페이지
                 </div>
-                <Col className="mb-3"> 
+                <Col className="mb-3">
                     <Image src={image} roundedCircle height="200" width="200"/>
                 </Col>
                 <label htmlFor="fileInput" id="fileInput-text">프로필 사진 변경

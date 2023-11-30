@@ -12,7 +12,7 @@ export default function HabitForm ({ userInfo, habitList }) {
 
     return (
         <>
-            <Container className="habits-container" style={{ marginTop: '20px'}}>
+            <Container className="habits-container">
                 <Row>
                     <TurtleForm userName={userName} turtleLevel={turtleLevel}/>
                     <HabitAddForm userName={userName} habits={habits}/>
@@ -46,7 +46,7 @@ const TurtleForm = ({ userName, turtleLevel }) => {
                 <Card style={{ height: '450px' }}>
                     <Card.Body>
                         <Card.Title>
-                            <span style={{ fontWeight: "bold", fontSize: "30px" }}>
+                            <span style={{ fontSize: "30px" }}>
                                 {userName}</span>의 거북잉
                         </Card.Title>
                     </Card.Body>
@@ -98,7 +98,7 @@ const HabitAddForm = ({ userName, habits }) => {
             type='radio' name="group" 
             onClick={() => handleRadioChange(day)}
             style={{ fontSize: "14px"}}/>
-        </ListGroup.Item> // name="group"으로 group 이름이 같아야 중복 선택 안됨
+        </ListGroup.Item>
     ));
 
     const handleSelectButton = () => {
@@ -120,7 +120,7 @@ const HabitAddForm = ({ userName, habits }) => {
                 <Card style={{ height: '450px' }}>
                     <Card.Body style={{ height: "100%" }}>
                         <Card.Title>
-                            <span style={{ fontWeight: "bold", fontSize: "30px" }}>
+                            <span style={{ fontSize: "30px" }}>
                                 {userName}</span>의 습관
                         </Card.Title>
                         <div style={{ color: "grey", marginBottom: '20px', fontSize: "80%" }}>

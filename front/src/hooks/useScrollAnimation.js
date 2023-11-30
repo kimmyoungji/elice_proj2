@@ -1,17 +1,15 @@
-import { useState, useRef, useEffect } from 'react';
-
-const options = { root: null, rootMargin: "0px", threshold: 0.5 };
+import { useState, useRef, useEffect } from "react";
 
 export default function useScrollAnimation() {
   // 뷰포트 내부에 존재하는 지 확인하는 상태
   const [isInViewport, setIsInViewport] = useState(false);
   const ref = useRef();
+  const options = { root: null, rootMargin: "0px", threshold: 0.5 };
 
   // 요소들의 가시성 확인하여 뷰포트 상태 전달
   const callback = (entries) => {
     if (entries[0].isIntersecting) {
       setIsInViewport(true);
-      console.log(entries);
     } else {
       setIsInViewport(false);
     }
@@ -32,5 +30,3 @@ export default function useScrollAnimation() {
 
   return { isInViewport, ref };
 }
-
-
