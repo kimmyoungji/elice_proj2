@@ -7,7 +7,7 @@ import { Col, Container, Row, Card, ListGroup } from 'react-bootstrap';
 import './Calendar.css';
 
 
-// fullfilledDate만 받아올 것
+// fullfilledDate만 받아올 것 //
 const CalendarForm = ( habitlist ) => {
   const [habitList, setHabitList] = useState(habitlist.habitlist);
   const eventData = [{date:'2023-10-12'}, {date:'2023-11-04'},
