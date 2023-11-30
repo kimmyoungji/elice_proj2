@@ -4,7 +4,7 @@ import { Col, Row, Form, Button } from "react-bootstrap";
 import axios from "axios";
 import {
   validateEmail,
-  validateNickname,
+  validateUsername,
   validatePassword,
 } from "../features/Register/validate";
 
@@ -15,61 +15,40 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPwd, setConfirmPwd] = useState("");
-  const [nickname, setNickname] = useState("");
+  const [username, setUsername] = useState("");
   // const [idErrMsg, setIdErrMsg] = useState("");
   // const [idCheckMsg, setIdCheckMsg] = useState("");
 
   //이메일 형태 적합 여부 확인
   const isEmailValid = validateEmail(email);
-  // 비밀번호가 5글자 이상인지 여부 확인
+  // 비밀번호가 8글자 이상인지 여부 확인
   const isPasswordValid = validatePassword(password);
   // 비밀번호와 확인용 비밀번호 일치 여부를 확인
   const isPasswordSame = password === confirmPwd;
   // 닉네임 형태 및 길이 적합 여부를 확인.
-  const isNicknameValid = validateNickname(nickname);
+  const isUsernameValid = validateUsername(username);
 
   // 위 4개 조건이 모두 동시에 만족되는지 여부를 확인함.
   const isFormValid =
-    isEmailValid && isPasswordValid && isPasswordSame && isNicknameValid;
-
-  // 이메일 중복검사 success시 닉네임 중복검사
-  const onClickRegister = (e) => {
-    e.preventDefault();
-
-    axios.get("/users").then((res) => {
-      const resMessage = res.data.message;
-      if (resMessage === "FAIL") {
-        alert("이미 사용중인 이메일입니다.");
-      } else if (resMessage === "SUCCESS") {
-        axios.get("/users").then((res) => {
-          const resMessage = res.data.message;
-          if (resMessage === "FAIL") {
-            alert("이미 사용중인 닉네임입니다.");
-          } else if (resMessage === "SUCCESS") {
-            alert("회원가입이 정상적으로 완료되었습니다.");
-          }
-        });
-      }
-    });
-  };
-
-  // 회원가입 버튼 눌렀을 때 post 요청 보내서 회원가입 처리하기: 백 일단 정리되면 정리하기로 함
+    isEmailValid && isPasswordValid && isPasswordSame && isUsernameValid;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       // "user/register" 엔드포인트로 post요청함.
-      await axios.post("/users", {
+      await axios.post("http://" + window.location.hostname + ":5001/users", {
         email,
         password,
-        nickname,
+        username,
       });
-
-      // 로그인 페이지로 이동함.
       navigate("/login");
-    } catch (err) {
-      console.log("회원가입에 실패하였습니다.", err);
+    } catch (e) {
+      if (e.response.data.message === "이미 등록된 이메일입니다.") {
+        alert("이미 사용중인 이메일입니다.");
+      } else if (e.response.data.message === "이미 사용중인 사용자명입니다.") {
+        alert("이미 사용중인 닉네임입니다.");
+      }
     }
   };
 
@@ -127,10 +106,10 @@ export default function RegisterPage() {
             <Form.Control
               type="text"
               autoComplete="off"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
-            {!isNicknameValid && (
+            {!isUsernameValid && (
               <Form.Text className="text-success">
                 2~8자로 설정 가능합니다.
               </Form.Text>
@@ -142,7 +121,7 @@ export default function RegisterPage() {
               <Button
                 variant="primary"
                 type="submit"
-                onClick={onClickRegister}
+                // onClick={handleSubmit}
                 disabled={!isFormValid}
               >
                 회원가입
