@@ -30,10 +30,10 @@ app.use(
 
 // connectDB 테스트
 const connectDB = require("./middlewares/connectDB");
-app.get("/", connectDB, async (req, res, next) => {
+app.get("/", async (req, res, next) => {
   //연결 테스트 입니다. 콘솔에 "Connected to the turtineDB." 가 찍히면 연결 성공입니다.
   try {
-    await req.connectDB;
+    await knex.select(1 + 1);
     res.send("turtine에 오신걸 환영합니다 야호");
   } catch (error) {
     console.error("Database connection failed:", error);
