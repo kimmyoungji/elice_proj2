@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Col, Button, Container, Image, Form, Row } from "react-bootstrap";
 import "./UserPage.css";
-import { api } from "../utils/axiosConfig";
+import { api } from "../../utils/axiosConfig";
 
 const UserPageForm = (props) => {
   const { userInfo } = props;
