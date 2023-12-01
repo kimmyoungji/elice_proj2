@@ -93,7 +93,7 @@ const UserPageForm = ( props ) => {
         formData.append("passwordcheck", form.userFormPasswordCheck);
         // formData.append("data", new Blob([JSON.stringify(formData)], {type: 'application/json'}));
 
-        // FormData 확인
+        // FormData 확인용
         for (let key of formData.keys()){
             console.log(key);
         }
