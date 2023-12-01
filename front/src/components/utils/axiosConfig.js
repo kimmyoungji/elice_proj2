@@ -5,7 +5,7 @@ import axios from "axios";
 
 //인스턴스 생성
 export const api = axios.create({
-  baseURL: "http://localhost:5001", // API의 기본 URL
+  baseURL: "http://" + window.location.hostname + ":5001", // API의 기본 URL
   //headers: { "Content-Type": "application/json" }, // HTTP 헤더 설정
   timeout: 5000, // 요청 타임아웃(ms)
   //withCredentials: true, // 크로스 도메인 요청 시에도 인증 정보를 포함할지 여부
@@ -14,7 +14,7 @@ export const api = axios.create({
 // [Client] ------[ Interceptor ] -----> [Server]
 // 인터셉터: request
 api.interceptors.request.use(
-  function () {
+  function (request) {
     //요청 data가 formData일때
     if (request.data && request.data instanceof FormData) {
       request.headers["Content-Type"] = "multipart/form-data";
@@ -68,7 +68,7 @@ api.interceptors.response.use(
         default:
           return Promise.reject(error);
       }
-    } else if (response.statusCode >= 500) {
+    } else if (error.response.status >= 500) {
       alert(`문제가 발생하였습니다. 관리자에게 문의하세요.`);
     }
     return Promise.reject(error);
