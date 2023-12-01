@@ -43,7 +43,12 @@ export default function CommunityPage() {
 
 
   // const getTurtleCards = () =>
-  //   axios.get('거북이 정보 불러오기')
+  //   axios.get("http://"+ window.location.hostname +":5001/users",{
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     withCredentials: true,
+  //   })
   //     .then(res => {
   //       if (turtleCards) {
   //         setTurtleCards(...turtleCards,res.data);
