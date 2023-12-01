@@ -51,7 +51,10 @@ export default function LoginPage() {
         navigate("/habit", { replace: true });
   
       })
-      .catch((err) => console.log("로그인 실패!",err));
+      .catch((e) => {
+        console.log("로그인 실패!", e.response.data.message)
+        alert(e.response.data.message);
+      });
 
   }
 
