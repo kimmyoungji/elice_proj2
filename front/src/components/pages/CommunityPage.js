@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from "axios";
+import api from "../utils/axiosConfig";
 import HabitCard from "../features/HabitContents/HabitCard";
 import { Row, Container } from "react-bootstrap";
 import { CardWrapperDiv } from "../features/CommunityContents/CardScollStyled";
@@ -43,10 +43,12 @@ export default function CommunityPage() {
 
 
   // const getTurtleCards = () =>
-  //   axios.get('거북이 정보 불러오기')
+  //   api.get("/users",{
+  //     withCredentials: true,
+  //   })
   //     .then(res => {
   //       if (turtleCards) {
-  //         setTurtleCards(...turtleCards,res.data);
+  //         setTurtleCards(...turtleCards, res.data);
   //       } else {
   //         setTurtleCards(res.data);
   //       }
