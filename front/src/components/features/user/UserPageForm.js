@@ -121,7 +121,7 @@ const UserPageForm = (props) => {
   };
 
   const deleteUser = () => {
-    axios({
+    api({
       method: "delete",
       url: "http://" + window.location.hostname + ":5001/users",
       withCredentials: true,
