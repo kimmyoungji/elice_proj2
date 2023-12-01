@@ -56,21 +56,22 @@ class Fulfilled_habitsModel {
   }
   async create(data) {
     try {
-      await knex("fulfilled_habits").insert(data);
+      await this.knex("fulfilled_habits").insert(data);
       console.log("달성 기록이 잘 저장됨");
     } catch (error) {
       console.error("달성 습관을 저장하다가 뭔가 잘못됨", error.stack);
       throw new Error(error);
     } finally {
-      await knex.destroy();
+      await this.knex.destroy();
     }
   }
 
   async delete(data) {
     try {
-      await knex("fulfilled_habits").where(data).del();
+      await this.knex("fulfilled_habits").where(data).del();
       console.log("달성 기록이 잘 삭제됨");
       //delete from fulfilled_habits where user=user_id and date = today and habit_id = habit_id;
+      //삭제할 내용을 못찾았을 경우 어떻게 할 지 추가
     } catch (error) {
       console.error("취소한 달성내역을 삭제하다가 뭔가 잘못됨", error.stack);
       throw new Error(error);
