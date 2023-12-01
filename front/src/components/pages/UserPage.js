@@ -3,7 +3,7 @@ import UserPageForm from '../features/user/UserPageForm';
 import axios from 'axios';
 
 
-const UserPage = () => {
+const UserPage = async () => {
     const userInfo = {
         userName : "거북잉",
         userImg: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
@@ -14,10 +14,17 @@ const UserPage = () => {
 
     // get api로 기본 정보 가져오기
     // userName, userImg, userEmail
-    axios.get("http://"+ window.location.hostname +":5001/users/user")
+    await axios({
+      method: 'get',
+      url: "http://"+ window.location.hostname +":5001/users/user",
+      headers: {
+        "Content-Type": "application/json",
+        // Authorization: `Bearer ${accessToken}`,
+        withCredentials: true
+      }
+    })
     .then((res) => {
-        console.log(res.data);
-         // response 
+      console.log(res);
     }).catch((error) => {
         console.log(error)
     }).then(() => {
