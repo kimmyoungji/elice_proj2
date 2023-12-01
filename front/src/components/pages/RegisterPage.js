@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { Col, Row, Form, Button } from "react-bootstrap";
-import axios from "axios";
 import {
   validateEmail,
   validateUsername,
@@ -17,8 +16,6 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPwd, setConfirmPwd] = useState("");
   const [username, setUsername] = useState("");
-  // const [idErrMsg, setIdErrMsg] = useState("");
-  // const [idCheckMsg, setIdCheckMsg] = useState("");
 
   //이메일 형태 적합 여부 확인
   const isEmailValid = validateEmail(email);
