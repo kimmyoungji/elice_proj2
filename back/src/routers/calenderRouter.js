@@ -1,111 +1,30 @@
-const { Router } = require("express");
-const connectDB = require("../middlewares/connectDB");
-const router = Router();
+const fulfilledRouter = require("express").Router();
+const knex = require("../db/knex");
+const Fulfilled_habitsModel = require("../db/models/fulfilled_habits");
+const fulfilled = new Fulfilled_habitsModel(knex);
 
-// router.get("/", connectDB, async (req, res, next) => {
-//   try {
-//     //http://localhost:5001/fulfilled_habits?month=2023-11 같은 형태의 쿼리일 때
-//     const { month } = req.query; //yyyy-MM
-
-//     const nextmonth =
-//       month.slice(5, 7) == 12 //쿼리로 들어온 달이 12월이면
-//         ? `${parseInt(month.slice(0, 4)) + 1}-01` //다음 해 01월
-//         : `${month.slice(0, 4)}-${parseInt(month.slice(5, 7)) + 1}`; //아니면 같은 해 다음달
-
-//     //const { user_id } = req.cookies; //쿠키에서 user 정보 가져옴
-//     const user_id = "123abc"; //로그인 기능 연결 전 임시 변수
-//     const result = await req.dbConnection
-//       .select("date")
-//       .from("fulfilled_habits")
-//       .where({
-//         user_id: user_id,
-//       })
-//       .where("date", ">=", `${month}-01`)
-//       .where("date", "<", `${nextmonth}-01`);
-//     console.log(result);
-//     const data = result.map((el) => el.date);
-//     res.status(200).json({
-//       status: 200,
-//       message: `${month}월에 습관을 실천한 날짜 목록 조회 성공`,
-//       data: data,
-//     });
-//   } catch (error) {
-//     console.error("Error in calenderRouter", error.stack);
-//     res.status(500).json({
-//       status: 500,
-//       message: "Internal Server Error",
-//       data: null,
-//     });
-//   }
-// });
-
-// //쿼리 파라미터가 다르고 같은 경로로 접근하는 API를 구분하지 못하는 이슈 때문에 임의로 /calender 라고 경로 추가
-// router.get("/calender", connectDB, async (req, res, next) => {
-//   try {
-//     //http://localhost:5001/fulfilled_habits?month=2023-11-29 같은 형태의 쿼리일 때
-//     const { date } = req.query; //yyyy-MM-dd
-//     //const { user_id } = req.cookies; //쿠키에서 user 정보 가져옴
-//     const user_id = "123abc"; //로그인 기능 연결 전 임시 변수
-
-//     const result = await req.dbConnection
-//       .select("habits.habit_title")
-//       .from("fulfilled_habits")
-//       .join("habits", "fulfilled_habits.habit_id", "=", "habits.habit_id")
-//       .where("fulfilled_habits.user_id", "=", user_id)
-//       .andWhere("fulfilled_habits.date", "=", date);
-//     console.log(result);
-//     const data = result.map((row) => row.habit_title);
-//     res.status(200).json({
-//       status: 200,
-//       message: `${date} 에 실천한 습관 목록 조회 성공`,
-//       data: data,
-//     });
-//   } catch (error) {
-//     console.error("Error in calenderRouter", error.stack);
-//     res.status(500).json({
-//       status: 500,
-//       message: "Internal Server Error",
-//       data: null,
-//     });
-//   }
-// });
-
-router.get("/", connectDB, async (req, res, next) => {
+fulfilledRouter.get("/", async (req, res, next) => {
   try {
     const { month, date } = req.query;
     //const { user_id } = req.cookies; //쿠키에서 user 정보 가져옴
     const user_id = "123abc"; //로그인 기능 연결 전 임시 변수
     if (month) {
-      const nextmonth =
+      const nextMonth =
         month.slice(5, 7) == 12 //쿼리로 들어온 달이 12월이면
           ? `${parseInt(month.slice(0, 4)) + 1}-01` //다음 해 01월
           : `${month.slice(0, 4)}-${parseInt(month.slice(5, 7)) + 1}`; //아니면 같은 해 다음달
-      const result = await req.dbConnection
-        .select("date")
-        .from("fulfilled_habits")
-        .where({
-          user_id: user_id,
-        })
-        .where("date", ">=", `${month}-01`)
-        .where("date", "<", `${nextmonth}-01`);
+      const result = await fulfilled.getByMonth(user_id, month, nextMonth);
       console.log(result);
       const data = result.map((el) => el.date);
       res.status(200).json({
-        status: 200,
         message: `${month}월에 습관을 실천한 날짜 목록 조회 성공`,
         data: data,
       });
     } else if (date) {
-      const result = await req.dbConnection
-        .select("habits.habit_title")
-        .from("fulfilled_habits")
-        .join("habits", "fulfilled_habits.habit_id", "=", "habits.habit_id")
-        .where("fulfilled_habits.user_id", "=", user_id)
-        .andWhere("fulfilled_habits.date", "=", date);
+      const result = await fulfilled.getByDate(user_id, date);
       console.log(result);
-      const data = result.map((row) => row.habit_title);
+      const data = { [date]: result.map((row) => row.habit_title) };
       res.status(200).json({
-        status: 200,
         message: `${date} 에 실천한 습관 목록 조회 성공`,
         data: data,
       });
@@ -115,18 +34,66 @@ router.get("/", connectDB, async (req, res, next) => {
       tomorrow.setDate(today.getDate() + 1);
       console.log(today);
       console.log(tomorrow);
-      const result = await req.dbConnection
-        .select("*")
-        .from("fulfilled_habits")
-        .where({
-          user_id: user_id,
-        })
-        .where("date", ">=", today.toISOString().slice(0, 10))
-        .where("date", "<", tomorrow.toISOString().slice(0, 10));
+      const result = await fulfilled.getToday(
+        user_id,
+        today.toISOString().slice(0, 10),
+        tomorrow.toISOString().slice(0, 10)
+      );
       console.log(result);
-      res.json(result);
+      const data = result.map((row) => row.habit_id);
+      res.status(200).json({
+        message: `${today
+          .toISOString()
+          .slice(0, 10)}에 실천한 습관 id 조회 성공`,
+        data: data,
+      });
     }
-  } catch (error) {}
+  } catch (error) {
+    next(error);
+  }
 });
 
-module.exports = router;
+fulfilledRouter.post("/", async (req, res, next) => {
+  try {
+    //const { user_id } = req.cookies; //쿠키에서 user 정보 가져옴
+    const user_id = "123abc"; //로그인 기능 연결 전 임시 변수
+    //fullfilled_habits:[ {habit_id: [습관아이디],timestamp: [완료시간]},{...}, ...]
+    const checked = req.body.fullfilled_habits;
+    console.log(checked);
+    const data = checked.map((el) => ({
+      fulfilled_habit_id: "어떤식으로 생성하지 아이디를??",
+      user_id,
+      habit_id: el.habit_id,
+      date: new Date(el.timestamp).toISOString().slice(0, 10),
+    }));
+    console.log(data);
+    await fulfilled.insertChecked(data);
+    res.status(200).json({ message: "습관 달성 내역 저장 성공" });
+  } catch (error) {
+    console.error("Error in fulfilledRouter", error.stack);
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+});
+
+fulfilledRouter.delete("/", async (req, res, next) => {
+  try {
+    //const { user_id } = req.cookies; //쿠키에서 user 정보 가져옴
+    const user_id = "123abc"; //로그인 기능 연결 전 임시 변수
+    //fullfilled_habit_id:[habit_id]
+    const habit_id_array = req.body.fullfilled_habit_id;
+    //날짜 오늘, 유저아이디, habit_id인 데이터 삭제
+    const today = new Date().toISOString().slice(0, 10);
+    habit_id_array.map(async (id) => {
+      const data = { user_id, habit_id: id.habit_id, date: today };
+      await fulfilled.deleteChecked(data);
+    });
+
+    //delete from fulfilled_habits where user=user_id and date = today and habit_id = habit_id;
+  } catch (error) {
+    next(error);
+  }
+});
+
+module.exports = fulfilledRouter;
