@@ -10,27 +10,16 @@ import axios from 'axios';
 export default function HabitForm ({ userInfo, habitList, selectedHabits }) {
     const { userName, turtleLevel } = userInfo;
     const habits = habitList;
-    // const selectedHabits = ["habit1", "habit2"];
+    // const selectedHabits = ["habit1", "habit2"]; // 임시 데이터
 
     return (
         <>
             <Container className="habits-container">
                 <Row>
                     <TurtleForm userName={userName} turtleLevel={turtleLevel}/>
-                    
-                    {/* 기존에 선택한 습관이 없는 경우  */}
-                    {!selectedHabits && <HabitAddForm
-                                            userName={userName}
-                                            habits={habits}/>}
-                    {/* 기존에 선택한 습관이 있는 경우  */}
-                    {selectedHabits && <HabitShowForm
-                                            userName={userName}
-                                            selectedHabits={selectedHabits}
-                                            request={true}/>}
-                   
-                    {/* <HabitCardForm userName={userName}
+                    <HabitCardForm userName={userName}
                                    habits={habits}
-                                   selectedHabits={selectedHabits}/> */}
+                                   selectedHabits={selectedHabits}/>
                 </Row>
             </Container>
         </>
@@ -72,21 +61,38 @@ const TurtleForm = ({ userName, turtleLevel }) => {
     )
 }
 
-// const HabitCardForm = ({ userInfo, habitList, selectedHabits }) => {
-//     return (
-//         <>
-//             {!selectDone && <HabitAddForm userName={userName}
-//                                             habits={habits}/>}
-//             {selectDone && <HabitShowForm selectedHabits={selectedHabits} request={false}/>}
-//         </>
-//     )
-// }
+const HabitCardForm = ({ userName, habits, selectedHabits }) => {
+    const [ start, setStart ] = useState(selectedHabits ? false : true);
+
+    const handleAddFormSubmit = () => {
+        setStart(false);
+    }
+
+    // start가 false인 경우 <HabitAddForm/>을 실행하고
+    // start를 true로 바꿔서 바로 <HabitShowForm/>를 실행하고 싶은데 동작 x
+    return (
+        <>
+            <Col xs={12} sm={6} className="habit-container" >
+                <Card style={{ height: '450px' }}>
+                    {/* 기존에 선택한 습관이 없는 경우  */}
+                    {start && <HabitAddForm userName={userName}
+                                            habits={habits}
+                                            onSubmit={() => handleAddFormSubmit()}/>}
+                    {/* 기존에 선택한 습관이 있는 경우  */}
+                    {!start && <HabitShowForm userName={userName}
+                            habits={habits} selectedHabits={selectedHabits} request={true}/>}
+                </Card>
+            </Col>
+            
+        </>
+    )
+}
+
 
 const HabitAddForm = ({ userName, habits }) => {
     const [ addButton, setAddButton ] = useState(true);
     const [ selectedHabit, setSelectedHabit ] = useState([]);
     const [ selectedDay, setSelectedDay ] = useState(null);
-    const [ selectDone, setSelectDone ] = useState(false);
 
     const handleAddButton = () => {
         setAddButton(false);
@@ -127,90 +133,94 @@ const HabitAddForm = ({ userName, habits }) => {
     const handleSelectButton = () => {
         console.log(selectedHabit);
         console.log(selectedDay);
+        
 
         // 새롭게 선택한 습관 추가하기
-        // 아직 api 연결 x -> 백에서 변수와 data 수정중
-        axios({
-            method: 'post',
-            url: "http://"+ window.location.hostname +":5001/planned_habits",
-            withCredentials: true,
-            headers: {
-            "Content-Type": "application/json",
-            },
-            data: {
-                selectedHabit: selectedHabit,
-                selectedDay: selectedDay
-            }
-        })
-        .then((res) => {
-            // 백에 카멜케이스로 수정 요청
-            const { habit_ids } = res.data.plannedHabits[0];
-            console.log(habit_ids);
-        }).catch((error) => {
-            // 추후 수정예정
-            console.log(error)
-        }).then(() => {
-        });
-
-        setSelectDone(true);
+        // 아직 api 연결 x -> 백에서 변수명과 data 수정중
+        // axios({
+        //     method: 'post',
+        //     url: "http://"+ window.location.hostname +":5001/planned_habits",
+        //     withCredentials: true,
+        //     headers: {
+        //     "Content-Type": "application/json",
+        //     },
+        //     data: {
+        //         selectedHabit: selectedHabit,
+        //         selectedDay: selectedDay
+        //     }
+        // })
+        // .then((res) => {
+        //     // 백에 카멜케이스로 수정 요청
+        //     const { habit_ids } = res.data.plannedHabits[0];
+        //     console.log(habit_ids);
+        // }).catch((error) => {
+        //     // 추후 수정예정
+        //     console.log(error)
+        // }).then(() => {
+        // });
+        
     }
-
 
     return (
         <>
-            <Col xs={12} sm={6} className="habit-container" >
-                <Card style={{ height: '450px' }}>
-                    <Card.Body style={{ height: "100%" }}>
-                        <Card.Title>
-                            <span style={{ fontSize: "30px" }}>
-                                {userName}</span>의 습관
-                        </Card.Title>
-                        <div style={{ color: "grey", marginBottom: '20px', fontSize: "80%" }}>
-                            습관과 실천 기간을 추가해보세요 !
-                        </div>
-                        {addButton &&
-                        <div className="d-flex justify-content-center" style={{ marginTop: '100px' }}>
-                            <Button variant="primary" size="lg"
-                            onClick={() => handleAddButton()}>+
-                            </Button>
-                        </div>
-                        }
-                        {!addButton &&
-                        <ListGroup style={{ position: 'relative', width: '100%', fontSize: "83%"}}>
-                            {getHabitList}
-                        </ListGroup>}
-                    </Card.Body>
-                    {!addButton  &&
-                    <>
-                        <ListGroup horizontal="sm"
-                            className="d-flex justify-content-center"
-                            style={{ border: "none" }}>
-                            {getDayList}
-                        </ListGroup>
-                        <div className="d-flex justify-content-center">
-                            <Button className="select-button" variant="primary" size="lg"
-                                onClick={() => handleSelectButton()}
-                                style={{ width: "30%", fontSize: '13px', margin: "10px"}}>
-                                    선택완료
-                            </Button>
-                        </div>
-                    </>}
-                </Card>
-            </Col>
-            {/* {selectDone && <HabitShowForm selectedHabits={selectedHabit} request={false}/>} */}
+            <Card.Body style={{ height: "100%" }}>
+                <Card.Title>
+                    <span style={{ fontSize: "30px" }}>
+                        {userName}</span>의 습관
+                </Card.Title>
+                <div style={{ color: "grey", marginBottom: '20px', fontSize: "80%" }}>
+                    습관과 실천 기간을 추가해보세요 !<br/>
+                    한 번 정한 습관은 변경 없이 꾸준히 진행됩니다 😊
+                </div>
+                {addButton &&
+                <div className="d-flex justify-content-center" style={{ marginTop: '100px' }}>
+                    <Button variant="primary" size="lg"
+                    onClick={() => handleAddButton()}>+
+                    </Button>
+                </div>
+                }
+                {!addButton &&
+                <ListGroup style={{ position: 'relative', width: '100%', fontSize: "83%"}}>
+                    {getHabitList}
+                </ListGroup>}
+            </Card.Body>
+            {!addButton  &&
+                <>
+                    <ListGroup horizontal="sm"
+                        className="d-flex justify-content-center"
+                        style={{ border: "none" }}>
+                        {getDayList}
+                    </ListGroup>
+                    <div className="d-flex justify-content-center">
+                        <Button className="select-button" variant="primary" size="lg"
+                            onClick={() => handleSelectButton()}
+                            style={{ width: "30%", fontSize: '13px', margin: "10px"}}>
+                                선택완료
+                        </Button>
+                    </div>
+                </>
+            }
         </>
     )
 }
 
+
 // 선택한 습관들 조회하기
-const HabitShowForm = ({ userName, selectedHabits, request}) => {
-    console.log(request);
-    console.log(selectedHabits);
+const HabitShowForm = ({ userName, habits, selectedHabits, request }) => {
     const [ checkHabit, setCheckHabit ] = useState(false);
 
+    const getSelectedHabit = selectedHabits.map((habit) => (
+        <ListGroup.Item>
+            <Form.Check inline key={habit} 
+            type='checkbox'
+            //onClick={() => handleRadioChange(day)}
+            style={{ fontSize: "14px"}}/>{habits[habit]}
+        </ListGroup.Item>
+    ));
+
     const getDoneHabit = () => {
-        setCheckHabit(true)
         
+        setCheckHabit(true)
         return (
             <></>
         )
@@ -239,29 +249,30 @@ const HabitShowForm = ({ userName, selectedHabits, request}) => {
     
     return (
         <>
-            <Col xs={12} sm={6} className="habit-container" >
-                <Card style={{ height: '450px' }}>
-                    <Card.Body style={{ height: "100%" }}>
-                        <Card.Title>
-                            <span style={{ fontSize: "30px" }}>
-                                {userName}</span>의 습관
-                        </Card.Title>
-                        {!request && <ListGroup style={{ position: 'relative', width: '100%', fontSize: "83%"}}>
-                            {selectedHabits}
-                        </ListGroup>}
-                        {request && <ListGroup style={{ position: 'relative', width: '100%', fontSize: "83%"}}>
-                            {getDoneHabit}
-                        </ListGroup>}
-                    </Card.Body>
-                        <div className="d-flex justify-content-center">
-                            <Button className="select-button" variant="primary" size="lg"
-                                // onClick={() => handleSelectButton()}
-                                style={{ width: "30%", fontSize: '13px', margin: "10px"}}>
-                                    실천완료
-                            </Button>
-                        </div>
-                </Card>
-            </Col>
+            <Card.Body style={{ height: "100%" }}>
+                <Card.Title>
+                    <span style={{ fontSize: "30px" }}>
+                        {userName}</span>의 습관
+                </Card.Title>
+                <div style={{ color: "grey", marginBottom: '20px', fontSize: "80%" }}>
+                    실천한 습관을 선택해주세요 !
+                </div>
+                {/* api 요청 없이 추가한 습관들 리스트 그대로 가져와서 띄우기 */}
+                {!request && <ListGroup style={{ position: 'relative', width: '100%', fontSize: "83%", marginTop: "40px"}}>
+                    {getSelectedHabit}
+                </ListGroup>}
+                {/* api 요청으로 완료한 습관들 구분해서 표시하기 */}
+                {request && <ListGroup style={{ position: 'relative', width: '100%', fontSize: "83%"}}>
+                    {getDoneHabit}
+                </ListGroup>}
+            </Card.Body>
+                <div className="d-flex justify-content-center">
+                    <Button className="select-button" variant="primary" size="lg"
+                        // onClick={() => handleSelectButton()}
+                        style={{ width: "30%", fontSize: '13px', margin: "10px"}}>
+                            실천완료
+                    </Button>
+                </div>
         </>
     )
 }
