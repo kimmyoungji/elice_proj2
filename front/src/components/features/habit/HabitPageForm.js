@@ -1,3 +1,4 @@
+// 컴포넌트 분리 및 api 수정중
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Container, Button, Col, Row, ListGroup, Image, Form } from 'react-bootstrap';
@@ -264,4 +265,3 @@ const HabitShowForm = ({ userName, selectedHabits, request}) => {
         </>
     )
 }
-
