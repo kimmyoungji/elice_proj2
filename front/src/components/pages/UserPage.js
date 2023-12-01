@@ -14,9 +14,9 @@ const UserPage = () => {
 
     // get api로 기본 정보 가져오기
     // userName, userImg, userEmail
-    axios.get("http://"+ window.location.hostname +":5001/users/{user_id}", userInfo)
+    axios.get("http://"+ window.location.hostname +":5001/users/user")
     .then((res) => {
-        console.log(res)
+        console.log(res.data);
          // response 
     }).catch((error) => {
         console.log(error)
