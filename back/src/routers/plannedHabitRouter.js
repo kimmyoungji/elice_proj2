@@ -1,6 +1,6 @@
 const plannedHabitRouter = require("express").Router();
 const knex = require("../db/knex");
-const PlannedHabitsModel = require("../db/models/planned_habits");
+const PlannedHabitsModel = require("../db/models/plannedHabits");
 const plannedHabits = new PlannedHabitsModel(knex);
 const HabitsModel = require("../db/models/habits");
 const habits = new HabitsModel(knex);
@@ -58,13 +58,13 @@ plannedHabitRouter.post(
       // 요청 쿠키 데이터 받아오기 - user_id
       const user_id = req.currentUserId;
       // 요청 바디 데이터 받아오기 - planned-habits array
-      let plannedHabitIdStr = req.body.planned_habit_ids;
-      let plannedHabitIdArr = stringToArr(plannedHabitIdStr);
+      let habitIdStr = req.body.habitIds;
+      let habitIdArr = stringToArr(habitIdStr);
 
       // 이미 있는 습관인지 검증
       let user_habits = await plannedHabits.findUnclosedByUserId(user_id);
       let user_habit_ids = user_habits.map((h) => h.habit_id);
-      const inCommingHset = new Set(plannedHabitIdArr);
+      const inCommingHset = new Set(habitIdArr);
       const overlappingH = user_habit_ids.filter((h) => inCommingHset.has(h));
       console.log("user_habits_ids", user_habit_ids);
       console.log("inCommingHset", inCommingHset);
@@ -76,7 +76,7 @@ plannedHabitRouter.post(
       }
 
       // 반복문
-      for (let pHabitId of plannedHabitIdArr) {
+      for (let pHabitId of habitIdArr) {
         // 추가할 계획습관 데이터 구성하기
         const planned_habit_id = uuidv4();
         // habit_id 로 habits에서 습관 조회하기
@@ -118,7 +118,7 @@ plannedHabitRouter.delete(
     try {
       // 요청 바디 데이터 받아오기 - planned-habit_id - array
       const user_id = req.currentUserId;
-      const plannedHabitIdStr = req.body.planned_habit_ids;
+      const plannedHabitIdStr = req.body.plannedHabitIds;
       const plannedHabitIdArr = stringToArr(plannedHabitIdStr);
       // 반복문
       for (let pHabitId of plannedHabitIdArr) {

@@ -3,7 +3,7 @@ CREATE DATABASE turtine;
 USE turtine;
 
 CREATE TABLE habits (
-    habit_id VARCHAR(36) PRIMARY KEY,
+    habit_id VARCHAR(100) PRIMARY KEY ,
     habit_title VARCHAR(50) NOT NULL,
     discription VARCHAR(300),
     target_days INT NOT NULL,
@@ -11,39 +11,40 @@ CREATE TABLE habits (
 );
 
 CREATE TABLE users (
-    user_id VARCHAR(36) PRIMARY KEY,
-    username VARCHAR(50) NOT NULL,
-    email VARCHAR(50) NOT NULL,
+    user_id VARCHAR(100) PRIMARY KEY ,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL,
-    level INT NOT NULL DEFAULT 0,
+    level INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE fulfilled_habits (
-    fulfilled_habit_id VARCHAR(36) PRIMARY KEY,
-    user_id VARCHAR(36) NOT NULL,
-    habit_id VARCHAR(36) NOT NULL,
+    fulfilled_habit_id VARCHAR(100) PRIMARY KEY,
+    user_id VARCHAR(100) NOT NULL,
+    habit_id VARCHAR(100) NOT NULL,
     date DATE NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (habit_id) REFERENCES habits(habit_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (habit_id) REFERENCES habits(habit_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE planned_habits (
-    planned_habit_id VARCHAR(36) PRIMARY KEY,
-    user_id VARCHAR(36) NOT NULL,
-    habit_id VARCHAR(36) NOT NULL,
+    planned_habit_id VARCHAR(100) PRIMARY KEY,
+    user_id VARCHAR(100) NOT NULL,
+    habit_id VARCHAR(100) NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Sample data for 'habits' table
+-- UUID() 사용이전
 INSERT INTO habits (habit_id, habit_title, discription, target_days, trash_type) 
 VALUES
-    ('1a2b3c', 'Recycle Plastics', 'Dispose of plastics in the designated recycling bin.', 30, 'Plastic'),
-    ('4d5e6f', 'Reduce Water Usage', 'Take shorter showers and fix any leaks in the house.', 15, 'Water'),
-    ('7g8h9i', 'Compost Kitchen Waste', 'Start composting fruit and vegetable scraps.', 20, 'Organic'),
-    ('jklmno', 'Use Reusable Bags', 'Switch to reusable bags instead of plastic or paper.', 25, 'Paper/Plastic'),
-    ('pqrstu', 'Save Energy', 'Turn off lights and unplug electronics when not in use.', 30, 'Electricity');
+    ('habit1','장바구니 (에코백) 사용하기', '장바구니를 사용하면 일회용 비닐봉투의 사용을 줄일 수 있습니다.', 10, 'Plastic'),
+    ('habit2','음식 포장 시 다회용기 사용하기', '다회용기를 사용하면 일회용 플라스틱 용기 사용을 줄일 수 있습니다.', 10, 'Plastic'),
+    ('habit3','텀블러나 머그컵 사용하기', '텀블러를 사용하면 일회용 컵의 사용을 줄일 수 있습니다.', 20, 'Plastic'),
+    ('habit4','플라스틱 빨대 안 쓰기', '빨대를 사용하지 않으면 플라스틱 사용을 줄 일수 있습니다.', 20, 'Plastic'),
+    ('habit5','플라스틱 세척해서 분리배출하기', '플라스틱을 세척해서 분리배출하면, 재활용 가능성이 높아집니다.', 30, 'Plastic'),
+    ('habit6','무라벨 제품 구매하기', '라벨이 없는 제품을 구매하면, 플라스틱 제품을 더 쉽게 재활용할 수 있습니다.', 30, 'Plastic');
 
 -- Sample data for 'users' table
 INSERT INTO users (user_id, username, email, password, level) 
@@ -54,23 +55,44 @@ VALUES
     ('abc123', 'user4', 'user4@example.com', 'password4', 4),
     ('def456', 'user5', 'user5@example.com', 'password5', 2);
 
--- Sample data for 'fulfilled_habits' table
 INSERT INTO fulfilled_habits (fulfilled_habit_id, user_id, habit_id, date) 
 VALUES
-    ('fh1', '123abc', '1a2b3c', '2023-11-15'),
-    ('fh2', '123abc', '4d5e6f', '2023-11-15'),
-    ('fh3', '123abc', '4d5e6f', '2023-11-16'),
-    ('fh4', '456def', '4d5e6f', '2023-11-16'),
-    ('fh5', '789ghi', '7g8h9i', '2023-11-15'),
-    ('fh6', 'abc123', 'jklmno', '2023-11-17'),
-    ('fh7', 'def456', 'pqrstu', '2023-11-16');
+    ('fh1', '123abc', 'habit1', '2023-01-05'),
+    ('fh2', '456def', 'habit2', '2023-01-10'),
+    ('fh3', '789ghi', 'habit3', '2023-01-15'),
+    ('fh4', 'abc123', 'habit4', '2023-01-20'),
+    ('fh5', 'def456', 'habit5', '2023-01-25'),
+    ('fh6', '123abc', 'habit1', '2023-01-28'),
+    ('fh7', '456def', 'habit2', '2023-02-02'),
+    ('fh8', '789ghi', 'habit3', '2023-02-07');
 
 -- Sample data for 'planned_habits' table
 INSERT INTO planned_habits (planned_habit_id, user_id, habit_id, start_date, end_date) 
 VALUES
-    ('ph1', '123abc', '1a2b3c', '2023-11-01', '2023-11-30'),
-    ('ph2', '123abc', '4d5e6f', '2023-11-01', '2023-11-30'),
-    ('ph3', '456def', '4d5e6f', '2023-11-02', '2023-12-01'),
-    ('ph4', '789ghi', '7g8h9i', '2023-11-01', '2023-11-30'),
-    ('ph5', 'abc123', 'jklmno', '2023-11-01', '2023-11-30'),
-    ('ph6', 'def456', 'pqrstu', '2023-10-31', '2023-11-29');
+    ('ph1', '123abc', 'habit1', '2023-02-01', '2023-02-10'),
+    ('ph2', '456def', 'habit2', '2023-02-05', '2023-02-15'),
+    ('ph3', '789ghi', 'habit3', '2023-02-10', '2023-02-20'),
+    ('ph4', 'abc123', 'habit4', '2023-02-15', '2023-02-25'),
+    ('ph5', 'def456', 'habit5', '2023-02-20', '2023-03-01'),
+    ('ph6', '123abc', 'habit1', '2023-03-05', '2023-03-15'),
+    ('ph7', '456def', 'habit2', '2023-03-10', '2023-03-20'),
+    ('ph8', '789ghi', 'habit3', '2023-03-15', '2023-03-25');
+
+CREATE TABLE intro(data VARCHAR(1210));
+INSERT INTO intro VALUES('{
+"koreaTrashGraph":
+[{"year":2017,"recycle_amount":2285.1,"burn_or_bury_amount":3546.9},
+{"year":2018,"recycle_amount":2521.9,"burn_or_bury_amount":3752.8},{"year":2019,"recycle_amount":2604.3,"burn_or_bury_amount":4416.5},
+{"year":2020,"recycle_amount":3119.7363387978144,"burn_or_bury_amount":4423.960928961748},
+{"year":2021,"recycle_amount":3128.7342465753422,"burn_or_bury_amount":4530.461643835616}],
+"worldOceanPlasticsGraph":
+[{"year":2000,"total_amount":8.471748},{"year":2001,"total_amount":9.153952},
+{"year":2002,"total_amount":9.881777},{"year":2003,"total_amount":10.656836},
+{"year":2004,"total_amount":11.48184},{"year":2005,"total_amount":12.356893},
+{"year":2006,"total_amount":13.285542},{"year":2007,"total_amount":14.270018},
+{"year":2008,"total_amount":15.304404},{"year":2009,"total_amount":16.390133},
+{"year":2010,"total_amount":17.532563},{"year":2011,"total_amount":18.731689},
+{"year":2012,"total_amount":19.986928},{"year":2013,"total_amount":21.299929},
+{"year":2014,"total_amount":22.671211},{"year":2015,"total_amount":24.102793},
+{"year":2016,"total_amount":25.592507},{"year":2017,"total_amount":27.140495},
+{"year":2018,"total_amount":28.747704},{"year":2019,"total_amount":30.408747}]}');
