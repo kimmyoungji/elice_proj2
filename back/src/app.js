@@ -5,13 +5,13 @@ const cookieParser = require("cookie-parser");
 const errorMiddleware = require("./middlewares/errorMiddleware");
 
 const knex = require("./db/knex");
-const UsersModel = require("./db/models/users");
 const testKnex = require("./db/models/modelTestCodes/knex_test");
 
 //라우터 가져오기
 const introRouter = require("./routers/introRouter");
 const userRouter = require("./routers/userRouter");
 const calenderRouter = require("./routers/calenderRouter");
+const plannedHabitRouter = require("./routers/plannedHabitRouter");
 
 //라우터 가져오기
 const app = express();
@@ -28,12 +28,10 @@ app.use(
   })
 );
 
-// connectDB 테스트
-const connectDB = require("./middlewares/connectDB");
-app.get("/", connectDB, async (req, res, next) => {
+app.get("/", async (req, res, next) => {
   //연결 테스트 입니다. 콘솔에 "Connected to the turtineDB." 가 찍히면 연결 성공입니다.
   try {
-    await req.connectDB;
+    await knex.select(1 + 1);
     res.send("turtine에 오신걸 환영합니다 야호");
   } catch (error) {
     console.error("Database connection failed:", error);
@@ -46,6 +44,7 @@ testKnex();
 // 라우터
 app.use("/graphs", introRouter);
 app.use(userRouter);
+app.use(plannedHabitRouter);
 app.use("/fulfilled_habits", calenderRouter);
 // 에러처리 미들웨어
 app.use(errorMiddleware);
