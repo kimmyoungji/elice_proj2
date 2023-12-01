@@ -7,6 +7,7 @@ import {
   validateUsername,
   validatePassword,
 } from "../features/Register/validate";
+import { api } from "../utils/axiosConfig";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ export default function RegisterPage() {
 
     try {
       // "user/register" 엔드포인트로 post요청함.
-      await axios.post("http://" + window.location.hostname + ":5001/users", {
+      await api.post("/users", {
         email,
         password,
         username,
