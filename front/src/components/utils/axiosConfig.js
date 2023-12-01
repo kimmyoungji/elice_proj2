@@ -1,53 +1,78 @@
-// import axios from "axios";
+import axios from "axios";
 
-// //request사용
-// const config = {
-//   baseURL:
-//     process.env.REACT_APP_API_BASE_URL || process.env.REACT_APP_BUILD_BASE_URL,
-//   headers: { "Content-Type": "application/json" },
-//   timeout: 5000,
-//   withCredentials: true,
-// };
+// axios config: axios 인스턴스 생성 시 사용되는 설정 객체
+// axios가 HTTP 요청을 수행할 때 필요한 다양한 옵션을 지정.
 
-// export const api = axios.create(config); // 인스턴스
+//인스턴스 생성
+export const api = axios.create({
+  baseURL: "http://" + window.location.hostname + ":5001", // API의 기본 URL
+  //headers: { "Content-Type": "application/json" }, // HTTP 헤더 설정
+  timeout: 5000, // 요청 타임아웃(ms)
+  //withCredentials: true, // 크로스 도메인 요청 시에도 인증 정보를 포함할지 여부
+});
 
-// // [Client] ------[ Interceptor ] -----> [Server]
-// api.interceptors.request.use(
-//   (req) => {
-//     //요청 data가 formData일때
-//     // console.log("req", req);
-//     if (req.data && req.data instanceof FormData) {
-//       req.headers["Content-Type"] = "application/json";
-//     }
-//     //요청 data가 Object일 때
-//     if (req.data && req.data instanceof Object) {
-//       req.headers["Content-Type"] = "application/json";
-//       req.data = JSON.stringify(req.data);
-//     }
-//     if (req.status >= 400 && req.status < 400) {
-//       console.log(`잘못된 요청입니다. ${req.status}`);
-//       // throw new Error("Error");
-//     }
-//     if (req.status <= 500) {
-//       console.log(`에러가 발생하였습니다 ${req.status}`);
-//     }
-//     return req;
-//   },
-//   (err) => {
-//     // 400(Bad Requeset), 404(NotFound)
-//     console.log(err);
-//   }
-// );
+// [Client] ------[ Interceptor ] -----> [Server]
+// 인터셉터: request
+api.interceptors.request.use(
+  function (request) {
+    //요청 data가 formData일때
+    if (request.data && request.data instanceof FormData) {
+      request.headers["Content-Type"] = "multipart/form-data";
+    }
+    //요청 data가 Object일 때
+    if (request.data && request.data instanceof Object) {
+      request.headers["Content-Type"] = "application/json";
+      request.data = JSON.stringify(request.data);
+    }
+    // 4xx 범위의 에러를 캐치
+    if (request.status >= 400 && request.status < 500) {
+      console.log(`잘못된 요청입니다. ${request.status}`);
+      alert("잘못된 요청입니다.");
+    }
 
-// // [Client] <------[ Interceptor ] ----- [Server]
+    return request;
+  },
+  (err) => {
+    console.log(err);
+  }
+);
 
-// api.interceptors.response.use((res) => {
-//   if (res.statusCode >= 400 && res.status < 500) {
-//     alert(`요청이 실패하였습니다: error code ${res.status} `);
-//   } else if (res.statusCode >= 500) {
-//     alert(`요청이 실패하였습니다 error code ${res.status}`);
-//   }
-//   return res;
-// });
+// [Client] <------[ Interceptor ] ----- [Server]
+// 인터셉터: response
 
-// export default api;
+// 2xx 범위에 있는 상태 코드는 응답 데이터가 있는 작업 수행
+api.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  // 2xx 외의 범위에 있는 상태 코드는 응답 오류가 있는 작업 수행.
+  function (error) {
+    if (error.response && error.response.status) {
+      switch (error.response.status) {
+        case 400:
+          console.log("400 Bad Request");
+          alert("요청을 다시 확인해주세요.");
+          break;
+        case 401:
+          console.log("401 Unauthorized");
+          alert("인증이 필요합니다.");
+          break;
+        case 403:
+          console.log("403 Forbidden");
+          alert("접근 권한이 없습니다.");
+          break;
+        case 404:
+          console.log("404 Not Found");
+          alert("존재하지 않는 페이지입니다.");
+          break;
+        default:
+          return Promise.reject(error);
+      }
+    } else if (error.response.status >= 500) {
+      alert(`문제가 발생하였습니다. 관리자에게 문의하세요.`);
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default api;

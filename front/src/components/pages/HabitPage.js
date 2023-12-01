@@ -1,9 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import HabitForm from '../features/habit/HabitPageForm';
 import HabitListForm from '../features/habit/HabitListForm';
+import axios from 'axios';
+// import { api } from "../utils/axiosConfig";
 
 export default function HabitPage() {
   const [isEditing, setIsEditing] = useState(true);
+
+  // 페이지 처음 로드되면 사용자의 완료 습관 조회하기
+  //     api.get("/fullfilled_habits", {
+  // useEffect(() => {
+  //     
+  //     });
+  // })
+
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: "http://"+ window.location.hostname +":5001/fullfilled_habits",
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      }
+    })
+    .then((res) => {
+        const { habit_id } = res.data;
+      console.log(res);
+    }).catch((error) => {
+        console.log(error)
+    }).then(() => {
+    });
+}, [])
+
   const userInfo = {
     userName : "거북잉",
     turtleLevel: 2
