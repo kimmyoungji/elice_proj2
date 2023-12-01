@@ -24,7 +24,7 @@ export default function HabitPage() {
       }
     })
     .then((res) => {
-        const { habit_id } = res.data;
+        const { fullfilled_habit_id, habit_id } = res.data;
       console.log(res);
     }).catch((error) => {
         console.log(error)

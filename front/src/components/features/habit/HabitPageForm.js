@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Card, Container, Button, Col, Row, ListGroup, Image, Form } from 'react-bootstrap';
 import './HabitPage.css';
 import calendar from "../../../assets/imgs/calendar.png";
+import axios from 'axios';
 
 
 export default function HabitForm ({ userInfo, habitList }) {
@@ -101,14 +102,14 @@ const HabitAddForm = ({ userName, habits }) => {
     const handleSelectButton = () => {
         console.log(selectedHabit);
         console.log(selectedDay);
-        // axios.post("http://"+ window.location.hostname +":5001/habits/habits_id",
-        //     selectedHabit)
-        // .then((res) => {
-        //     console.log(res)
-        // }).catch((error) => {
-        //     console.log(error)
-        // }).then(() => {
-        // });
+        axios.post("http://"+ window.location.hostname +":5001/planned-habits",
+            selectedHabit)
+        .then((res) => {
+            console.log(res)
+        }).catch((error) => {
+            console.log(error)
+        }).then(() => {
+        });
     }
 
     return (
