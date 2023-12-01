@@ -86,7 +86,7 @@ export default function HabitListForm ({ habitList }) {
             <Container
                 className='text-center'
                 style={{ marginTop: '40px'}}>
-                <span>{cheerUpTexts[randomIndex]}</span>
+                <h2>{cheerUpTexts[randomIndex]}</h2>
                 <h6 style={{ color: "grey", marginTop: '20px', marginBottom: '50px' }}>
                     ▼ 아래로 내려서 습관들을 확인해보세요
                 </h6><br />

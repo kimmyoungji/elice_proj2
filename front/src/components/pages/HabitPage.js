@@ -21,7 +21,7 @@ export default function HabitPage() {
   useEffect(() => {
     axios({
       method: 'get',
-      url: "http://"+ window.location.hostname +":5001/planned-habits",
+      url: "http://"+ window.location.hostname +":5001/planned_habits",
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",
