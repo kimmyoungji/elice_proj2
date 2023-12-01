@@ -28,8 +28,6 @@ app.use(
   })
 );
 
-// connectDB 테스트
-const connectDB = require("./middlewares/connectDB");
 app.get("/", async (req, res, next) => {
   //연결 테스트 입니다. 콘솔에 "Connected to the turtineDB." 가 찍히면 연결 성공입니다.
   try {
