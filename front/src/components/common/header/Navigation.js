@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Nav, Navbar, Container, Image, Offcanvas } from "react-bootstrap";
+import { useNavigate } from 'react-router-dom';
 import logo from "./logo.png"
+
 
 const navMenus = [
   { href: "/", label: "서비스 소개", public: true },
@@ -20,6 +22,8 @@ function Navigation() {
   const filteredNavMenus = navMenus.filter((menu) => menu.public !== isLogin);
   const filteredSideMenus = sideMenus.filter((menu) => menu.public !== isLogin);
 
+  const navigate = useNavigate();
+  //href={menu.href} 
     return (
         <Navbar expand="False" className="bg-body-tertiary mb-3">
             <Container fluid>
@@ -28,7 +32,8 @@ function Navigation() {
               </Navbar.Brand>
               <Nav className="d-flex flex-row ms-auto">
                 {(isLogin ? navMenus : filteredNavMenus).map((menu, index) =>
-                <Nav.Link key={`nav-menu-${index}`} href={menu.href} className="me-3" style={{ fontSize: "85%" }}>
+                <Nav.Link key={`nav-menu-${index}`} className="me-3" style={{ fontSize: "85%" }}
+                  onClick={() => {navigate(menu.href)}}>
                   {menu.label}
                 </Nav.Link>)}
               </Nav>
@@ -48,7 +53,8 @@ function Navigation() {
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                   <Nav className="justify-content-end flex-grow-1 pe-3">
-                    {filteredSideMenus.map((menu, index) => <Nav.Link key={`nav-menu-${index}`} href={menu.href}>{menu.label}</Nav.Link>)}
+                    {filteredSideMenus.map((menu, index) => <Nav.Link key={`nav-menu-${index}`}
+                      onClick={() => {navigate(menu.href)}}>{menu.label}</Nav.Link>)}
                   </Nav>
                 </Offcanvas.Body>
               </Navbar.Offcanvas>

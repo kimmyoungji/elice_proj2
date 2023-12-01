@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Col, Button, Container, Image, Form, Row } from 'react-bootstrap';
@@ -102,16 +102,42 @@ const UserPageForm = ( props ) => {
             console.log(value);
         }
 
-
-        // post api 호출
         axios({
-            method: 'post',
-            url: '', // 서버 url에 따라
-            data: formData,
+          method: 'put',
+          url: "http://"+ window.location.hostname +":5001/users",
+          withCredentials: true,
+          data: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          }
         })
-        // 통신 연결 후 에러 상태코드에 따라 수정 예정
-        .then((result) => {console.log('요청성공', result)})
-        .catch((error) => {console.log('요청실패', error)})
+        .then((res) => {
+          console.log(res);
+        }).catch((error) => {
+            console.log(error)
+        }).then(() => {
+        });
+    }
+
+    const deleteUser = () => {
+        axios({
+            method: 'delete',
+            url: "http://"+ window.location.hostname +":5001/users",
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            }
+          })
+          .then((res) => {
+            alert('탈퇴되었습니다. 감사합니다.');
+            // 쿠키 제거
+            navigate('/');
+          }).catch((error) => {
+              console.log(error)
+          }).then(() => {
+          });
+        
+          
     }
 
     return (
@@ -153,7 +179,7 @@ const UserPageForm = ( props ) => {
                         </Button>
                     </Form>
                     <Button className="bg-body-tertiary btn text-black" variant="secondary" type="submit" size="sm"
-                        onClick={() => navigate('/')}>
+                        onClick={() => deleteUser()}>
                         회원탈퇴
                     </Button>
                 </Col>
