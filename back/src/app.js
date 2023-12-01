@@ -10,8 +10,8 @@ const testKnex = require("./db/models/modelTestCodes/knex_test");
 //라우터 가져오기
 const introRouter = require("./routers/introRouter");
 const userRouter = require("./routers/userRouter");
-const calenderRouter = require("./routers/calenderRouter");
 const plannedHabitRouter = require("./routers/plannedHabitRouter");
+const fulfilledRouter = require("./routers/fulfilledRouter");
 
 //라우터 가져오기
 const app = express();
@@ -45,7 +45,7 @@ testKnex();
 app.use("/graphs", introRouter);
 app.use(userRouter);
 app.use(plannedHabitRouter);
-app.use("/fulfilled_habits", calenderRouter);
+app.use("/fulfilledHabits", fulfilledRouter);
 // 에러처리 미들웨어
 app.use(errorMiddleware);
 
