@@ -3,7 +3,7 @@ class Fulfilled_habitsModel {
     this.knex = knex;
   }
 
-  async getToday(user_id, today, tomorrow) {
+  async findByToday(user_id, today, tomorrow) {
     try {
       return await this.knex
         .select("habit_id")
@@ -22,9 +22,7 @@ class Fulfilled_habitsModel {
     }
   }
 
-  // 일단 month를 통해서 date, title, id 칼럼 조회해서 -> month 쿼리 파라미터 쓸때는 date 만 가져다 사용, date 에서는 요 테이블에서 날짜 필터링..?
-  //어느게 더 빠를까?
-  async getByMonth(user_id, month, nextMonth) {
+  async findByMonth(user_id, month, nextMonth) {
     try {
       return await this.knex
         .select("date")
@@ -40,7 +38,7 @@ class Fulfilled_habitsModel {
     }
   }
 
-  async getByDate(user_id, date) {
+  async findByDate(user_id, date) {
     try {
       return await this.knex
         .select("habits.habit_title")
@@ -56,7 +54,7 @@ class Fulfilled_habitsModel {
       throw new Error(error);
     }
   }
-  async insertChecked(data) {
+  async create(data) {
     try {
       await knex("fulfilled_habits").insert(data);
       console.log("달성 기록이 잘 저장됨");
@@ -68,7 +66,7 @@ class Fulfilled_habitsModel {
     }
   }
 
-  async deleteChecked(data) {
+  async delete(data) {
     try {
       await knex("fulfilled_habits").where(data).del();
       console.log("달성 기록이 잘 삭제됨");
