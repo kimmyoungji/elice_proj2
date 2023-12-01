@@ -3,7 +3,7 @@ CREATE DATABASE turtine;
 USE turtine;
 
 CREATE TABLE habits (
-    habit_id VARCHAR(36) PRIMARY KEY ,
+    habit_id VARCHAR(100) PRIMARY KEY ,
     habit_title VARCHAR(50) NOT NULL,
     discription VARCHAR(300),
     target_days INT NOT NULL,
@@ -11,39 +11,40 @@ CREATE TABLE habits (
 );
 
 CREATE TABLE users (
-    user_id VARCHAR(36) PRIMARY KEY ,
+    user_id VARCHAR(100) PRIMARY KEY ,
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(50) NOT NULL,
-    level INT NOT NULL DEFAULT 0,
+    password VARCHAR(100) NOT NULL,
+    level INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE fulfilled_habits (
-    fulfilled_habit_id VARCHAR(36) PRIMARY KEY,
-    user_id VARCHAR(36) NOT NULL,
-    habit_id VARCHAR(36) NOT NULL,
+    fulfilled_habit_id VARCHAR(100) PRIMARY KEY,
+    user_id VARCHAR(100) NOT NULL,
+    habit_id VARCHAR(100) NOT NULL,
     date DATE NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (habit_id) REFERENCES habits(habit_id)
 );
 
 CREATE TABLE planned_habits (
-    planned_habit_id VARCHAR(36) PRIMARY KEY,
-    user_id VARCHAR(36) NOT NULL,
-    habit_id VARCHAR(36) NOT NULL,
+    planned_habit_id VARCHAR(100) PRIMARY KEY,
+    user_id VARCHAR(100) NOT NULL,
+    habit_id VARCHAR(100) NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
--- Sample data for 'habits' table
-INSERT INTO habits (habit_id, habit_title, discription, target_days, trash_type) 
+-- UUID() 사용이전
+INSERT INTO habits (habit_title, discription, target_days, trash_type) 
 VALUES
-    ('1a2b3c', 'Recycle Plastics', 'Dispose of plastics in the designated recycling bin.', 30, 'Plastic'),
-    ('4d5e6f', 'Reduce Water Usage', 'Take shorter showers and fix any leaks in the house.', 15, 'Water'),
-    ('7g8h9i', 'Compost Kitchen Waste', 'Start composting fruit and vegetable scraps.', 20, 'Organic'),
-    ('jklmno', 'Use Reusable Bags', 'Switch to reusable bags instead of plastic or paper.', 25, 'Paper/Plastic'),
-    ('pqrstu', 'Save Energy', 'Turn off lights and unplug electronics when not in use.', 30, 'Electricity');
+    ('1a2b3c','장바구니 (에코백) 사용하기', '장바구니를 사용하면 일회용 비닐봉투의 사용을 줄일 수 있습니다.', 10, 'Plastic'),
+    ('4d5e6f','음식 포장 시 다회용기 사용하기', '다회용기를 사용하면 일회용 플라스틱 용기 사용을 줄일 수 있습니다.', 10, 'Plastic'),
+    ('7g8h9i','텀블러나 머그컵 사용하기', '텀블러를 사용하면 일회용 컵의 사용을 줄일 수 있습니다.', 20, 'Plastic'),
+    ('jklmno','플라스틱 빨대 안 쓰기', '빨대를 사용하지 않으면 플라스틱 사용을 줄 일수 있습니다.', 20, 'Plastic'),
+    ('pqrstu','플라스틱 세척해서 분리배출하기', 'Turn off lights and unplug electronics when not in use.', 30, 'Plastic'),
+    ('pq12td','무라벨 제품 구매하기', '라벨이 없는 제품을 구매하면, 플라스틱 제품을 더 쉽게 재활용할 수 있습니다.', 30, 'Plastic');
 
 -- Sample data for 'users' table
 INSERT INTO users (user_id, username, email, password, level) 
@@ -64,7 +65,7 @@ VALUES
     ('fh5', '789ghi', '7g8h9i', '2023-11-15'),
     ('fh6', 'abc123', 'jklmno', '2023-11-17'),
     ('fh7', 'def456', 'pqrstu', '2023-11-16'),
-    ('fh8', '123abc', '1a2b3c', '2023-11-30'),;
+    ('fh8', '123abc', '1a2b3c', '2023-11-30');
 
 -- Sample data for 'planned_habits' table
 INSERT INTO planned_habits (planned_habit_id, user_id, habit_id, start_date, end_date) 
