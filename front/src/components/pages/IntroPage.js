@@ -9,7 +9,7 @@ import Logo from "../common/header/logo.png";
 import Chat from "../features/IntroContents/kakaotalk.png";
 import Chart from "../features/IntroContents/Chart";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../utils/axiosConfig";
 
 
 export default function IntroPage() {
@@ -18,13 +18,13 @@ export default function IntroPage() {
   const [charts, setCharts] = useState();
 
   const getCharts = () => {
-    axios.get("http://"+ window.location.hostname +":5001/graphs")
+    api.get("/graphs")
       .then((res) => {
         setCharts(res.data.data);
     })
       .catch((err) => {
-        // TODO :  에러 핸들링
         console.log(err);
+        alert("그래프를 불러오지 못했습니다. 페이지를 새로고침 해주세요 😢");
     })
   };
 
@@ -132,7 +132,7 @@ export default function IntroPage() {
         </ScrollAniDiv>
       </Row>
 
-      {/* TODO: 로그인 되어있는 상태라면 시작하기 눌렀을 때, 해빗페이지로 이동할까요? */}
+      {/* TODO: 로그인 되어있는 상태라면 시작하기 눌렀을 때, 해빗페이지로 이동하도록 */}
       <Row className="vh-100">
         <Col>
           <ScrollAniDiv>
