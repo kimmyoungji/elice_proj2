@@ -57,11 +57,12 @@ fulfilledRouter.get("/", isLoggedIn, async (req, res, next) => {
 fulfilledRouter.post("/", isLoggedIn, async (req, res, next) => {
   try {
     const user_id = req.currentUserId;
+    const checked = req.body;
     //fullfilled_habits:[ {habit_id: [습관아이디],timestamp: [완료시간]},{...}, ...]
-    const checked = req.body.fullfilled_habits;
     console.log(checked);
+    console.log(checked.fulfilled_habits);
     const fulfilled_habit_id = uuidv4();
-    const data = checked.map((el) => ({
+    const data = checked.fulfilled_habits.map((el) => ({
       fulfilled_habit_id,
       user_id,
       habit_id: el.habit_id,
@@ -70,6 +71,8 @@ fulfilledRouter.post("/", isLoggedIn, async (req, res, next) => {
     console.log(data);
     await fulfilled.create(data);
     res.status(200).json({ message: "습관 달성 내역 저장 성공" });
+    //중복 검사 해야함
+    //만약 해당 날짜에 이미 저장된 습관이 있다면 무시하고 과거 내역 남기거나 덮어쓰는 부분 추가해야함
   } catch (error) {
     console.error("Error in fulfilledRouter", error.stack);
     res.status(500).json({
@@ -81,13 +84,15 @@ fulfilledRouter.post("/", isLoggedIn, async (req, res, next) => {
 fulfilledRouter.delete("/", isLoggedIn, async (req, res, next) => {
   try {
     const user_id = req.currentUserId;
-    //fullfilled_habit_id:[habit_id]
     const habit_id_array = req.body.fullfilled_habit_id;
+    //fullfilled_habit_id:[habit_id]
     //날짜 오늘, 유저아이디, habit_id인 데이터 삭제
     const today = new Date().toISOString().slice(0, 10);
     habit_id_array.map(async (id) => {
-      const data = { user_id, habit_id: id.habit_id, date: today };
+      const data = { user_id, habit_id: id, date: today };
+      console.log(data);
       await fulfilled.delete(data);
+      res.status(200).json({ message: "달성 취소 습관 삭제 성공" });
     });
 
     //delete from fulfilled_habits where user=user_id and date = today and habit_id = habit_id;
