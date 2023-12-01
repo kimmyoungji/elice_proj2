@@ -104,14 +104,14 @@ const UserPageForm = ( props ) => {
 
 
         // post api 호출
-        axios({
-            method: 'post',
-            url: '', // 서버 url에 따라
-            data: formData,
-        })
-        // 통신 연결 후 에러 상태코드에 따라 수정 예정
-        .then((result) => {console.log('요청성공', result)})
-        .catch((error) => {console.log('요청실패', error)})
+        // axios({
+        //     method: 'post',
+        //     url: '', // 서버 url에 따라
+        //     data: formData,
+        // })
+        // // 통신 연결 후 에러 상태코드에 따라 수정 예정
+        // .then((result) => {console.log('요청성공', result)})
+        // .catch((error) => {console.log('요청실패', error)})
     }
 
     return (
