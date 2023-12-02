@@ -16,11 +16,12 @@ plannedHabitsRouter.get(
       const plannedHabits = await plannedHabitService.getPlannedHabitById(
         user_id
       );
+      const plannedHabitIds = plannedHabits.map((ph) => ph.habit_id);
 
       // 응답 데이터 구성하기
       res.status(200).json({
         message: "DB 데이터 조회 성공",
-        plannedHabits,
+        plannedHabitIds,
       });
       // 응답
     } catch (err) {
@@ -37,11 +38,17 @@ plannedHabitsRouter.post(
       // 요청 쿠키 데이터 받아오기
       const user_id = req.currentUserId;
       // 요청 바디 데이터 받아오기
-      let habitIdStr = req.body.habitIds;
-      let habitIdArr = stringToArr(habitIdStr);
+      let habitIds = req.body.habitIds;
+      if (typeof habitIds === "string") {
+        habitIds = stringToArr(habitIds);
+      }
+      let habitDate = req.body.habitDate;
+      if (typeof habitDate === "string") {
+        habitDate = stringToArr(habitDate);
+      }
 
       // 새로운 습관 계획 추가하기
-      await plannedHabitService.addPlannedHabit(user_id, habitIdArr);
+      await plannedHabitService.addPlannedHabit(user_id, habitIds, habitDate);
 
       // 응답
       res.status(200).json({
@@ -60,11 +67,13 @@ plannedHabitsRouter.delete(
     try {
       // 요청 바디 데이터 받아오기 - planned-habit_id - array
       const user_id = req.currentUserId;
-      const plannedHabitIdStr = req.body.plannedHabitIds;
-      const plannedHabitIdArr = stringToArr(plannedHabitIdStr);
+      let habitIds = req.body.habitIds;
+      if (typeof habitIds === "string") {
+        habitIds = stringToArr(habitIds);
+      }
 
       // 계획습관아이디로 계획습관 삭제하기
-      await plannedHabitService.deletePlannedHabit(user_id, plannedHabitIdArr);
+      await plannedHabitService.deletePlannedHabit(user_id, habitIds);
 
       // 응답 데이터 구성하기
       res.status(200).json({

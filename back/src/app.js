@@ -28,16 +28,6 @@ app.use(
   })
 );
 
-app.get("/", async (req, res, next) => {
-  //연결 테스트 입니다. 콘솔에 "Connected to the turtineDB." 가 찍히면 연결 성공입니다.
-  try {
-    await knex.select(1 + 1);
-    res.send("turtine에 오신걸 환영합니다 야호");
-  } catch (error) {
-    console.error("Database connection failed:", error);
-  }
-});
-
 // knex 연결 test
 testKnex();
 
@@ -45,7 +35,7 @@ testKnex();
 app.use("/graphs", introRouter);
 app.use("/users", usersRouter);
 app.use(plannedHabitsRouter);
-app.use("/fulfilled_habits", fulfilledHabitsRouter);
+app.use("/fulfilled-habits", fulfilledHabitsRouter);
 // 에러처리 미들웨어
 app.use(errorMiddleware);
 

@@ -92,12 +92,14 @@ fulfilledHabitsRouter.delete("/", isLoggedIn, async (req, res, next) => {
     //const { user_id } = req.cookies; //쿠키에서 user 정보 가져옴
     const user_id = req.currentUserId; //로그인 기능 연결 전 임시 변수
     //fullfilled_habit_id:[habit_id]
-    const habitIdStr = req.body.habitIds;
-    const habitIdArr = stringToArr(habitIdStr);
+    let habitIds = req.body.habitIds;
+    if (typeof habitIds === "string") {
+      habitIds = stringToArr(habitIds);
+    }
     //날짜 오늘, 유저아이디, habit_id인 데이터 삭제
     const today = new Date().toISOString().slice(0, 10);
     console.log(today, "today");
-    for (let habitId of habitIdArr) {
+    for (let habitId of habitIds) {
       const data = { user_id, habit_id: habitId, date: today };
       await fulfilledHabits.deleteChecked(data);
     }

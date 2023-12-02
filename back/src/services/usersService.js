@@ -48,6 +48,7 @@ class userService {
       throw new NotFoundError("데이터가 존재하지 않습니다.");
     }
     // 응답 데이터 구성하기
+    delete result[0].user_id;
     delete result[0].password;
     return result;
   }
@@ -58,6 +59,7 @@ class userService {
 
     // 응답 데이터 구성하기
     userArr = userArr.map((user) => {
+      delete user.user_id;
       delete user.password;
       return user;
     });

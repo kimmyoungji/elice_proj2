@@ -17,7 +17,6 @@ router.get("/", async (req, res, next) => {
     console.error("Error in introRouter", error.stack);
     res.status(500).json({
       message: "Internal Server Error",
-      data: null,
     });
   }
 });

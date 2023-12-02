@@ -5,6 +5,9 @@ const HabitsModel = require("../db/models/habits");
 const habits = new HabitsModel(knex);
 const { NotFoundError, ConflictError } = require("../lib/custom-error");
 const { v4: uuidv4 } = require("uuid");
+const dayjs = require("dayjs");
+var utc = require("dayjs/plugin/utc");
+dayjs.extend(utc);
 
 class plannedHabitService {
   static async getPlannedHabitById(user_id) {
@@ -15,60 +18,50 @@ class plannedHabitService {
     return plannedHabitArr;
   }
 
-  static async addPlannedHabit(user_id, habitIdArr) {
-    // 이미 있는 습관인지 검증
-    let user_habits = await plannedHabits.findUnclosedByUserId(user_id);
-    let user_habit_ids = user_habits.map((h) => h.habit_id);
-    const inCommingHset = new Set(habitIdArr);
-    const overlappingH = user_habit_ids.filter((h) => inCommingHset.has(h));
-    // console.log("user_habits_ids", user_habit_ids);
-    // console.log("inCommingHset", inCommingHset);
-    // console.log("overlappingH", overlappingH);
-    if (overlappingH.length !== 0) {
-      throw new ConflictError(
-        `${overlappingH}: 옆의 habit_id에 해당하는 습관들은 이미 실천 중인 습관입니다.`
-      );
-    }
+  static async addPlannedHabit(user_id, habitIds, habitDate) {
+    // 이미 있는 습관의 habit_id 가져오기
+    let userHabits = await plannedHabits.findUnclosedByUserId(user_id);
+    let userHabitsIds = userHabits.map((h) => h.habit_id);
 
     // 반복문
-    for (let pHabitId of habitIdArr) {
+    for (let i = 0; i < habitIds.length; i++) {
+      // 중복 검증
+      if (userHabitsIds.includes(habitIds[i])) {
+        continue;
+      }
       // 추가할 계획습관 데이터 구성하기
       const planned_habit_id = uuidv4();
-      // habit_id 로 habits에서 습관 조회하기
-      const habitArr = await habits.findById(pHabitId);
-      const habit = habitArr[0];
-      // habit_id
-      const habit_id = habit.habit_id;
       // start_date에 target_days 더해서 end_date 만들기
-      const start_date = new Date();
-      const end_date = new Date(start_date);
-      end_date.setDate(end_date.getDate() + habit.target_days);
+      const start_date = dayjs();
+      const end_date = start_date.add(habitDate[i], "day");
       // DB: 새로운 계획습관 데이터 추가하기
       const newhabit = {
         planned_habit_id,
         user_id,
-        habit_id,
-        start_date,
-        end_date,
+        habit_id: habitIds[i],
+        start_date: start_date.utc(true).format(),
+        end_date: end_date.utc(true).format(),
       };
       // DB: 새로운 데이터 추가
       await plannedHabits.create(newhabit);
     }
   }
 
-  static async deletePlannedHabit(user_id, plannedHabitIdArr) {
-    // 반복문
-    for (let pHabitId of plannedHabitIdArr) {
-      // 사용자의 계획습관인지 검증
-      const habitArr = await plannedHabits.findById(pHabitId);
-      const habit = habitArr[0];
-      if (user_id !== habit.user_id) {
-        throw new Error(
-          "현재 사용자의 계획습관 데이터가 아니므로 삭제할 수 없습니다."
-        );
+  static async deletePlannedHabit(user_id, habitIds) {
+    //user_id로 현재 실천 중인 습관하져오기
+    const pHabits = await plannedHabits.findUnclosedByUserId(user_id);
+    const pHabitsToDelete = pHabits.filter((ph) => {
+      for (let habitId of habitIds) {
+        if (ph.habit_id === habitId) {
+          return true;
+        }
       }
-      // DB: 계획습관 아이디로 지우기
-      const result = await plannedHabits.deleteById(pHabitId);
+      return false;
+    });
+
+    // 반복문
+    for (let pHabit of pHabitsToDelete) {
+      const result = await plannedHabits.deleteById(pHabit.planned_habit_id);
       if (result === 0) {
         throw new Error("DB 데이터 삭제 실패");
       }

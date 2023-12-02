@@ -30,7 +30,7 @@ usersRouter.post("/login", async (req, res, next) => {
     res.status(200).json({
       message: "로그인 성공",
       user: {
-        user_id: user.user_id,
+        userId: user.user_id,
         username: user.username,
         email: user.email,
       },
