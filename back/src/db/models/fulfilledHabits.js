@@ -1,4 +1,4 @@
-class Fulfilled_habitsModel {
+class FulfilledHabitsModel {
   constructor(knex) {
     this.knex = knex;
   }
@@ -58,19 +58,19 @@ class Fulfilled_habitsModel {
   }
   async insertChecked(data) {
     try {
-      await knex("fulfilled_habits").insert(data);
+      await this.knex("fulfilled_habits").insert(data);
       console.log("달성 기록이 잘 저장됨");
     } catch (error) {
       console.error("달성 습관을 저장하다가 뭔가 잘못됨", error.stack);
       throw new Error(error);
     } finally {
-      await knex.destroy();
+      await this.knex.destroy();
     }
   }
 
   async deleteChecked(data) {
     try {
-      await knex("fulfilled_habits").where(data).del();
+      await this.knex("fulfilled_habits").where(data).del();
       console.log("달성 기록이 잘 삭제됨");
       //delete from fulfilled_habits where user=user_id and date = today and habit_id = habit_id;
     } catch (error) {
@@ -80,4 +80,4 @@ class Fulfilled_habitsModel {
   }
 }
 
-module.exports = Fulfilled_habitsModel;
+module.exports = FulfilledHabitsModel;

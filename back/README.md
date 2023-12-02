@@ -7,7 +7,7 @@
 cd back
 
 # 2) 패키지 설치해주기
-npm install
+npm ci
 
 # 3) src 폴더로 이동하기
 cd src
@@ -19,4 +19,5 @@ node app.js
 Server is running on http://localhost:5001
 Knex Successfully connected
 ```
+
 making commit for merging

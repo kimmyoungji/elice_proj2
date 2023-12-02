@@ -80,18 +80,16 @@ userRouter.get("/users/user", isLoggedIn, async (req, res, next) => {
 
     // DB:  user_id로 users 조회
     const result = await users.findById(user_id);
-
     // 빈 배열일 경우 에러처리
     if (result.length === 0) {
       throw new NotFoundError("데이터가 존재하지 않습니다.");
     }
-
     // 응답 데이터 구성하기
     delete result[0].password;
 
     // 응답
     res.status(200).send({
-      statusMessage: "DB 데이터 조회 성공",
+      message: "DB 데이터 조회 성공",
       user: result,
     });
   } catch (err) {
@@ -173,8 +171,7 @@ userRouter.delete("/users", isLoggedIn, async (req, res, next) => {
     const result = await users.deleteById(user_id);
 
     //응답
-    res.status(200).end({
-      statusCode: 200,
+    res.status(200).send({
       message: "DB 데이터 삭제 성공",
     });
   } catch (err) {
