@@ -9,9 +9,9 @@ const testKnex = require("./db/models/modelTestCodes/knex_test");
 
 //라우터 가져오기
 const introRouter = require("./routers/introRouter");
-const userRouter = require("./routers/userRouter");
-const fulfilledHabitRouter = require("./routers/fulfilledHabitRouter");
-const plannedHabitRouter = require("./routers/plannedHabitRouter");
+const usersRouter = require("./routers/usersRouter");
+const fulfilledHabitsRouter = require("./routers/fulfilledHabitsRouter");
+const plannedHabitsRouter = require("./routers/plannedHabitsRouter");
 
 //라우터 가져오기
 const app = express();
@@ -43,9 +43,9 @@ testKnex();
 
 // 라우터
 app.use("/graphs", introRouter);
-app.use(userRouter);
-app.use(plannedHabitRouter);
-app.use("/fulfilled_habits", fulfilledHabitRouter);
+app.use("/users", usersRouter);
+app.use(plannedHabitsRouter);
+app.use("/fulfilled_habits", fulfilledHabitsRouter);
 // 에러처리 미들웨어
 app.use(errorMiddleware);
 

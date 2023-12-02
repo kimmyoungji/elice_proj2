@@ -58,14 +58,16 @@ class FulfilledHabitsModel {
   }
   async insertChecked(data) {
     try {
+      // 중복 체크 필요!
       await this.knex("fulfilled_habits").insert(data);
       console.log("달성 기록이 잘 저장됨");
     } catch (error) {
       console.error("달성 습관을 저장하다가 뭔가 잘못됨", error.stack);
       throw new Error(error);
-    } finally {
-      await this.knex.destroy();
     }
+    // finally {
+    //   await this.knex.destroy();
+    // } // 이 코드를 빼야합니다! 이코드가 있으면 데이터 삽입 직후 데이터베이스와의 연결이 끊어져 후속 요청시 연결이 끊어졌다는 오류가 납니다
   }
 
   async deleteChecked(data) {
