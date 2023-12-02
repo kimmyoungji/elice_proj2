@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import HabitForm from '../features/habit/HabitPageForm';
 import HabitListForm from '../features/habit/HabitListForm';
+import HabitCheckForm from '../features/habit/HabitCheckForm';
 import axios from 'axios';
+// import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+// import { UserProvider } from "./Context/UserStateContext";
+// import Navigation from "./components/common/header/Navigation";
 // import { api } from "../utils/axiosConfig";
 
 export default function HabitPage() {
@@ -21,16 +25,16 @@ export default function HabitPage() {
   useEffect(() => {
     axios({
       method: 'get',
-      url: "http://"+ window.location.hostname +":5001/planned_habits",
+      url: "http://"+ window.location.hostname +":5001/planned-habits",
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",
       }
     })
     .then((res) => {
-      // 백에 카멜케이스로 수정 요청함
-      const { habitIds } = res.data.plannedHabits[0];
-      setSelectedHabits(habitIds);
+      const { habitIds } = res.data.plannedHabits;
+      console.log('habitIds', habitIds);
+      setSelectedHabits( habitIds );
     }).catch((error) => {
       // 추후 수정예정
         console.log(error)
@@ -56,10 +60,13 @@ export default function HabitPage() {
   return (
     <>
       <HabitForm
-        userInfo={userInfo}
-        habitList={habitList}
-        selectedHabits={selectedHabits} />
-      {isEditing === true && <HabitListForm habitList={habitList} />}
+            userInfo={userInfo}
+            habitList={habitList}
+            selectedHabits={selectedHabits}
+            />
+      <HabitListForm habitList={habitList}/>
+      {!isEditing &&
+        <HabitCheckForm habitList={habitList} />}
     </>
   );
 }
