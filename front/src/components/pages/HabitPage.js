@@ -1,27 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import HabitForm from '../features/habit/HabitPageForm';
 import HabitListForm from '../features/habit/HabitListForm';
-import HabitCheckForm from '../features/habit/HabitCheckForm';
+// import HabitCheckForm from '../features/habit/HabitCheckForm';
 import axios from 'axios';
-// import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-// import { UserProvider } from "./Context/UserStateContext";
-// import Navigation from "./components/common/header/Navigation";
-// import { api } from "../utils/axiosConfig";
 
 export default function HabitPage() {
-  const [isEditing, setIsEditing] = useState(true);
-  const [selectedHabits, setSelectedHabits] = useState();
-
-  // 페이지 처음 로드되면 사용자의 계획 습관 조회하기
-  //     api.get("/planned-habits", {
-  // useEffect(() => {
-  //     
-  //     });
-  // })
+  // const [isEditing, setIsEditing] = useState(true);
+  const [selectedHabits, setSelectedHabits] = useState(null);
 
   // 사용자가 계획한 습관이 있는지 확인
   // if yes -> 계획한 습관 띄우기
   // if no -> 추가하기 버튼 띄우기
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios({
+  //         method: 'get',
+  //         url: "http://"+ window.location.hostname +":5001/planned-habits",
+  //         withCredentials: true,
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         }
+  //       })
+  //       const { habit_id } = response.data.plannedHabits[0];
+  //       const habitIds = [habit_id];
+  //       console.log('habitIds', habitIds);
+  //       setSelectedHabits(habitIds);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetchData(); 
+  // }, [])
   useEffect(() => {
     axios({
       method: 'get',
@@ -32,16 +42,18 @@ export default function HabitPage() {
       }
     })
     .then((res) => {
-      const { habitIds } = res.data.plannedHabits;
+      // 백에 배열로 수정 요청 전달함.
+      const { habit_id } = res.data.plannedHabits[0];
+      const habitIds = [habit_id];
       console.log('habitIds', habitIds);
       setSelectedHabits( habitIds );
     }).catch((error) => {
       // 추후 수정예정
         console.log(error)
+        
     }).then(() => {
     });
   }, [])
-
 
   const userInfo = {
     userName : "거북잉",
@@ -59,14 +71,12 @@ export default function HabitPage() {
 
   return (
     <>
-      <HabitForm
+      {selectedHabits !== null && <HabitForm
             userInfo={userInfo}
             habitList={habitList}
             selectedHabits={selectedHabits}
-            />
+            />}
       <HabitListForm habitList={habitList}/>
-      {!isEditing &&
-        <HabitCheckForm habitList={habitList} />}
     </>
   );
 }
