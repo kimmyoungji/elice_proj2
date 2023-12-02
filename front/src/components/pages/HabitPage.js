@@ -11,27 +11,6 @@ export default function HabitPage() {
   // 사용자가 계획한 습관이 있는지 확인
   // if yes -> 계획한 습관 띄우기
   // if no -> 추가하기 버튼 띄우기
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios({
-  //         method: 'get',
-  //         url: "http://"+ window.location.hostname +":5001/planned-habits",
-  //         withCredentials: true,
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         }
-  //       })
-  //       const { habit_id } = response.data.plannedHabits[0];
-  //       const habitIds = [habit_id];
-  //       console.log('habitIds', habitIds);
-  //       setSelectedHabits(habitIds);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   fetchData(); 
-  // }, [])
   useEffect(() => {
     axios({
       method: 'get',
