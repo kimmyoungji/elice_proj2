@@ -18,12 +18,10 @@ const getDate = () => {
     return dateString;
   }
 
-// , selectedHabits
 export default function HabitForm ({ userInfo, habitList, selectedHabits }) {
     const { userName, turtleLevel } = userInfo;
     const habits = habitList;
     console.log('HabitForm selectedHabits', selectedHabits);
-    // const selectedHabits = ["habit1", "habit2"]; // 임시 데이터
 
     return (
         <>
@@ -86,16 +84,7 @@ const HabitCardForm = ({ userName, habits, selectedHabits }) => {
         setStart(false);
         setRequest(false);
       };
-    // const handleAddFormSubmit = (e) => {
-    //     setStart(false);
-    //     console.log(e);
-    //     console.log('2', start);
-    // }
 
-
-
-    // start가 false인 경우 <HabitAddForm/>을 실행하고
-    // start를 true로 바꿔서 바로 <HabitShowForm/>를 실행하고 싶은데 동작 x
     return (
         <>
             <Col xs={12} sm={6} className="habit-container" >
