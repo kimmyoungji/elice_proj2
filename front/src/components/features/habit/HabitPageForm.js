@@ -1,15 +1,28 @@
 // 컴포넌트 분리 및 api 수정중
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Container, Button, Col, Row, ListGroup, Image, Form } from 'react-bootstrap';
 import './HabitPage.css';
 import calendar from "../../../assets/imgs/calendar.png";
 import axios from 'axios';
 
+const getDate = () => {
+    const today = new Date();
+  
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+  
+    const dateString = year + '-' + month + '-' + day;
+  
+    return dateString;
+  }
+
 // , selectedHabits
 export default function HabitForm ({ userInfo, habitList, selectedHabits }) {
     const { userName, turtleLevel } = userInfo;
     const habits = habitList;
+    console.log('HabitForm selectedHabits', selectedHabits);
     // const selectedHabits = ["habit1", "habit2"]; // 임시 데이터
 
     return (
@@ -63,10 +76,23 @@ const TurtleForm = ({ userName, turtleLevel }) => {
 
 const HabitCardForm = ({ userName, habits, selectedHabits }) => {
     const [ start, setStart ] = useState(selectedHabits ? false : true);
+    const [ selectedHabit, setSelectedHabit ] = useState(selectedHabits);
+    const [ request, setRequest ] = useState(true);
+    const [ selectedDate, setSelectedDate ] = useState(0);
 
-    const handleAddFormSubmit = () => {
+    const handleFormSubmit = (selectedHabit, selectedDate) => {
+        setSelectedHabit(selectedHabit);
+        setSelectedDate(selectedDate);
         setStart(false);
-    }
+        setRequest(false);
+      };
+    // const handleAddFormSubmit = (e) => {
+    //     setStart(false);
+    //     console.log(e);
+    //     console.log('2', start);
+    // }
+
+
 
     // start가 false인 경우 <HabitAddForm/>을 실행하고
     // start를 true로 바꿔서 바로 <HabitShowForm/>를 실행하고 싶은데 동작 x
@@ -76,11 +102,10 @@ const HabitCardForm = ({ userName, habits, selectedHabits }) => {
                 <Card style={{ height: '450px' }}>
                     {/* 기존에 선택한 습관이 없는 경우  */}
                     {start && <HabitAddForm userName={userName}
-                                            habits={habits}
-                                            onSubmit={() => handleAddFormSubmit()}/>}
+                                            habits={habits} onSubmit={handleFormSubmit}/>}
                     {/* 기존에 선택한 습관이 있는 경우  */}
-                    {!start && <HabitShowForm userName={userName}
-                            habits={habits} selectedHabits={selectedHabits} request={true}/>}
+                    {!start && <HabitShowForm userName={userName} habits={habits}
+                                selectedDate={selectedDate} selectedHabit={selectedHabit} request={request}/>}
                 </Card>
             </Col>
             
@@ -89,10 +114,11 @@ const HabitCardForm = ({ userName, habits, selectedHabits }) => {
 }
 
 
-const HabitAddForm = ({ userName, habits }) => {
+const HabitAddForm = ({ userName, habits, onSubmit }) => {
     const [ addButton, setAddButton ] = useState(true);
     const [ selectedHabit, setSelectedHabit ] = useState([]);
-    const [ selectedDay, setSelectedDay ] = useState(null);
+    const [ selectedDate, setSelectedDate ] = useState(null);
+    const [ pass, setPass ] = useState(false);
 
     const handleAddButton = () => {
         setAddButton(false);
@@ -109,7 +135,7 @@ const HabitAddForm = ({ userName, habits }) => {
     }
 
     const handleRadioChange = (key) => {
-        setSelectedDay(key)
+        setSelectedDate(key)
     }
 
     const getHabitList = Object.keys(habits).map((key) => (
@@ -131,33 +157,35 @@ const HabitAddForm = ({ userName, habits }) => {
     ));
 
     const handleSelectButton = () => {
-        console.log(selectedHabit);
-        console.log(selectedDay);
+        setPass(true)
+        if (onSubmit) {
+            onSubmit(selectedHabit, selectedDate);
+        }
         
-
         // 새롭게 선택한 습관 추가하기
         // 아직 api 연결 x -> 백에서 변수명과 data 수정중
-        // axios({
-        //     method: 'post',
-        //     url: "http://"+ window.location.hostname +":5001/planned_habits",
-        //     withCredentials: true,
-        //     headers: {
-        //     "Content-Type": "application/json",
-        //     },
-        //     data: {
-        //         selectedHabit: selectedHabit,
-        //         selectedDay: selectedDay
-        //     }
-        // })
-        // .then((res) => {
-        //     // 백에 카멜케이스로 수정 요청
-        //     const { habit_ids } = res.data.plannedHabits[0];
-        //     console.log(habit_ids);
-        // }).catch((error) => {
-        //     // 추후 수정예정
-        //     console.log(error)
-        // }).then(() => {
-        // });
+        axios({
+            method: 'post',
+            url: "http://"+ window.location.hostname +":5001/planned-habits",
+            withCredentials: true,
+            headers: {
+            "Content-Type": "application/json",
+            },
+            data: {
+                habitIds: selectedHabit,
+                habitDate: selectedDate
+            }
+        })
+        .then((res) => {
+            // 백에 카멜케이스로 수정 요청
+            const { habit_ids } = res.data.plannedHabits[0];
+            console.log(habit_ids);
+        }).catch((error) => {
+            // 추후 수정예정
+            // error case 1) 선택 안 할 경우
+            console.log(error)
+        }).then(() => {
+        });
         
     }
 
@@ -193,7 +221,9 @@ const HabitAddForm = ({ userName, habits }) => {
                     </ListGroup>
                     <div className="d-flex justify-content-center">
                         <Button className="select-button" variant="primary" size="lg"
-                            onClick={() => handleSelectButton()}
+                            onClick={() => {
+                                handleSelectButton();
+                            }}
                             style={{ width: "30%", fontSize: '13px', margin: "10px"}}>
                                 선택완료
                         </Button>
@@ -206,10 +236,12 @@ const HabitAddForm = ({ userName, habits }) => {
 
 
 // 선택한 습관들 조회하기
-const HabitShowForm = ({ userName, habits, selectedHabits, request }) => {
+const HabitShowForm = ({ userName, habits, selectedDay, selectedHabit, request }) => {
+    const [ check, setCheck ] = useState(false);
     const [ checkHabit, setCheckHabit ] = useState(false);
+    const today = getDate();
 
-    const getSelectedHabit = selectedHabits.map((habit) => (
+    const getSelectedHabit = selectedHabit.map((habit) => (
         <ListGroup.Item>
             <Form.Check inline key={habit} 
             type='checkbox'
@@ -219,32 +251,37 @@ const HabitShowForm = ({ userName, habits, selectedHabits, request }) => {
     ));
 
     const getDoneHabit = () => {
-        
-        setCheckHabit(true)
-        return (
-            <></>
-        )
+        setCheck(true)
     }
 
-    useEffect(() => {
-        axios({
-          method: 'get',
-          url: "http://"+ window.location.hostname +":5001/fullfilled_habits",
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          }
-        })
-        .then((res) => {
-          // 백에 카멜케이스로 요청
-            const { habit_id } = res.data.fullfilledHabits[0];
-          console.log(habit_id);
-        }).catch((error) => {
-          // 추후 수정예정
-            console.log(error)
-        }).then(() => {
-        });
-      }, [checkHabit])
+    // useEffect(() => {
+    //     if (check) {
+    //         console.log('get 요청');
+    //         axios({
+    //             method: 'get',
+    //             url: "http://"+ window.location.hostname +":5001/fulfilled_habits",
+    //             params: {date: today},
+    //             withCredentials: true,
+    //             headers: {
+    //             "Content-Type": "application/json",
+    //             }
+    //         })
+    //         .then((res) => {
+    //             // 백에 카멜케이스로 요청
+    //             const { habit_id } = res.data.habitIds;
+    //             if (!habit_id) {
+    //             setCheckHabit(null);
+    //             } else {
+    //             setCheckHabit(habit_id);
+    //             }
+    //             return getSelectedHabit
+    //         }).catch((error) => {
+    //             // 추후 수정예정
+    //             console.log(error)
+    //         }).then(() => {
+    //         });
+    //     }
+    //   }, [check]);
 
     
     return (
@@ -255,15 +292,16 @@ const HabitShowForm = ({ userName, habits, selectedHabits, request }) => {
                         {userName}</span>의 습관
                 </Card.Title>
                 <div style={{ color: "grey", marginBottom: '20px', fontSize: "80%" }}>
-                    실천한 습관을 선택해주세요 !
-                </div>
+                    실천한 습관을 선택해주세요 !</div>
+                <div>실천 종료까지 남은 일자: {selectedDay}</div>
                 {/* api 요청 없이 추가한 습관들 리스트 그대로 가져와서 띄우기 */}
                 {!request && <ListGroup style={{ position: 'relative', width: '100%', fontSize: "83%", marginTop: "40px"}}>
                     {getSelectedHabit}
                 </ListGroup>}
                 {/* api 요청으로 완료한 습관들 구분해서 표시하기 */}
                 {request && <ListGroup style={{ position: 'relative', width: '100%', fontSize: "83%"}}>
-                    {getDoneHabit}
+                    {getSelectedHabit}
+                {/* 체크 작업 필요 */}
                 </ListGroup>}
             </Card.Body>
                 <div className="d-flex justify-content-center">
@@ -276,5 +314,3 @@ const HabitShowForm = ({ userName, habits, selectedHabits, request }) => {
         </>
     )
 }
-
-
