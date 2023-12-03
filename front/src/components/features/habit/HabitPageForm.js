@@ -243,34 +243,34 @@ const HabitShowForm = ({ userName, habits, selectedDay, selectedHabit, request }
         setCheck(true)
     }
 
-    // useEffect(() => {
-    //     if (check) {
-    //         console.log('get 요청');
-    //         axios({
-    //             method: 'get',
-    //             url: "http://"+ window.location.hostname +":5001/fulfilled_habits",
-    //             params: {date: today},
-    //             withCredentials: true,
-    //             headers: {
-    //             "Content-Type": "application/json",
-    //             }
-    //         })
-    //         .then((res) => {
-    //             // 백에 카멜케이스로 요청
-    //             const { habit_id } = res.data.habitIds;
-    //             if (!habit_id) {
-    //             setCheckHabit(null);
-    //             } else {
-    //             setCheckHabit(habit_id);
-    //             }
-    //             return getSelectedHabit
-    //         }).catch((error) => {
-    //             // 추후 수정예정
-    //             console.log(error)
-    //         }).then(() => {
-    //         });
-    //     }
-    //   }, [check]);
+    useEffect(() => {
+        if (check) {
+            console.log('get 요청');
+            axios({
+                method: 'get',
+                url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
+                params: {date: today},
+                withCredentials: true,
+                headers: {
+                "Content-Type": "application/json",
+                }
+            })
+            .then((res) => {
+                // 백에 카멜케이스로 요청
+                const { habit_id } = res.data.habitIds;
+                if (!habit_id) {
+                setCheckHabit(null);
+                } else {
+                setCheckHabit(habit_id);
+                }
+                return getSelectedHabit
+            }).catch((error) => {
+                // 추후 수정예정
+                console.log(error)
+            }).then(() => {
+            });
+        }
+      }, [check]);
 
     
     return (
@@ -290,6 +290,7 @@ const HabitShowForm = ({ userName, habits, selectedDay, selectedHabit, request }
                 {/* api 요청으로 완료한 습관들 구분해서 표시하기 */}
                 {request && <ListGroup style={{ position: 'relative', width: '100%', fontSize: "83%"}}>
                     {getSelectedHabit}
+                    {getDoneHabit}
                 {/* 체크 작업 필요 */}
                 </ListGroup>}
             </Card.Body>
@@ -302,8 +303,5 @@ const HabitShowForm = ({ userName, habits, selectedDay, selectedHabit, request }
                 </div>
         </>
     )
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> dev-front
+

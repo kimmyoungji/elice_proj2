@@ -63,16 +63,6 @@ const UserPageForm = (props) => {
     setImage(imgUrl);
   };
 
-<<<<<<< HEAD
-        // FormData 확인용
-        for (let key of formData.keys()){
-            console.log(key);
-        }
-        console.log('-----');
-        for (let value of formData.values()){
-            console.log(value);
-        }
-=======
   const handleInputChange = (e) => {
     if (e.target.type === "file") {
       const id = "userFormImg";
@@ -89,7 +79,6 @@ const UserPageForm = (props) => {
       }));
     }
   };
->>>>>>> dev-front
 
   const editing = (e) => {
     e.preventDefault();
@@ -104,14 +93,14 @@ const UserPageForm = (props) => {
     formData.append("passwordcheck", form.userFormPasswordCheck);
     // formData.append("data", new Blob([JSON.stringify(formData)], {type: 'application/json'}));
 
-    // FormData 확인
-    for (let key of formData.keys()) {
-      console.log(key);
-    }
-    console.log("-----");
-    for (let value of formData.values()) {
-      console.log(value);
-    }
+    // FormData 확인용
+    // for (let key of formData.keys()){
+    //     console.log(key);
+    // }
+    // console.log('-----');
+    // for (let value of formData.values()){
+    //     console.log(value);
+    // }
 
     axios({
       method: "put",
