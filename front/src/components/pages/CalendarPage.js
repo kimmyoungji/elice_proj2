@@ -3,6 +3,7 @@ import CalendarForm from '../features/calender/CalendarPageForm';
 import axios from 'axios';
 
 function CalendarPage() {
+  // api 연결 후 수정할 변수
   const habitList = {date: '2023-11-25', habit1: "오늘 습관1", habit2: "오늘 습관2", habit3: "오늘 습관3"}
   const checkdata = {};
 

@@ -302,4 +302,8 @@ const HabitShowForm = ({ userName, habits, selectedDay, selectedHabit, request }
                 </div>
         </>
     )
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> dev-front
