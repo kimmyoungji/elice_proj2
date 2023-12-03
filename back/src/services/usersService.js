@@ -53,16 +53,10 @@ class userService {
     return result;
   }
 
-  static async getUsersAll() {
+  static async getUsers(cursor, limit) {
     // DB: 모든 users 조회
-    let userArr = await users.findById();
-
-    // 응답 데이터 구성하기
-    userArr = userArr.map((user) => {
-      delete user.user_id;
-      delete user.password;
-      return user;
-    });
+    let userArr = await users.findByCursor(cursor, limit);
+    console.log(userArr);
 
     // 빈 배열일 경우 에러처리
     if (userArr.length === 0) {

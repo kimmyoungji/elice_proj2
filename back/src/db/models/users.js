@@ -11,10 +11,34 @@ class UsersModel {
     }
   }
 
+  async findByCursor(cursor, limit) {
+    try {
+      cursor = cursor ? cursor : "99999999999999999999"; // Replace this with your actual cursor value
+      limit = limit ? limit : "10";
+      const result = await this.knex("users")
+        .select("username", "email", "level")
+        .select(
+          this.knex.raw(
+            "CONCAT(LPAD(username, 10, 0), LPAD(level, 10, 0)) as cursors"
+          )
+        )
+        .whereRaw(`CONCAT(LPAD(username, 10, 0), LPAD(level, 10, 0)) < ?`, [
+          cursor,
+        ])
+        .orderBy("username", "desc")
+        .orderBy("level", "desc")
+        .limit(limit);
+      console.log(result);
+      return result;
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
   async findById(user_id) {
     try {
       if (!user_id) {
-        return await this.knex("users").select("*").from("users");
+        return await this.knex("users").select("*");
       }
       return await this.knex("users").select("*").where("user_id", user_id);
     } catch (err) {
