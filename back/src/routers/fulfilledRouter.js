@@ -30,7 +30,7 @@ fulfilledRouter.get("/", isLoggedIn, async (req, res, next) => {
         data: data,
       });
     } else {
-      const today = new Date();
+      const today = new Date(now);
       const tomorrow = new Date(today);
       tomorrow.setDate(today.getDate() + 1);
       console.log(today);
@@ -66,7 +66,7 @@ fulfilledRouter.post("/", isLoggedIn, async (req, res, next) => {
       fulfilledHabitId,
       userId,
       habitId: el.habitid,
-      date: new Date().toISOString().slice(0, 10),
+      date: new Date(now).toISOString().slice(0, 10),
     }));
     console.log(data);
     await fulfilled.create(data);
