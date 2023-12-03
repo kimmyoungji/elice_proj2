@@ -21,10 +21,7 @@ export default function HabitPage() {
       }
     })
     .then((res) => {
-      // 백에 배열로 수정 요청 전달함.
-      console.log('res.data', res.data);
       const habitIds = res.data.plannedHabitIds;
-      console.log('habitIds', habitIds);
       setSelectedHabits( habitIds );
     }).catch((error) => {
       // 추후 수정예정
