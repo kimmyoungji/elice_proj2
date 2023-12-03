@@ -3,9 +3,13 @@ class UsersModel {
     this.knex = knex;
   }
 
+  setTrx(trx) {
+    this.trx = trx;
+  }
+
   async create(user) {
     try {
-      return await this.knex("users").insert(user);
+      return this.knex("users").transacting(this.trx).insert(user);
     } catch (err) {
       throw new Error(err);
     }
@@ -15,7 +19,9 @@ class UsersModel {
     try {
       cursor = cursor ? cursor : "99999999999999999999"; // Replace this with your actual cursor value
       limit = limit ? limit : "10";
-      const result = await this.knex("users")
+      console.log("cursor and limit", cursor, limit);
+      return this.knex("users")
+        .transacting(this.trx)
         .select("username", "email", "level")
         .select(
           this.knex.raw(
@@ -28,8 +34,6 @@ class UsersModel {
         .orderBy("username", "desc")
         .orderBy("level", "desc")
         .limit(limit);
-      console.log(result);
-      return result;
     } catch (err) {
       throw new Error(err);
     }
@@ -38,9 +42,12 @@ class UsersModel {
   async findById(user_id) {
     try {
       if (!user_id) {
-        return await this.knex("users").select("*");
+        return this.knex("users").transacting(this.trx).select("*");
       }
-      return await this.knex("users").select("*").where("user_id", user_id);
+      return this.knex("users")
+        .transacting(this.trx)
+        .select("*")
+        .where("user_id", user_id);
     } catch (err) {
       throw new Error(err);
     }
@@ -48,7 +55,10 @@ class UsersModel {
 
   async findByEmail(email) {
     try {
-      return await this.knex("users").select("*").where("email", email);
+      return this.knex("users")
+        .transacting(this.trx)
+        .select("*")
+        .where("email", email);
     } catch (err) {
       throw new Error(err);
     }
@@ -56,7 +66,10 @@ class UsersModel {
 
   async findByUsername(username) {
     try {
-      return await this.knex("users").select("*").where("username", username);
+      return this.knex("users")
+        .transacting(this.trx)
+        .select("*")
+        .where("username", username);
     } catch (err) {
       throw new Error(err);
     }
@@ -64,7 +77,8 @@ class UsersModel {
 
   async update(user_id, toUpdate) {
     try {
-      return await this.knex("users")
+      return this.knex("users")
+        .transacting(this.trx)
         .where("user_id", user_id)
         .update(toUpdate);
     } catch (err) {
@@ -74,7 +88,10 @@ class UsersModel {
 
   async deleteById(user_id) {
     try {
-      return await this.knex("users").where("user_id", user_id).delete();
+      return this.knex("users")
+        .transacting(this.trx)
+        .where("user_id", user_id)
+        .delete();
     } catch (err) {
       throw new Error(err);
     }

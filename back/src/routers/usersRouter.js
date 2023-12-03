@@ -70,6 +70,7 @@ usersRouter.get("/", async (req, res, next) => {
     console.log("limit", limit);
     // 모든 사용자 데이터 가져오기
     const users = await userService.getUsers(cursor, limit);
+    console.log("users", users);
 
     // 응답
     res.status(200).send({

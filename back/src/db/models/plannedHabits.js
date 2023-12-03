@@ -3,9 +3,15 @@ class PlannedHabitsModel {
     this.knex = knex;
   }
 
+  setTrx(trx) {
+    this.trx = trx;
+  }
+
   async create(plannedHabit) {
     try {
-      return await this.knex("planned_habits").insert(plannedHabit);
+      return this.knex("planned_habits")
+        .transacting(this.trx)
+        .insert(plannedHabit);
     } catch (err) {
       throw new Error(err);
     }
@@ -14,9 +20,10 @@ class PlannedHabitsModel {
   async findById(planned_habit_id) {
     try {
       if (!planned_habit_id) {
-        return await this.knex("planned_habits").select("*");
+        return this.knex("planned_habits").transacting(this.trx).select("*");
       }
-      return await this.knex("planned_habits")
+      return this.knex("planned_habits")
+        .transacting(this.trx)
         .select("*")
         .where("planned_habit_id", planned_habit_id);
     } catch (err) {
@@ -26,7 +33,8 @@ class PlannedHabitsModel {
 
   async findByUserId(user_id) {
     try {
-      return await this.knex("planned_habits")
+      return this.knex("planned_habits")
+        .transacting(this.trx)
         .select("*")
         .where("user_id", user_id);
     } catch (err) {
@@ -37,7 +45,8 @@ class PlannedHabitsModel {
   async findUnclosedByUserId(user_id) {
     try {
       const today = new Date();
-      return await this.knex("planned_habits")
+      return this.knex("planned_habits")
+        .transacting(this.trx)
         .select("*")
         .where("user_id", user_id)
         .andWhere("end_date", ">=", today);
@@ -48,7 +57,8 @@ class PlannedHabitsModel {
 
   async deleteById(planned_habit_id) {
     try {
-      return await this.knex("planned_habits")
+      return this.knex("planned_habits")
+        .transacting(this.trx)
         .where("planned_habit_id", planned_habit_id)
         .delete();
     } catch (err) {

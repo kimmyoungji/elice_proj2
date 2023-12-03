@@ -12,6 +12,7 @@ const introRouter = require("./routers/introRouter");
 const usersRouter = require("./routers/usersRouter");
 const fulfilledHabitsRouter = require("./routers/fulfilledHabitsRouter");
 const plannedHabitsRouter = require("./routers/plannedHabitsRouter");
+//for testing trex
 
 //라우터 가져오기
 const app = express();
