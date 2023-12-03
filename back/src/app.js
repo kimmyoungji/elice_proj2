@@ -12,7 +12,6 @@ const introRouter = require("./routers/introRouter");
 const usersRouter = require("./routers/usersRouter");
 const fulfilledHabitsRouter = require("./routers/fulfilledHabitsRouter");
 const plannedHabitsRouter = require("./routers/plannedHabitsRouter");
-//for testing trex
 
 //라우터 가져오기
 const app = express();
@@ -34,9 +33,9 @@ testKnex();
 
 // 라우터
 app.use("/graphs", introRouter);
-app.use("/users", usersRouter);
+app.use(usersRouter);
 app.use(plannedHabitsRouter);
-app.use("/fulfilled-habits", fulfilledHabitsRouter);
+app.use("/fulfilledHabits", fulfilledHabitsRouter);
 // 에러처리 미들웨어
 app.use(errorMiddleware);
 
