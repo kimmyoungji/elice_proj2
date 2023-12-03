@@ -4,14 +4,12 @@ const errorMiddleware = (error, req, res, next) => {
     res.status(error.status).send({
       statusCode: error.status,
       message: error.message,
-      data: {},
     });
   } else {
     // 정의되지 않은 Error
     res.status(400).send({
       statusCode: 400,
       message: error.message,
-      data: {},
     });
   }
 };

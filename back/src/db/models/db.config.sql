@@ -6,7 +6,6 @@ CREATE TABLE habits (
     habit_id VARCHAR(100) PRIMARY KEY ,
     habit_title VARCHAR(50) NOT NULL,
     discription VARCHAR(300),
-    target_days INT NOT NULL,
     trash_type VARCHAR(50) NOT NULL
 );
 
@@ -37,14 +36,14 @@ CREATE TABLE planned_habits (
 );
 
 -- UUID() 사용이전
-INSERT INTO habits (habit_id, habit_title, discription, target_days, trash_type) 
+INSERT INTO habits (habit_id, habit_title, discription, trash_type) 
 VALUES
-    ('habit1','장바구니 (에코백) 사용하기', '장바구니를 사용하면 일회용 비닐봉투의 사용을 줄일 수 있습니다.', 10, 'Plastic'),
-    ('habit2','음식 포장 시 다회용기 사용하기', '다회용기를 사용하면 일회용 플라스틱 용기 사용을 줄일 수 있습니다.', 10, 'Plastic'),
-    ('habit3','텀블러나 머그컵 사용하기', '텀블러를 사용하면 일회용 컵의 사용을 줄일 수 있습니다.', 20, 'Plastic'),
-    ('habit4','플라스틱 빨대 안 쓰기', '빨대를 사용하지 않으면 플라스틱 사용을 줄 일수 있습니다.', 20, 'Plastic'),
-    ('habit5','플라스틱 세척해서 분리배출하기', '플라스틱을 세척해서 분리배출하면, 재활용 가능성이 높아집니다.', 30, 'Plastic'),
-    ('habit6','무라벨 제품 구매하기', '라벨이 없는 제품을 구매하면, 플라스틱 제품을 더 쉽게 재활용할 수 있습니다.', 30, 'Plastic');
+    ('habit1','장바구니 (에코백) 사용하기', '장바구니를 사용하면 일회용 비닐봉투의 사용을 줄일 수 있습니다.','Plastic'),
+    ('habit2','음식 포장 시 다회용기 사용하기', '다회용기를 사용하면 일회용 플라스틱 용기 사용을 줄일 수 있습니다.','Plastic'),
+    ('habit3','텀블러나 머그컵 사용하기', '텀블러를 사용하면 일회용 컵의 사용을 줄일 수 있습니다.', 'Plastic'),
+    ('habit4','플라스틱 빨대 안 쓰기', '빨대를 사용하지 않으면 플라스틱 사용을 줄 일수 있습니다.', 'Plastic'),
+    ('habit5','플라스틱 세척해서 분리배출하기', '플라스틱을 세척해서 분리배출하면, 재활용 가능성이 높아집니다.', 'Plastic'),
+    ('habit6','무라벨 제품 구매하기', '라벨이 없는 제품을 구매하면, 플라스틱 제품을 더 쉽게 재활용할 수 있습니다.', 'Plastic');
 
 -- Sample data for 'users' table
 INSERT INTO users (user_id, username, email, password, level) 

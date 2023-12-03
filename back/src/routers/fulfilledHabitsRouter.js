@@ -1,4 +1,4 @@
-const fulfilledHabitRouter = require("express").Router();
+const fulfilledHabitsRouter = require("express").Router();
 const knex = require("../db/knex");
 const FulfilledHabitsModel = require("../db/models/fulfilledHabits");
 const { stringToArr } = require("../lib/stringToarray");
@@ -6,7 +6,7 @@ const fulfilledHabits = new FulfilledHabitsModel(knex);
 const isLoggedIn = require("../middlewares/isLoggedIn");
 const { v4: uuidv4 } = require("uuid");
 
-fulfilledHabitRouter.get("/", isLoggedIn, async (req, res, next) => {
+fulfilledHabitsRouter.get("/", isLoggedIn, async (req, res, next) => {
   try {
     const { month, date } = req.query;
     const user_id = req.currentUserId;
@@ -59,7 +59,7 @@ fulfilledHabitRouter.get("/", isLoggedIn, async (req, res, next) => {
   }
 });
 
-fulfilledHabitRouter.post("/", isLoggedIn, async (req, res, next) => {
+fulfilledHabitsRouter.post("/", isLoggedIn, async (req, res, next) => {
   try {
     const user_id = req.currentUserId; //로그인 기능 연결 전 임시 변수
     //fullfilled_habits:[ {habit_id: [습관아이디],timestamp: [완료시간]},{...}, ...]
@@ -80,24 +80,26 @@ fulfilledHabitRouter.post("/", isLoggedIn, async (req, res, next) => {
     await fulfilledHabits.insertChecked(data);
     res.status(200).json({ message: "습관 달성 내역 저장 성공" });
   } catch (error) {
-    console.error("Error in fulfilledHabitRouter", error.stack);
+    console.error("Error in fulfilledHabitsRouter", error.stack);
     res.status(500).json({
       message: "Internal Server Error",
     });
   }
 });
 
-fulfilledHabitRouter.delete("/", isLoggedIn, async (req, res, next) => {
+fulfilledHabitsRouter.delete("/", isLoggedIn, async (req, res, next) => {
   try {
     //const { user_id } = req.cookies; //쿠키에서 user 정보 가져옴
     const user_id = req.currentUserId; //로그인 기능 연결 전 임시 변수
     //fullfilled_habit_id:[habit_id]
-    const habitIdStr = req.body.habitIds;
-    const habitIdArr = stringToArr(habitIdStr);
+    let habitIds = req.body.habitIds;
+    if (typeof habitIds === "string") {
+      habitIds = stringToArr(habitIds);
+    }
     //날짜 오늘, 유저아이디, habit_id인 데이터 삭제
     const today = new Date().toISOString().slice(0, 10);
     console.log(today, "today");
-    for (let habitId of habitIdArr) {
+    for (let habitId of habitIds) {
       const data = { user_id, habit_id: habitId, date: today };
       await fulfilledHabits.deleteChecked(data);
     }
@@ -111,4 +113,4 @@ fulfilledHabitRouter.delete("/", isLoggedIn, async (req, res, next) => {
   }
 });
 
-module.exports = fulfilledHabitRouter;
+module.exports = fulfilledHabitsRouter;
