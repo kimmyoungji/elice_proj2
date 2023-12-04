@@ -12,38 +12,28 @@ export default function CommunityPage() {
   const lastCusor = useRef();
 
   const getTurtleCards = () =>
-    api.get(lastCusor.current ? `/users?cursor=${lastCusor.current}&limit=6` : "/users?limit=6" ,{
+    api.get(lastCusor.current ? `/users?cursor=${lastCusor.current}&limit=6` : "/users?limit=6", {
       withCredentials: true,
     })
       .then(res => {
-        console.log("응답데이터:",res.data.users);
-        turtleCards === undefined ? setTurtleCards(res.data.users) : setTurtleCards((prev) => [...prev], res.data.users);
-        console.log("카드데이터:",turtleCards);
-        lastCusor.current = res.data.users[res.data.users.length-1].cursors;
-        console.log("커서데이터:",lastCusor.current); 
+        console.log("응답데이터:", res.data.users);
+        turtleCards === undefined ? setTurtleCards(res.data.users) : setTurtleCards((prev) => [...prev].concat(res.data.users));
+        console.log("카드데이터:", turtleCards);
+        lastCusor.current = res.data.users[res.data.users.length - 1].cursors;
+        console.log("커서데이터:", lastCusor.current);
       })
       .catch(err => console.log("거북이를 불러오지 못했어요! 페이지를 새로고침 해주세요 🐢", err));
   
-  useEffect(() => {
-    getTurtleCards();
-  }, []);
-  
-  const [isLoading, setIsLoading] = useState(false);
   const { ref, isInViewport } = useScrollAnimation();
   const lastIdx = turtleCards && turtleCards.length - 1;
 
 
   useEffect(() => {
-    if (isInViewport === true) {
-      setIsLoading(true);
       getTurtleCards();
-    } else {
-      setIsLoading(false);
-    }
   }, [isInViewport]);
 
-  console.log(ref);
-  console.log(isInViewport);
+  console.log("ref값은?:",ref);
+  console.log("ref가 뷰포트 안에 있는가?:",isInViewport);
 
 
   return (
@@ -66,8 +56,8 @@ export default function CommunityPage() {
           />
           )
         )}
-        { isLoading && <LoadingCard/> }
+        { isInViewport && <LoadingCard/> }
       </CardWrapperDiv>
-    </Container>
+    </Container> 
   );
-}
+} 
