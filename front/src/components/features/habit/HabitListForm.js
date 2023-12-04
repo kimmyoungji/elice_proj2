@@ -2,21 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Card, Container, Col, Row, Modal, Button, Image } from 'react-bootstrap';
 import './HabitPage.css';
 import { ScrollAniDiv } from "../IntroContents/AnimationStyled";
-
 // import axios from 'axios';
+
+const cheerUpTexts = [
+    "같이 시작해봐요, 플라스틱 줄이기! 😊",
+    "나부터 시작하는 환경을 위한 습관 !",
+    "오늘도 환경을 위한 습관 Level Up 중!!",
+    "👍🏻👍🏻👍🏻",
+    "충분히 잘하고 있어요👍🏻 우리 계속 도전해봐요"
+];
 
 export default function HabitListForm ({ habitList }) {
     const [modalShow, setModalShow] = useState(false);
     const [selectedHabit, setSelectedHabit] = useState(null);
-    const cheerUpTexts = [
-        "같이 시작해봐요, 플라스틱 줄이기! 😊",
-        "나부터 시작하는 환경을 위한 습관 !",
-        "오늘도 환경을 위한 습관 Level Up 중!!",
-        "👍🏻👍🏻👍🏻",
-        "충분히 잘하고 있어요👍🏻 우리 계속 도전해봐요"
-    ];
     const [randomIndex, setRandomIndex] = useState(() => Math.floor(Math.random() * cheerUpTexts.length));
-
 
     const HabitModal = (props) => {
         const { key, name } = props.habitinfo;
