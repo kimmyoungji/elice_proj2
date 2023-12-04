@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import CalendarForm from '../features/calender/CalendarPageForm';
 import axios from 'axios';
 
@@ -15,16 +15,19 @@ const getDate = () => {
 }
 
 function CalendarPage() {
+  const [isLoading, setIsLoading] = useState(false);
   // api 연결 후 수정할 변수
-  let habitList = {date: getDate()[1]}; //{date: '2023-11-25', habit1: "오늘 습관1", habit2: "오늘 습관2", habit3: "오늘 습관3"}
-  let checkdata = {};
+  let habitList = {}; //{date: '2023-11-25', habit1: "오늘 습관1", habit2: "오늘 습관2", habit3: "오늘 습관3"}
+  let monthCheckDate = {};
 
   // get api로 기본 정보 가져오기
   // 달마다 습관 완료한 날짜만 받아옴 -> fullfilledDate : date 배열
   useEffect(() => {
+    console.log('get 요청');
+    
     axios({
         method: 'get',
-        url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
+        url: "http://"+ window.location.hostname +":5001/fulfilledHabits",
         params: {date: getDate()[1]},
         withCredentials: true,
         headers: {
@@ -32,23 +35,22 @@ function CalendarPage() {
         }
     })
     .then((res) => {
-      console.log(res.data);
-        const habitIds = res.data.habitIds[getDate()[1]];
+        const habitIds = res.data.habitIds;
+        habitList.date = getDate()[1]
         if (habitIds.length === 0) {
           habitList.habit1 = "습관을 추가해주세요"
         } else {
           habitIds.map((habit) => habitList.habit1 = habit)
         }
-        console.log('habitList', habitList);
     }).catch((error) => {
         // 추후 수정예정
         console.log(error)
-    }).then(() => {
+    }).finally(() => {
     });
 
     axios({
         method: 'get',
-        url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
+        url: "http://"+ window.location.hostname +":5001/fulfilledHabits",
         params: {month: getDate()[0]},
         withCredentials: true,
         headers: {
@@ -58,18 +60,21 @@ function CalendarPage() {
     .then((res) => {
         // 백에 카멜케이스로 요청
         const checkDates = res.data.dates;
-        checkdata.current = checkDates;
-        console.log('checkdata', checkdata);
+        monthCheckDate.current = checkDates;
     }).catch((error) => {
         // 추후 수정예정
         console.log(error)
-    }).then(() => {
+    }).finally(() => {
+      setIsLoading(true);
     });
-  }, [])
     
+  }, [isLoading])
 
   return (
-    <CalendarForm habitlist={habitList} checkdata={checkdata}/>
+    <>
+      {isLoading && <CalendarForm habitlist={habitList} checkdate={monthCheckDate}/>}
+    </>
+    
   );
 }
 

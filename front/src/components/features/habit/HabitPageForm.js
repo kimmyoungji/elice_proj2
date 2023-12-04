@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Card, Container, Col, Row, Image } from 'react-bootstrap';
 import HabitCardForm from "./HabitCardForm";
 import calendar from "../../../assets/imgs/calendar.png";
-import './HabitPage.css';
 
 
 export default function HabitForm ({ userInfo, habitList, selectedDate, selectedHabits }) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Nav, Navbar, Container, Image, Offcanvas } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
-import logo from "./logo.png"
+import logo from "../../../assets/imgs/logo.png"
 
 
 const navMenus = [

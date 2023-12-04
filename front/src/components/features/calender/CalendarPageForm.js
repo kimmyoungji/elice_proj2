@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -7,17 +7,22 @@ import { Col, Container, Row, Card, ListGroup } from 'react-bootstrap';
 import './Calendar.css';
 import axios from 'axios';
 
+const checkExp = [{date:'2023-11-30'}, {date:'2023-12-01'}, {date:'2023-12-03'}];
 
 // fullfilledDate만 받아올 것 //
-const CalendarForm = ( habitlist, checkdata ) => {
-  const [habitList, setHabitList] = useState(habitlist.habitlist);
-  const checkExp = [{date:'2023-11-30'}, {date:'2023-12-01'}, {date:'2023-12-03'}];
+const CalendarForm = ({ habitlist, checkdata }) => {
+  
+  const [habitList, setHabitList] = useState(habitlist);
+  console.log('First habitList', habitList);
   const [checkData, setCheckData ] = useState(checkExp);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [scroll, setScroll] = useState(false);
 
+  // useEffect(() => {
+  //   setHabitList(habitlist.habitlist)
+  // }, []);
+
   const renderEventContent = useCallback((eventInfo) => {
-    console.log('eventInfo', eventInfo);
     return (
         <img className="check-image" src={check} alt="check"
         onClick={() => handleCheckClick(eventInfo.event)}
@@ -27,13 +32,14 @@ const CalendarForm = ( habitlist, checkdata ) => {
     )
   }, [])
 
-  const HabitListGroup = () => {
+  const HabitListGroup = useMemo(() => {
+    console.log('HabitListGroup', habitList);
     return Object.keys(habitList).map((key) => (
           <ListGroup.Item key={key}>
             {habitList[key]}
           </ListGroup.Item>
     ))
-  }
+  },[habitList])
 
   // 체크한 이미지 클릭
   const handleCheckClick = (event) => {
@@ -45,7 +51,7 @@ const CalendarForm = ( habitlist, checkdata ) => {
     // api 요청으로 받은 데이터로 변경
     axios({
         method: 'get',
-        url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
+        url: "http://"+ window.location.hostname +":5001/fulfilledHabits",
         params: {date: clickFullDate},
         withCredentials: true,
         headers: {
@@ -62,8 +68,7 @@ const CalendarForm = ( habitlist, checkdata ) => {
     }).catch((error) => {
         // 추후 수정예정
         console.log(error)
-    }).then(() => {
-    });
+    })
 
     
   };
@@ -82,13 +87,13 @@ const CalendarForm = ( habitlist, checkdata ) => {
     const monthString = year + '-' + month;
 
     if (middleMonth === new Date().getMonth() + 1) {
-        setHabitList(habitlist.habitlist)
+        setHabitList(habitlist)
     }
 
     console.log('middleMonth', middleMonth);
       axios({
           method: 'get',
-          url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
+          url: "http://"+ window.location.hostname +":5001/fulfilledHabits",
           params: {month: monthString},
           withCredentials: true,
           headers: {
@@ -97,13 +102,12 @@ const CalendarForm = ( habitlist, checkdata ) => {
       })
       .then((res) => {
           const checkDates = res.data.dates;
-          console.log('checkDates', checkDates);
-          // setCheckData(checkDates);
+          // console.log('checkDates', checkDates);
+          setCheckData(checkDates);
       }).catch((error) => {
           // 추후 수정예정
           console.log(error)
-      }).then(() => {
-      });
+      })
     
   };
 
@@ -166,7 +170,7 @@ const CalendarForm = ( habitlist, checkdata ) => {
           </Row>
           <Card className="calendar-text" style={{ width: '30rem', height: "300px" }}>
             <ListGroup variant="flush">
-              <HabitListGroup/>
+              {HabitListGroup}
             </ListGroup>
           </Card>
         </Col>

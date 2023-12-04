@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Creditcard from"../features/IntroContents/credit-card.png";
 import Eat from "../features/IntroContents/restaurant.png";
 import Toothbrush from "../features/IntroContents/toothbrush.png";
-import Logo from "../common/header/logo.png";
+import Logo from "../../assets/imgs/logo.png";
 import Chat from "../features/IntroContents/kakaotalk.png";
 import Chart from "../features/IntroContents/Chart";
 import { useEffect, useState } from "react";
