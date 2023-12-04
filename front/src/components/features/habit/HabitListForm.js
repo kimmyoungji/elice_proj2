@@ -2,22 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Card, Container, Col, Row, Modal, Button, Image } from 'react-bootstrap';
 import './HabitPage.css';
 import { ScrollAniDiv } from "../IntroContents/AnimationStyled";
-
 // import axios from 'axios';
+
+const cheerUpTexts = [
+    "같이 시작해봐요, 플라스틱 줄이기! 😊",
+    "나부터 시작하는 환경을 위한 습관 !",
+    "오늘도 환경을 위한 습관 Level Up 중!!",
+    "👍🏻👍🏻👍🏻",
+    "충분히 잘하고 있어요👍🏻 우리 계속 도전해봐요"
+];
 
 export default function HabitListForm ({ habitList }) {
     const [modalShow, setModalShow] = useState(false);
     const [selectedHabit, setSelectedHabit] = useState(null);
-    const habits = habitList;
-    const cheerUpTexts = [
-        "같이 시작해봐요, 플라스틱 줄이기! 😊",
-        "나부터 시작하는 환경을 위한 습관 !",
-        "오늘도 환경을 위한 습관 Level Up 중!!",
-        "👍🏻👍🏻👍🏻",
-        "충분히 잘하고 있어요👍🏻 우리 계속 도전해봐요"
-    ];
     const [randomIndex, setRandomIndex] = useState(() => Math.floor(Math.random() * cheerUpTexts.length));
-
 
     const HabitModal = (props) => {
         const { key, name } = props.habitinfo;
@@ -60,7 +58,7 @@ export default function HabitListForm ({ habitList }) {
         }
       }, [modalShow, cheerUpTexts.length]);
 
-    const cards = Object.keys(habits).map((key) => (
+    const cards = Object.keys(habitList).map((key) => (
         <Col key={key} xs={6} sm={4} md={6} lg={4}
             className="mb-4" style={{ marginRight: '0'}}>
             <ScrollAniDiv>
@@ -70,10 +68,10 @@ export default function HabitListForm ({ habitList }) {
                             src={require(`../../../assets/imgs/${key}.png`)}
                             alt="Card image"
                             style={{ width: '200px', height: '200px' }}
-                            onClick={() => handleModal(habits[key], key)}/>
+                            onClick={() => handleModal(habitList[key], key)}/>
                         <Card.Title
                             style={{ marginTop: "10px" }}>
-                            <span style={{ fontSize: "17px" }}>{habits[key]}</span>
+                            <span style={{ fontSize: "17px" }}>{habitList[key]}</span>
                         </Card.Title>
                     </Card.Body>
                 </Card>

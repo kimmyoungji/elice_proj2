@@ -6,12 +6,9 @@ import HabitCardForm from "./HabitCardForm";
 import calendar from "../../../assets/imgs/calendar.png";
 import './HabitPage.css';
 
-//, selectedHabits
+
 export default function HabitForm ({ userInfo, habitList, selectedDate, selectedHabits }) {
     const { userName, turtleLevel } = userInfo;
-    const habits = habitList;
-    // const selectedHabits = null;
-    console.log('HabitForm selectedHabits', selectedHabits);
 
     return (
         <>
@@ -19,7 +16,7 @@ export default function HabitForm ({ userInfo, habitList, selectedDate, selected
                 <Row>
                     <TurtleForm userName={userName} turtleLevel={turtleLevel}/>
                     <HabitCardForm userName={userName}
-                                   habits={habits}
+                                   habits={habitList}
                                    selectedDate={selectedDate}
                                    selectedHabits={selectedHabits}/>
                 </Row>
@@ -33,7 +30,8 @@ const TurtleForm = ({ userName, turtleLevel }) => {
     const navigate = useNavigate();
 
     const getTurtleImage = (level) => {
-        const turtleImg = require(`../../../assets/imgs/거북이${level}.png`);
+        // const turtleImg = require(`../../../assets/imgs/거북이${level}.png`);
+        const turtleImg = `../../../assets/imgs/거북이${level}.png`;
         return (
             <Card.Body className="d-flex justify-content-center align-items-center">
                 <Card.Img src={turtleImg} alt="Card image" style={{ width: '70%'}}/>
