@@ -39,7 +39,7 @@ app.use(
 testKnex();
 // addDummyUsers(50);
 // addDummyPlannedH(40);
-addDummyFulfilledH(50);
+// addDummyFulfilledH(50);
 
 // 라우터
 app.use("/graphs", introRouter);

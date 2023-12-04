@@ -41,6 +41,18 @@ usersRouter.post("/login", async (req, res, next) => {
   }
 });
 
+// GET /logout
+usersRouter.get("/logout", isLoggedIn, async (req, res, next) => {
+  try {
+    res.cookie("accessToken", "", cookieOption);
+    res.status(200).json({
+      message: "로그아웃 성공",
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // GET /user
 usersRouter.get("/user", isLoggedIn, async (req, res, next) => {
   try {

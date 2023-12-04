@@ -30,7 +30,7 @@ class userService {
   static async getUserByEmail(email) {
     try {
       return await knex.transaction(async (trx) => {
-        user.setTrx(trx);
+        users.setTrx(trx);
         const result = await users.findByEmail(email);
         const user = result[0];
         if (!user) {
