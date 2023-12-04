@@ -44,13 +44,13 @@ class plannedHabitService {
             continue;
           }
           // 추가할 계획습관 데이터 구성하기
-          const planned_habit_id = uuidv4();
+          // const planned_habit_id = uuidv4();
           // start_date에 target_days 더해서 end_date 만들기
           const start_date = dayjs();
           const end_date = start_date.add(habitDate[i], "day");
           // DB: 새로운 계획습관 데이터 추가하기
           const newhabit = {
-            planned_habit_id,
+            // planned_habit_id,
             user_id,
             habit_id: habitIds[i],
             start_date: start_date.utc(true).format(),
