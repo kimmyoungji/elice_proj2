@@ -19,6 +19,7 @@ export default function HabitListForm ({ habitList }) {
 
     const HabitModal = (props) => {
         const { key, name } = props.habitinfo;
+        console.log('HabitModal 모달');
         return (
             <Modal
                 {...props}
@@ -49,6 +50,7 @@ export default function HabitListForm ({ habitList }) {
             key: key,
             name: name });
         setModalShow(true)
+        console.log('handleModal 모달');
     }
 
     useEffect(() => {
