@@ -1,9 +1,8 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/axiosConfig";
 import { Col, Button, Container, Image, Form, Row } from "react-bootstrap";
 import "./UserPage.css";
-import { api } from "../../utils/axiosConfig";
 
 const UserPageForm = (props) => {
   const { userInfo } = props;
@@ -102,19 +101,42 @@ const UserPageForm = (props) => {
       console.log(value);
     }
 
-    // post api 호출
     api({
-      method: "put", // post에서 put으로 변경 - 성혜
-      url: "", // 서버 url에 따라
+      method: "put",
+      url: "/users",
+      withCredentials: true,
       data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     })
-      // 통신 연결 후 에러 상태코드에 따라 수정 예정
-      .then((result) => {
-        console.log("요청성공", result);
+      .then((res) => {
+        console.log(res);
       })
       .catch((error) => {
-        console.log("요청실패", error);
-      });
+        console.log(error);
+      })
+      .then(() => {});
+  };
+
+  const deleteUser = () => {
+    api({
+      method: "delete",
+      url: "/users",
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        alert("탈퇴되었습니다. 감사합니다.");
+        // 쿠키 제거
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .then(() => {});
   };
 
   return (
@@ -180,7 +202,7 @@ const UserPageForm = (props) => {
               variant="secondary"
               type="submit"
               size="sm"
-              onClick={() => navigate("/")}
+              onClick={() => deleteUser()}
             >
               회원탈퇴
             </Button>

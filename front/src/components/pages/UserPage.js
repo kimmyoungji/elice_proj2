@@ -1,30 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import UserPageForm from "../features/user/UserPageForm";
-import axios from "axios";
-import { api } from "../utils/axiosConfig";
+import api from "../utils/axiosConfig";
 
-const UserPage = () => {
+const UserPage = async () => {
+  useEffect(() => {
+    api({
+      method: "get",
+      url: "users/user",
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .then(() => {});
+  }, []);
+
   const userInfo = {
-    userName: "",
-    userImg: "",
-    // userEmail: "",
-    // password: "",
-    // passwordCheck: "",
-    // 패스워드랑 이메일 빼도 되지 않을까용, 유저네임, 이미지 빈칸으로 두고 일단 커밋- 성혜
+    userName: "거북잉",
+    userImg:
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    userEmail: "elice@elice.com",
+    password: "",
+    passwordCheck: "",
   };
-
-  // get api로 기본 정보 가져오기
-  // userName, userImg, userEmail
-  api
-    .get("users/{user_id}", userInfo)
-    .then((res) => {
-      console.log(res);
-      // response
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-    .then(() => {});
 
   return (
     <>
