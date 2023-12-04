@@ -53,11 +53,10 @@ const CalendarForm = ( habitlist, checkdata ) => {
     })
     .then((res) => {
         // 백에 수정 요청함
-        console.log(res.data.habitIds);
-        // const { habit_id } = res.data.habitIds;
+        const habits = res.data.habitIds[clickFullDate];
         setHabitList(() => ({
           date: clickFullDate,
-          habit1: "😊😊"
+          habit1: habits
         }))
     }).catch((error) => {
         // 추후 수정예정

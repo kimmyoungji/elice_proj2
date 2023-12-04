@@ -33,10 +33,13 @@ function CalendarPage() {
         }
     })
     .then((res) => {
+      console.log(res.data);
         const habitIds = res.data.habitIds[getDate()[1]];
-        console.log('habitIds', habitIds);
-        habitIds.map((habit) => habitList.habit1 = habit)
-        // {habitIds.map((habit) => {habit ? habitList.habit1 = habit: habitList.habit1 = "습관을 추가해주세요"})}
+        if (habitIds.length === 0) {
+          habitList.habit1 = "습관을 추가해주세요"
+        } else {
+          habitIds.map((habit) => habitList.habit1 = habit)
+        }
         console.log('habitList', habitList);
     }).catch((error) => {
         // 추후 수정예정
