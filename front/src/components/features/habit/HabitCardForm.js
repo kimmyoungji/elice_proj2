@@ -27,7 +27,7 @@ export default function HabitCardForm ({ userName, habits, selectedDate, selecte
                                           habits={habits} onSubmit={handleFormSubmit}/>}
                   {/* 기존에 선택한 습관이 있는 경우  */}
                   {!start && <HabitShowForm userName={userName} habits={habits}
-                              selectedDate={selectedDate} selectedHabit={selectedHabit} request={request}/>}
+                              selectedDate={selectDate} selectedHabit={selectedHabit} request={request}/>}
               </Card>
           </Col>
           

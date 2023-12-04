@@ -16,11 +16,13 @@ const habitList = {
 export default function HabitPage() {
   const [selectedHabits, setSelectedHabits] = useState(null);
   const [selectedDate, setSelectedDate] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   // 사용자가 계획한 습관이 있는지 확인
   // if yes -> 계획한 습관 띄우기
   // if no -> 추가하기 버튼 띄우기
   useEffect(() => {
+    setIsLoading(true);
     axios({
       method: 'get',
       url: "http://"+ window.location.hostname +":5001/planned-habits",
@@ -37,7 +39,8 @@ export default function HabitPage() {
       setSelectedDate(date);
     }).catch((error) => {
       setSelectedHabits( false );
-    }).then(() => {
+    }).finally(() => {
+      setIsLoading(false);
     });
   }, [])
   
@@ -49,6 +52,7 @@ export default function HabitPage() {
 
   return (
     <>
+      {isLoading && <div>로딩중입니다</div>}
       {selectedHabits !== null && <HabitForm
             userInfo={userInfo}
             habitList={habitList}

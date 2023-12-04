@@ -1,4 +1,3 @@
-// 컴포넌트 분리 및 api 수정중
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Container, Col, Row, Image } from 'react-bootstrap';
@@ -30,8 +29,7 @@ const TurtleForm = ({ userName, turtleLevel }) => {
     const navigate = useNavigate();
 
     const getTurtleImage = (level) => {
-        // const turtleImg = require(`../../../assets/imgs/거북이${level}.png`);
-        const turtleImg = `../../../assets/imgs/거북이${level}.png`;
+        const turtleImg = require(`../../../assets/imgs/거북이${level}.png`);
         return (
             <Card.Body className="d-flex justify-content-center align-items-center">
                 <Card.Img src={turtleImg} alt="Card image" style={{ width: '70%'}}/>
@@ -60,3 +58,4 @@ const TurtleForm = ({ userName, turtleLevel }) => {
         </>
     )
 }
+
