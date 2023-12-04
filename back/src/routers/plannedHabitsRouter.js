@@ -3,6 +3,7 @@ const isLoggedIn = require("../middlewares/isLoggedIn");
 
 const { stringToArr } = require("../lib/stringToarray");
 const plannedHabitService = require("../services/plannedHabitsService");
+const dayjs = require("dayjs");
 
 plannedHabitsRouter.get(
   "/planned-habits",
@@ -16,12 +17,16 @@ plannedHabitsRouter.get(
       const plannedHabits = await plannedHabitService.getPlannedHabitById(
         user_id
       );
-      const plannedHabitIds = plannedHabits.map((ph) => ph.habit_id);
+      const habitIds = plannedHabits.map((ph) => ph.habit_id);
+      const habitDates = plannedHabits.map((ph) => {
+        return dayjs(ph.end_date).diff(dayjs(), "day");
+      });
 
       // 응답 데이터 구성하기
       res.status(200).json({
         message: "DB 데이터 조회 성공",
-        plannedHabitIds,
+        habitIds,
+        habitDates,
       });
       // 응답
     } catch (err) {
@@ -43,9 +48,6 @@ plannedHabitsRouter.post(
         habitIds = stringToArr(habitIds);
       }
       let habitDate = req.body.habitDate;
-      if (typeof habitDate === "string") {
-        habitDate = stringToArr(habitDate);
-      }
 
       // 새로운 습관 계획 추가하기
       await plannedHabitService.addPlannedHabit(user_id, habitIds, habitDate);

@@ -72,7 +72,7 @@ fulfilledHabitsRouter.post("/", isLoggedIn, async (req, res, next) => {
       return JSON.parse(c + "}");
     });
     const data = checked.map((el) => ({
-      fulfilled_habit_id: uuidv4(),
+      // fulfilled_habit_id: uuidv4(),
       user_id,
       habit_id: el.habit_id,
       date: new Date(el.timestamp).toISOString().slice(0, 10),

@@ -3,33 +3,33 @@ CREATE DATABASE turtine;
 USE turtine;
 
 CREATE TABLE habits (
-    habit_id VARCHAR(100) PRIMARY KEY ,
+    habit_id VARCHAR(50) PRIMARY KEY ,
     habit_title VARCHAR(50) NOT NULL,
     discription VARCHAR(300),
     trash_type VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE users (
-    user_id VARCHAR(100) PRIMARY KEY ,
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL,
-    level INT NOT NULL DEFAULT 0
+    level INT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE fulfilled_habits (
-    fulfilled_habit_id VARCHAR(100) PRIMARY KEY,
-    user_id VARCHAR(100) NOT NULL,
-    habit_id VARCHAR(100) NOT NULL,
+    fulfilled_habit_id INT AUTO_INCREMENT PRIMARY KEY, 
+    user_id INT NOT NULL,
+    habit_id VARCHAR(50) NOT NULL,
     date DATE NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (habit_id) REFERENCES habits(habit_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE planned_habits (
-    planned_habit_id VARCHAR(100) PRIMARY KEY,
-    user_id VARCHAR(100) NOT NULL,
-    habit_id VARCHAR(100) NOT NULL,
+    planned_habit_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    habit_id VARCHAR(50) NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -45,55 +45,6 @@ VALUES
     ('habit5','플라스틱 세척해서 분리배출하기', '플라스틱을 세척해서 분리배출하면, 재활용 가능성이 높아집니다.', 'Plastic'),
     ('habit6','무라벨 제품 구매하기', '라벨이 없는 제품을 구매하면, 플라스틱 제품을 더 쉽게 재활용할 수 있습니다.', 'Plastic');
 
--- Sample data for 'users' table
-INSERT INTO users (user_id, username, email, password, level) 
-VALUES
-    ('123abc', 'user1', 'user1@example.com', 'password1', 3),
-    ('456def', 'user2', 'user2@example.com', 'password2', 2),
-    ('789ghi', 'user3', 'user3@example.com', 'password3', 1),
-    ('abc123', 'user4', 'user4@example.com', 'password4', 4),
-    ('def456', 'user5', 'user5@example.com', 'password5', 2);
-
-INSERT INTO users (user_id, username, email, password, level)
-VALUES
-    ('ghi789', 'user6', 'user6@example.com', 'password6', 3),
-    ('jkl012', 'user7', 'user7@example.com', 'password7', 1),
-    ('mno345', 'user8', 'user8@example.com', 'password8', 4),
-    ('pqr678', 'user9', 'user9@example.com', 'password9', 2),
-    ('stu901', 'user10', 'user10@example.com', 'password10', 3),
-    ('vwx234', 'user11', 'user11@example.com', 'password11', 1),
-    ('yzab567', 'user12', 'user12@example.com', 'password12', 4),
-    ('cde890', 'user13', 'user13@example.com', 'password13', 5),
-    ('fgh123', 'user14', 'user14@example.com', 'password14', 3),
-    ('ijk456', 'user15', 'user15@example.com', 'password15', 1),
-    ('lmn789', 'user16', 'user16@example.com', 'password16', 4),
-    ('opq012', 'user17', 'user17@example.com', 'password17', 5),
-    ('rst345', 'user18', 'user18@example.com', 'password18', 3),
-    ('opq013', 'user19', 'user19@example.com', 'password19', 2),
-    ('rst346', 'user20', 'user20@example.com', 'password20', 3);
-
-INSERT INTO fulfilled_habits (fulfilled_habit_id, user_id, habit_id, date) 
-VALUES
-    ('fh1', '123abc', 'habit1', '2023-01-05'),
-    ('fh2', '456def', 'habit2', '2023-01-10'),
-    ('fh3', '789ghi', 'habit3', '2023-01-15'),
-    ('fh4', 'abc123', 'habit4', '2023-01-20'),
-    ('fh5', 'def456', 'habit5', '2023-01-25'),
-    ('fh6', '123abc', 'habit1', '2023-01-28'),
-    ('fh7', '456def', 'habit2', '2023-02-02'),
-    ('fh8', '789ghi', 'habit3', '2023-02-07');
-
--- Sample data for 'planned_habits' table
-INSERT INTO planned_habits (planned_habit_id, user_id, habit_id, start_date, end_date) 
-VALUES
-    ('ph1', '123abc', 'habit1', '2023-02-01', '2023-02-10'),
-    ('ph2', '456def', 'habit2', '2023-02-05', '2023-02-15'),
-    ('ph3', '789ghi', 'habit3', '2023-02-10', '2023-02-20'),
-    ('ph4', 'abc123', 'habit4', '2023-02-15', '2023-02-25'),
-    ('ph5', 'def456', 'habit5', '2023-02-20', '2023-03-01'),
-    ('ph6', '123abc', 'habit1', '2023-03-05', '2023-03-15'),
-    ('ph7', '456def', 'habit2', '2023-03-10', '2023-03-20'),
-    ('ph8', '789ghi', 'habit3', '2023-03-15', '2023-03-25');
 
 CREATE TABLE intro(data VARCHAR(1210));
 INSERT INTO intro VALUES('{
@@ -113,3 +64,6 @@ INSERT INTO intro VALUES('{
 {"year":2014,"total_amount":22.671211},{"year":2015,"total_amount":24.102793},
 {"year":2016,"total_amount":25.592507},{"year":2017,"total_amount":27.140495},
 {"year":2018,"total_amount":28.747704},{"year":2019,"total_amount":30.408747}]}');
+
+-- 커서기반 페이지네이션 개발용
+SELECT username, email, level, CONCAT(LPAD(username, 10, '0'), LPAD(level, 10, '0')) as cursors FROM users ORDER BY username DESC, level DESC;
