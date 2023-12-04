@@ -30,8 +30,7 @@ class userService {
   static async getUserByEmail(email) {
     try {
       return await knex.transaction(async (trx) => {
-        // DB: transaction 객체전달하기
-        users.setTrx(trx);
+        user.setTrx(trx);
         const result = await users.findByEmail(email);
         const user = result[0];
         if (!user) {
@@ -92,14 +91,12 @@ class userService {
         // DB: transaction 객체전달하기
         users.setTrx(trx);
         // 응답 데이터 구성하기
-        const user_id = uuidv4();
+        // const user_id = uuidv4();
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = {
-          user_id,
           username,
           email,
           password: hashedPassword,
-          level: 0,
         };
 
         // DB: user 데이터 DB에 추가하기
