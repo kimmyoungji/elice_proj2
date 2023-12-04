@@ -43,9 +43,9 @@ testKnex();
 
 // 라우터
 app.use("/graphs", introRouter);
-app.use("/users", usersRouter);
+app.use(usersRouter);
 app.use(plannedHabitsRouter);
-app.use("/fulfilled-habits", fulfilledHabitsRouter);
+app.use("/fulfilledHabits", fulfilledHabitsRouter);
 // 에러처리 미들웨어
 app.use(errorMiddleware);
 
