@@ -1,6 +1,6 @@
 // 컴포넌트 분리 및 api 수정중
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card, Container, Button, Col, Row, ListGroup, Image, Form } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Card, Button, Col, Row, ListGroup, Form } from 'react-bootstrap';
 import './HabitPage.css';
 import axios from 'axios';
 
@@ -17,15 +17,15 @@ const getDate = () => {
   return dateString;
 }
 
-export default function HabitCardForm ({ userName, habits, selectedHabits }) {
+export default function HabitCardForm ({ userName, habits, selectedDate, selectedHabits }) {
   const [ start, setStart ] = useState(selectedHabits ? false : true);
   const [ selectedHabit, setSelectedHabit ] = useState(selectedHabits);
   const [ request, setRequest ] = useState(true);
-  const [ selectedDate, setSelectedDate ] = useState(0);
+  const [ selectDate, setSelectDate ] = useState(selectedDate);
 
   const handleFormSubmit = (selectedHabit, selectedDate) => {
       setSelectedHabit(selectedHabit);
-      setSelectedDate(selectedDate);
+      setSelectDate(selectedDate);
       setStart(false);
       setRequest(false);
     };
@@ -69,7 +69,7 @@ const HabitAddForm = ({ userName, habits, onSubmit }) => {
   }
 
   const handleRadioChange = (key) => {
-      setSelectedDate(key)
+    setSelectedDate(Number(key[0]))
   }
 
   const getHabitList = Object.keys(habits).map((key) => (
@@ -92,34 +92,35 @@ const HabitAddForm = ({ userName, habits, onSubmit }) => {
 
   const handleSelectButton = () => {
       setPass(true)
-      if (onSubmit) {
-          onSubmit(selectedHabit, selectedDate);
+      if (selectedHabit.length === 0) {
+        alert('실천할 습관을 선택하세요');
+      } else if (!selectedDate) {
+        alert('습관을 실천할 일자를 선택하세요');
+      } else {
+        if (onSubmit) {
+            onSubmit(selectedHabit, selectedDate);
+        }
+
+        // 새롭게 선택한 습관 추가하기
+        axios({
+            method: 'post',
+            url: "http://"+ window.location.hostname +":5001/planned-habits",
+            withCredentials: true,
+            headers: {
+            "Content-Type": "application/json",
+            },
+            data: {
+                habitIds: selectedHabit,
+                habitDate: selectedDate
+            }
+        })
+        .then((res) => {
+            console.log(res)
+        }).catch((error) => {
+            console.log(error)
+        }).then(() => {
+        });
       }
-      
-      // 새롭게 선택한 습관 추가하기
-      // 아직 api 연결 x -> 백에서 변수명과 data 수정중
-      axios({
-          method: 'post',
-          url: "http://"+ window.location.hostname +":5001/planned-habits",
-          withCredentials: true,
-          headers: {
-          "Content-Type": "application/json",
-          },
-          data: {
-              habitIds: selectedHabit,
-            //   habitDate: selectedDate
-          }
-      })
-      .then((res) => {
-          // 백에 카멜케이스로 수정 요청
-          const { habit_ids } = res.data.plannedHabits[0];
-          console.log(habit_ids);
-      }).catch((error) => {
-          // 추후 수정예정
-          // error case 1) 선택 안 할 경우
-          console.log(error)
-      }).then(() => {
-      });
       
   }
 
@@ -170,12 +171,14 @@ const HabitAddForm = ({ userName, habits, onSubmit }) => {
 
 
 // 선택한 습관들 조회하기
-const HabitShowForm = ({ userName, habits, selectedDay, selectedHabit, request }) => {
+const HabitShowForm = ({ userName, habits, selectedDate, selectedHabit, request }) => {
   const [ check, setCheck ] = useState(false);
   const [ selectHabit, setSelectHabit ]= useState(selectedHabit)
   const [ checkHabit, setCheckHabit ] = useState();
   const today = getDate();
-
+  console.log('selectedDate', selectedDate);
+  console.log('selectHabit',selectHabit);
+    console.log('request', request);
   const getSelectedHabit = selectHabit.map((habit) => (
       <ListGroup.Item>
           <Form.Check inline key={habit} 
@@ -196,31 +199,31 @@ const HabitShowForm = ({ userName, habits, selectedDay, selectedHabit, request }
 
 
   const getDoneHabit = () => {
-        axios({
-            method: 'get',
-            url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
-            params: {date: today},
-            withCredentials: true,
-            headers: {
-            "Content-Type": "application/json",
-            }
-        })
-        .then((res) => {
-            // console.log(res.data.habitIds);
-            // const { habitId } = res.data.habitIds;
-            const habitId = ['habit2'];
-            if (!habitId) {
-            // setCheckHabit();
-            // let difference = selectedHabit.filter(x => !checkHabit.includes(x));
-            // setSelectHabit(difference)
-            } else {
-            setCheckHabit(habitId);
-            }
-        }).catch((error) => {
-            // 추후 수정예정
-            console.log(error)
-        }).then(() => {
-        });
+        // axios({
+        //     method: 'get',
+        //     url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
+        //     params: {date: today},
+        //     withCredentials: true,
+        //     headers: {
+        //     "Content-Type": "application/json",
+        //     }
+        // })
+        // .then((res) => {
+        //     console.log('res.data.habitIds', res.data.habitIds);
+        //     // const { habitId } = res.data.habitIds;
+        //     const habitId = ['habit2'];
+        //     if (!habitId) {
+        //     // setCheckHabit();
+        //     // let difference = selectedHabit.filter(x => !checkHabit.includes(x));
+        //     // setSelectHabit(difference)
+        //     } else {
+        //     setCheckHabit(habitId);
+        //     }
+        // }).catch((error) => {
+        //     // 추후 수정예정
+        //     console.log(error)
+        // }).then(() => {
+        // });
 
       return (
         <>
@@ -234,11 +237,11 @@ const HabitShowForm = ({ userName, habits, selectedDay, selectedHabit, request }
   }
   useEffect(() => {
     if (!checkHabit) {
-        console.log()
-        let difference = selectedHabit.filter(x => !checkHabit.includes(x));
-        setSelectHabit(difference)
+        console.log('checkHabit', checkHabit);
+        let difference = selectedHabit.filter(x => [!checkHabit].includes(x));
+        // setSelectHabit(difference)
     }
-}, [checkHabit])
+    }, [checkHabit, selectedHabit])
 
 
   return (
@@ -250,7 +253,7 @@ const HabitShowForm = ({ userName, habits, selectedDay, selectedHabit, request }
               </Card.Title>
               <div style={{ color: "grey", marginBottom: '20px', fontSize: "80%" }}>
                   실천한 습관을 선택해주세요 !</div>
-              <div>실천 종료까지 남은 일자: {selectedDay}</div>
+              <div>실천 종료까지 남은 일자: {selectedDate}일</div>
               {/* api 요청 없이 추가한 습관들 리스트 그대로 가져와서 띄우기 */}
               {!request && <ListGroup style={{ position: 'relative', width: '100%', fontSize: "83%", marginTop: "40px"}}>
                   {getSelectedHabit}

@@ -11,35 +11,10 @@ import axios from 'axios';
 // fullfilledDate만 받아올 것 //
 const CalendarForm = ( habitlist, checkdata ) => {
   const [habitList, setHabitList] = useState(habitlist.habitlist);
-  // const checkData = [{date:'2023-10-12'}, {date:'2023-11-04'},
-  //                   {date:'2023-11-06'}, {date:'2023-11-15'}];
-  const [ checkData, setCheckData ] = useState(checkdata);
+  const checkExp = [{date:'2023-11-30'}, {date:'2023-12-01'}, {date:'2023-12-03'}];
+  const [checkData, setCheckData ] = useState(checkExp);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [scroll, setScroll] = useState(false);
-
-  // get api로 기본 정보 가져오기
-  // 달마다 습관 완료한 날짜만 받아옴 -> fullfilledDate : date 배열
-  useEffect(() => {
-    axios({
-        method: 'get',
-        url: "http://"+ window.location.hostname +":5001/fulfilled_habits",
-        params: {date: '2023-11'}, // 임의
-        withCredentials: true,
-        headers: {
-        "Content-Type": "application/json",
-        }
-    })
-    .then((res) => {
-      // 백에 수정 요청함
-        console.log(res.data.habitIds);
-        const { habit_id } = res.data.habitIds;
-        setCheckData();
-    }).catch((error) => {
-        // 추후 수정예정
-        console.log(error)
-    }).then(() => {
-    });
-  }, [checkData])
 
   const renderEventContent = (eventInfo) => {
     return (
@@ -62,14 +37,14 @@ const CalendarForm = ( habitlist, checkdata ) => {
   // 체크한 이미지 클릭
   const handleCheckClick = (event) => {
     const startDate = event._instance.range.start
-    const month = startDate.getMonth().toString().padStart(2, '0');;
+    const month = (startDate.getMonth() + 1).toString().padStart(2, '0');;
     const date = startDate.getDate().toString().padStart(2, '0');;
     const clickFullDate = `${startDate.getFullYear()}-${month}-${date}`
     
     // api 요청으로 받은 데이터로 변경
     axios({
         method: 'get',
-        url: "http://"+ window.location.hostname +":5001/fulfilled_habits",
+        url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
         params: {date: clickFullDate},
         withCredentials: true,
         headers: {
@@ -102,9 +77,34 @@ const CalendarForm = ( habitlist, checkdata ) => {
                         + (endDate.getTime() - startDate.getTime()) / 2);
     const middleMonth = middleDate.getMonth() + 1;
 
+    const year = middleDate.getFullYear();
+    const month = middleMonth.toString().padStart(2, '0');
+    const monthString = year + '-' + month;
+
     if (middleMonth === new Date().getMonth() + 1) {
         setHabitList(habitlist.habitlist)
     }
+
+    console.log('middleMonth', middleMonth);
+      axios({
+          method: 'get',
+          url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
+          params: {month: monthString},
+          withCredentials: true,
+          headers: {
+          "Content-Type": "application/json",
+          }
+      })
+      .then((res) => {
+          const checkDates = res.data.dates;
+          console.log('checkDates', checkDates);
+          // setCheckData(checkDates);
+      }).catch((error) => {
+          // 추후 수정예정
+          console.log(error)
+      }).then(() => {
+      });
+    
   };
 
   const MyHabitData = () => {
