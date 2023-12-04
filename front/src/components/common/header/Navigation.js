@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Nav, Navbar, Container, Image, Offcanvas } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
 import logo from "./logo.png"
@@ -19,8 +19,13 @@ const sideMenus = [
 
 function Navigation() {
   const [isLogin, setIsLogin] = useState(true);
-  const filteredNavMenus = navMenus.filter((menu) => menu.public !== isLogin);
-  const filteredSideMenus = sideMenus.filter((menu) => menu.public !== isLogin);
+  // const filteredNavMenus = navMenus.filter((menu) => menu.public !== isLogin);
+  // const filteredSideMenus = sideMenus.filter((menu) => menu.public !== isLogin);
+  const [filteredNavMenus, filteredSideMenus] = useMemo(() => [
+    navMenus.filter(menu => menu.public !== isLogin),
+    sideMenus.filter(menu => menu.public !== isLogin) 
+    ], [isLogin])
+ 
 
   const navigate = useNavigate();
   
