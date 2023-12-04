@@ -2,23 +2,24 @@ import React, { useEffect } from "react";
 import UserPageForm from "../features/user/UserPageForm";
 import api from "../utils/axiosConfig";
 
-const UserPage = async () => {
+const UserPage = () => {
+  const fetchData = async () => {
+    try {
+      const res = await api({
+        method: "get",
+        url: "users/user",
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    api({
-      method: "get",
-      url: "users/user",
-      withCredentials: true,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .then(() => {});
+    fetchData();
   }, []);
 
   const userInfo = {
