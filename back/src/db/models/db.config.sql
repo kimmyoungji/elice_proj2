@@ -54,6 +54,24 @@ VALUES
     ('abc123', 'user4', 'user4@example.com', 'password4', 4),
     ('def456', 'user5', 'user5@example.com', 'password5', 2);
 
+INSERT INTO users (user_id, username, email, password, level)
+VALUES
+    ('ghi789', 'user6', 'user6@example.com', 'password6', 3),
+    ('jkl012', 'user7', 'user7@example.com', 'password7', 1),
+    ('mno345', 'user8', 'user8@example.com', 'password8', 4),
+    ('pqr678', 'user9', 'user9@example.com', 'password9', 2),
+    ('stu901', 'user10', 'user10@example.com', 'password10', 3),
+    ('vwx234', 'user11', 'user11@example.com', 'password11', 1),
+    ('yzab567', 'user12', 'user12@example.com', 'password12', 4),
+    ('cde890', 'user13', 'user13@example.com', 'password13', 5),
+    ('fgh123', 'user14', 'user14@example.com', 'password14', 3),
+    ('ijk456', 'user15', 'user15@example.com', 'password15', 1),
+    ('lmn789', 'user16', 'user16@example.com', 'password16', 4),
+    ('opq012', 'user17', 'user17@example.com', 'password17', 5),
+    ('rst345', 'user18', 'user18@example.com', 'password18', 3),
+    ('opq013', 'user19', 'user19@example.com', 'password19', 2),
+    ('rst346', 'user20', 'user20@example.com', 'password20', 3);
+
 INSERT INTO fulfilled_habits (fulfilled_habit_id, user_id, habit_id, date) 
 VALUES
     ('fh1', '123abc', 'habit1', '2023-01-05'),

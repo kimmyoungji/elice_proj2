@@ -6,6 +6,7 @@ const {
   INVALID_USER_Error,
   BadRequestError,
 } = require("../lib/custom-error.js");
+const userService = require("../services/usersService.js");
 
 // GET /login
 usersRouter.post("/login", async (req, res, next) => {
@@ -62,8 +63,14 @@ usersRouter.get("/user", isLoggedIn, async (req, res, next) => {
 // GET
 usersRouter.get("/", async (req, res, next) => {
   try {
+    // 요청 바디 데이터 가져오기
+    const cursor = req.query.cursor;
+    console.log("cursor", cursor);
+    const limit = req.query.limit;
+    console.log("limit", limit);
     // 모든 사용자 데이터 가져오기
-    const users = await usersService.getUsersAll();
+    const users = await userService.getUsers(cursor, limit);
+    console.log("users", users);
 
     // 응답
     res.status(200).send({
