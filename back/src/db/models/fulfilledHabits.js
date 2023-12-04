@@ -2,6 +2,9 @@ class FulfilledHabitsModel {
   constructor(knex) {
     this.knex = knex;
   }
+  setTrx(trx) {
+    this.trx = trx;
+  }
 
   async findByToday(userId, today, tomorrow) {
     try {
@@ -30,7 +33,7 @@ class FulfilledHabitsModel {
         .where({
           user_id: userId,
         })
-        .where("date", ">=", `${month}-01`)
+        .andWhere("date", ">=", `${month}-01`)
         .andWhere("date", "<", `${nextMonth}-01`);
     } catch (error) {
       console.error("월별 달성 여부 불러오다가 뭔가 잘못됨", error.stack);
@@ -54,10 +57,25 @@ class FulfilledHabitsModel {
       throw new Error(error);
     }
   }
+
+  async findExistingRecords({ user_id, habit_id, date }) {
+    try {
+      return await this.knex
+        .select("user_id", "habit_id", "date")
+        .from("fulfilled_habits")
+        .where({ user_id, habit_id, date });
+    } catch (error) {
+      console.error(
+        "요청한 데이터를 저장전 중복검사하다가 뭔가 잘못됨",
+        error.stack
+      );
+      throw new Error(error);
+    }
+  }
+
   async create(data) {
     try {
-      // 중복 체크 필요!
-      await this.this.knex("fulfilled_habits").insert(data);
+      await this.knex("fulfilled_habits").insert(data);
       console.log("달성 기록이 잘 저장됨");
     } catch (error) {
       console.error("달성 습관을 저장하다가 뭔가 잘못됨", error.stack);
@@ -69,8 +87,6 @@ class FulfilledHabitsModel {
     try {
       await this.knex("fulfilled_habits").where(data).del();
       console.log("달성 기록이 잘 삭제됨");
-      //delete from fulfilled_habits where user=user_id and date = today and habit_id = habit_id;
-      //삭제할 내용을 못찾았을 경우 어떻게 할 지 추가
     } catch (error) {
       console.error("취소한 달성내역을 삭제하다가 뭔가 잘못됨", error.stack);
       throw new Error(error);

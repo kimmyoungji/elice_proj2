@@ -1,10 +1,6 @@
 const fulfilledRouter = require("express").Router();
-const knex = require("../db/knex.js");
-const FulfilledHabitsModel = require("../db/models/fulfilledHabits");
-const fulfilled = new FulfilledHabitsModel(knex);
-const isLoggedIn = require("../middlewares/isLoggedIn.js");
-const dayjs = require("dayjs");
 const fulfilledService = require("../services/fulfilledService");
+const isLoggedIn = require("../middlewares/isLoggedIn.js");
 
 fulfilledRouter.get("/", isLoggedIn, async (req, res, next) => {
   try {
@@ -34,21 +30,10 @@ fulfilledRouter.get("/", isLoggedIn, async (req, res, next) => {
     //쿼리 파라미터가 사용되지 않은 경우
     else {
       //오늘 날짜를 사용하여 오늘 실천합 습관 목록 조회
-      const today = dayjs();
-      const tomorrow = today.add(1, "day");
-
-      console.log(today);
-      console.log(tomorrow);
-      const result = await fulfilled.findByToday(
-        userId,
-        today.format("YYYY-MM-DD"),
-        tomorrow.format("YYYY-MM-DD")
-      );
-      console.log(result);
-      const data = result.map((row) => row.habitId);
+      const data = await fulfilledService.getHabitsByToday(userId);
       res.status(200).json({
         message: `${today.format("YYYY-MM-DD")}에 실천한 습관 id 조회 성공`,
-        data: data,
+        habitsId: data,
       });
     }
   } catch (error) {
@@ -59,26 +44,11 @@ fulfilledRouter.get("/", isLoggedIn, async (req, res, next) => {
 fulfilledRouter.post("/", isLoggedIn, async (req, res, next) => {
   try {
     const userId = req.currentUserId;
-    const checked = req.body;
-
-    //fullfilledHabits:[ {habitId: [습관아이디],{...}, ...]
-    console.log(checked);
-    console.log(checked.fulfilledHabits);
-    const data = checked.fulfilledHabits.map((el) => ({
-      userId,
-      habitId: el.habitid,
-      date: dayjs().format("YYYY-MM-DD"),
-    }));
-    console.log(data);
-    await fulfilled.create(data);
+    const checked = req.body; //실천 체크한 습관
+    await fulfilledService.addFulfilledHabits(userId, checked);
     res.status(200).json({ message: "습관 달성 내역 저장 성공" });
-    //중복 검사 해야함
-    //만약 해당 날짜에 이미 저장된 습관이 있다면 무시하고 과거 내역 남기거나 덮어쓰는 부분 추가해야함
   } catch (error) {
-    console.error("Error in fulfilledRouter", error.stack);
-    res.status(500).json({
-      message: "Internal Server Error",
-    });
+    next(error);
   }
 });
 
@@ -86,17 +56,8 @@ fulfilledRouter.delete("/", isLoggedIn, async (req, res, next) => {
   try {
     const userId = req.currentUserId;
     const habitIdArray = req.body.fullfilledHabitId;
-    //fullfilledHabitId:[habitId]
-    //날짜 오늘, 유저아이디, habitId인 데이터 삭제
-    const today = dayjs().format("YYYY-MM-DD");
-    habitIdArray.map(async (el) => {
-      const data = { userId, habitId: el, date: today };
-      console.log(data);
-      await fulfilled.delete(data);
-      res.status(200).json({ message: "달성 취소 습관 삭제 성공" });
-    });
-
-    //delete from fulfilledHabits where user=userId and date = today and habitId = habitId;
+    await fulfilledService.deleteFulfilledHabits(userId, habitIdArray);
+    res.status(200).json({ message: "달성 취소 습관 삭제 성공" });
   } catch (error) {
     next(error);
   }
