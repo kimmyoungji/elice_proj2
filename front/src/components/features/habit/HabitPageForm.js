@@ -7,10 +7,10 @@ import calendar from "../../../assets/imgs/calendar.png";
 import './HabitPage.css';
 
 //, selectedHabits
-export default function HabitForm ({ userInfo, habitList }) {
+export default function HabitForm ({ userInfo, habitList, selectedDate, selectedHabits }) {
     const { userName, turtleLevel } = userInfo;
     const habits = habitList;
-    const selectedHabits = null;
+    // const selectedHabits = null;
     console.log('HabitForm selectedHabits', selectedHabits);
 
     return (
@@ -20,6 +20,7 @@ export default function HabitForm ({ userInfo, habitList }) {
                     <TurtleForm userName={userName} turtleLevel={turtleLevel}/>
                     <HabitCardForm userName={userName}
                                    habits={habits}
+                                   selectedDate={selectedDate}
                                    selectedHabits={selectedHabits}/>
                 </Row>
             </Container>
