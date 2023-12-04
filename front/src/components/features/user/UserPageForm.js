@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/axiosConfig";
 import { Col, Button, Container, Image, Form, Row } from "react-bootstrap";
 import "./UserPage.css";
-import { api } from "../../utils/axiosConfig";
 
 const UserPageForm = (props) => {
   const { userInfo } = props;
@@ -102,9 +101,10 @@ const UserPageForm = (props) => {
       console.log(value);
     }
 
-    axios({
+    api({
       method: "put",
-      url: "http://" + window.location.hostname + ":5001/users",
+      url: "/users",
+
       withCredentials: true,
       data: formData,
       headers: {
@@ -123,7 +123,7 @@ const UserPageForm = (props) => {
   const deleteUser = () => {
     api({
       method: "delete",
-      url: "http://" + window.location.hostname + ":5001/users",
+      url: "/users",
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",

@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import UserPageForm from "../features/user/UserPageForm";
-import axios from "axios";
-import { api } from "../utils/axiosConfig";
+import api from "../utils/axiosConfig";
 
 const UserPage = async () => {
   useEffect(() => {
