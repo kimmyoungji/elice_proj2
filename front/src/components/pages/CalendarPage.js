@@ -2,20 +2,19 @@ import React, { useEffect } from 'react';
 import CalendarForm from '../features/calender/CalendarPageForm';
 import axios from 'axios';
 
+const getDate = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = (today.getMonth() + 1).toString().padStart(2, '0');
+  const day = today.getDate().toString().padStart(2, '0');
+
+  const monthString = year + '-' + month;
+  const dateString = year + '-' + month + '-' + day;
+
+  return [monthString, dateString];
+}
+
 function CalendarPage() {
-  const getDate = () => {
-    const today = new Date();
-  
-    const year = today.getFullYear();
-    const month = (today.getMonth() + 1).toString().padStart(2, '0');
-    const day = today.getDate().toString().padStart(2, '0');
-
-    const monthString = year + '-' + month;
-    const dateString = year + '-' + month + '-' + day;
-  
-    return [monthString, dateString];
-  }
-
   // api 연결 후 수정할 변수
   let habitList = {date: getDate()[1]}; //{date: '2023-11-25', habit1: "오늘 습관1", habit2: "오늘 습관2", habit3: "오늘 습관3"}
   let checkdata = {};

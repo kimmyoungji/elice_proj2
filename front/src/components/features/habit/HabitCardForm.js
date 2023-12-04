@@ -1,5 +1,4 @@
-// 컴포넌트 분리 및 api 수정중
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, Button, Col, ListGroup, Form } from 'react-bootstrap';
 import './HabitPage.css';
 import axios from 'axios';
@@ -61,16 +60,19 @@ const HabitAddForm = ({ userName, habits, onSubmit }) => {
     setSelectedDate(Number(key[0]))
   }
 
-  const getHabitList = Object.keys(habits).map((key) => (
+  const getHabitList = useMemo(() => {
+    return Object.keys(habits).map((key) => (
       <ListGroup.Item key={key} eventKey={key}>
               <Form.Check inline key={key} type="checkbox"
               onClick={() => handleCheckboxChange(key)}/>
           {habits[key]}
       </ListGroup.Item>
-  ));
+    ));
+  }, []);
 
-  const getDayList = ["3일", "5일", "7일"].map((day) => (
-      <ListGroup.Item>
+  const getDayList = useMemo(() => {
+    return ["3일", "5일", "7일"].map((day) => (
+      <ListGroup.Item key={day}>
           <Form.Check key={day} 
           label={day}
           type='radio' name="group" 
@@ -78,6 +80,8 @@ const HabitAddForm = ({ userName, habits, onSubmit }) => {
           style={{ fontSize: "14px"}}/>
       </ListGroup.Item> // name="group"으로 group 이름이 같아야 중복 선택 안됨
   ));
+  }, []);
+
 
   const handleSelectButton = () => {
       setPass(true)

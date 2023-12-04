@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -16,7 +16,8 @@ const CalendarForm = ( habitlist, checkdata ) => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [scroll, setScroll] = useState(false);
 
-  const renderEventContent = (eventInfo) => {
+  const renderEventContent = useMemo((eventInfo) => {
+    console.log('eventInfo', eventInfo);
     return (
         <img className="check-image" src={check} alt="check"
         onClick={() => handleCheckClick(eventInfo.event)}
@@ -24,7 +25,7 @@ const CalendarForm = ( habitlist, checkdata ) => {
         style={{ display: 'block', margin: '0 auto' }}
         />
     )
-  }
+  }, [])
 
   const HabitListGroup = () => {
     return Object.keys(habitList).map((key) => (
