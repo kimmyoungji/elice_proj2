@@ -107,7 +107,7 @@ const HabitAddForm = ({ userName, habits, onSubmit }) => {
           },
           data: {
               habitIds: selectedHabit,
-              habitDate: selectedDate
+            //   habitDate: selectedDate
           }
       })
       .then((res) => {
@@ -172,11 +172,11 @@ const HabitAddForm = ({ userName, habits, onSubmit }) => {
 // 선택한 습관들 조회하기
 const HabitShowForm = ({ userName, habits, selectedDay, selectedHabit, request }) => {
   const [ check, setCheck ] = useState(false);
-  const [ checkHabit, setCheckHabit ] = useState(false);
+  const [ selectHabit, setSelectHabit ]= useState(selectedHabit)
+  const [ checkHabit, setCheckHabit ] = useState();
   const today = getDate();
-  console.log('request', request);
 
-  const getSelectedHabit = selectedHabit.map((habit) => (
+  const getSelectedHabit = selectHabit.map((habit) => (
       <ListGroup.Item>
           <Form.Check inline key={habit} 
           type='checkbox'
@@ -185,8 +185,17 @@ const HabitShowForm = ({ userName, habits, selectedDay, selectedHabit, request }
       </ListGroup.Item>
   ));
 
+  const getCheckedHabit = [checkHabit].map((habit) => (
+    <ListGroup.Item>
+        <Form.Check disabled key={habit} 
+        type='checkbox'
+        //onClick={() => handleRadioChange(day)}
+        style={{ fontSize: "14px"}}/>{habits[habit]}(완료)
+    </ListGroup.Item>
+    ));
+
+
   const getDoneHabit = () => {
-    console.log('selectedHabit', selectedHabit);
         axios({
             method: 'get',
             url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
@@ -197,11 +206,13 @@ const HabitShowForm = ({ userName, habits, selectedDay, selectedHabit, request }
             }
         })
         .then((res) => {
-            console.log(res.data.habitIds);
-            const { habitId } = res.data.habitIds;
-            console.log(habitId);
+            // console.log(res.data.habitIds);
+            // const { habitId } = res.data.habitIds;
+            const habitId = ['habit2'];
             if (!habitId) {
-            setCheckHabit(null);
+            // setCheckHabit();
+            // let difference = selectedHabit.filter(x => !checkHabit.includes(x));
+            // setSelectHabit(difference)
             } else {
             setCheckHabit(habitId);
             }
@@ -210,45 +221,26 @@ const HabitShowForm = ({ userName, habits, selectedDay, selectedHabit, request }
             console.log(error)
         }).then(() => {
         });
+
       return (
-        <ListGroup.Item>
-          <Form.Check inline 
-          type='checkbox'
-          //onClick={() => handleRadioChange(day)}
-          style={{ fontSize: "14px"}}/>??
-        </ListGroup.Item>
+        <>
+            {/* 현재까지 체크된 습관이 없는 경우 */}
+            {!checkHabit && getSelectedHabit}
+
+            {/* 체크된 습관이 있는 경우 */}
+            {checkHabit && getSelectedHabit && getCheckedHabit}
+        </>
       )
   }
+  useEffect(() => {
+    if (!checkHabit) {
+        console.log()
+        let difference = selectedHabit.filter(x => !checkHabit.includes(x));
+        setSelectHabit(difference)
+    }
+}, [checkHabit])
 
-//   useEffect(() => {
-//       if (check) {
-//           console.log('get 요청');
-//           axios({
-//               method: 'get',
-//               url: "http://"+ window.location.hostname +":5001/fulfilled_habits",
-//               params: {date: today},
-//               withCredentials: true,
-//               headers: {
-//               "Content-Type": "application/json",
-//               }
-//           })
-//           .then((res) => {
-//               // 백에 카멜케이스로 요청
-//               const { habit_id } = res.data.habitIds;
-//               if (!habit_id) {
-//               setCheckHabit(null);
-//               } else {
-//               setCheckHabit(habit_id);
-//               }
-//           }).catch((error) => {
-//               // 추후 수정예정
-//               console.log(error)
-//           }).then(() => {
-//           });
-//       }
-//     }, [check]);
 
-  
   return (
       <>
           <Card.Body style={{ height: "100%" }}>
@@ -264,10 +256,9 @@ const HabitShowForm = ({ userName, habits, selectedDay, selectedHabit, request }
                   {getSelectedHabit}
               </ListGroup>}
               {/* api 요청으로 완료한 습관들 구분해서 표시하기 */}
-              {request && getDoneHabit()}
-                {/* <ListGroup style={{ position: 'relative', width: '100%', fontSize: "83%"}} onLoad={getDoneHabit}>
-                  {getSelectedHabit}
-              </ListGroup>} */}
+              {request && <ListGroup style={{ position: 'relative', width: '100%', fontSize: "83%", marginTop: "40px"}}>
+                {getDoneHabit()}
+              </ListGroup>}
           </Card.Body>
               <div className="d-flex justify-content-center">
                   <Button className="select-button" variant="primary" size="lg"

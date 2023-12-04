@@ -7,10 +7,10 @@ import calendar from "../../../assets/imgs/calendar.png";
 import './HabitPage.css';
 
 //, selectedHabits
-export default function HabitForm ({ userInfo, habitList }) {
+export default function HabitForm ({ userInfo, habitList, selectedHabits }) {
     const { userName, turtleLevel } = userInfo;
     const habits = habitList;
-    const selectedHabits = null;
+    // const selectedHabits = null;
     console.log('HabitForm selectedHabits', selectedHabits);
 
     return (
