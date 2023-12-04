@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import HabitForm from '../features/habit/HabitPageForm';
 import HabitListForm from '../features/habit/HabitListForm';
-// import HabitCheckForm from '../features/habit/HabitCheckForm';
 import axios from 'axios';
 
 export default function HabitPage() {
-  // const [isEditing, setIsEditing] = useState(true);
   const [selectedHabits, setSelectedHabits] = useState(null);
   const [selectedDate, setSelectedDate] = useState(0);
 
