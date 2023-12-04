@@ -1,5 +1,5 @@
 const fulfilledRouter = require("express").Router();
-const fulfilledService = require("../services/fulfilledService");
+const fulfilledService = require("../services/fulfilledHabitsService");
 const isLoggedIn = require("../middlewares/isLoggedIn.js");
 
 fulfilledRouter.get("/", isLoggedIn, async (req, res, next) => {
@@ -32,7 +32,7 @@ fulfilledRouter.get("/", isLoggedIn, async (req, res, next) => {
       //오늘 날짜를 사용하여 오늘 실천합 습관 목록 조회
       const data = await fulfilledService.getHabitsByToday(userId);
       res.status(200).json({
-        message: `${today.format("YYYY-MM-DD")}에 실천한 습관 id 조회 성공`,
+        message: `오늘 실천한 습관 id 조회 성공`,
         habitsId: data,
       });
     }

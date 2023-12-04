@@ -41,8 +41,8 @@ class fulfilledHabitsService {
         const today = dayjs();
         const tomorrow = today.add(1, "day");
 
-        console.log(today);
-        console.log(tomorrow);
+        console.log(today.format("YYYY-MM-DD"));
+        console.log(tomorrow.format("YYYY-MM-DD"));
         const result = await fulfilled.findByToday(
           userId,
           today.format("YYYY-MM-DD"),
@@ -66,7 +66,7 @@ class fulfilledHabitsService {
 
         const data = checked.fulfilledHabits.map((el) => ({
           user_id: userId,
-          habit_id: el,
+          habit_id: el.habitId,
           date: dayjs().format("YYYY-MM-DD"),
         }));
         console.log(data);
