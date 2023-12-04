@@ -6,28 +6,28 @@ import axios from 'axios';
 
 export default function HabitPage() {
   // const [isEditing, setIsEditing] = useState(true);
-  const [selectedHabits, setSelectedHabits] = useState(["habit1"]);
+  const [selectedHabits, setSelectedHabits] = useState(null);
 
   // 사용자가 계획한 습관이 있는지 확인
   // if yes -> 계획한 습관 띄우기
   // if no -> 추가하기 버튼 띄우기
-  // useEffect(() => {
-  //   axios({
-  //     method: 'get',
-  //     url: "http://"+ window.location.hostname +":5001/planned-habits",
-  //     withCredentials: true,
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     }
-  //   })
-  //   .then((res) => {
-  //     const habitIds = res.data.plannedHabitIds;
-  //     setSelectedHabits( habitIds );
-  //   }).catch((error) => {
-  //     setSelectedHabits( false );
-  //   }).then(() => {
-  //   });
-  // }, [])
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: "http://"+ window.location.hostname +":5001/planned-habits",
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      }
+    })
+    .then((res) => {
+      const habitIds = res.data.plannedHabitIds;
+      setSelectedHabits( habitIds );
+    }).catch((error) => {
+      setSelectedHabits( false );
+    }).then(() => {
+    });
+  }, [])
   const selectedDate = 0;
   const userInfo = {
     userName : "거북잉",
