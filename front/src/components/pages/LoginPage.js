@@ -39,6 +39,7 @@ export default function LoginPage() {
           type: "LOGIN_SUCCESS",
           payload: user,
         });
+        localStorage.setItem('user', JSON.stringify(user));
         alert(`${user.username}님 환영합니다!`);
         navigate("/habit", { replace: true });
   
