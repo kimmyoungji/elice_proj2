@@ -21,7 +21,7 @@ export default function HabitPage() {
   const [selectedDate, setSelectedDate] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { user } = useContext(UserStateContext);
+  const user = useContext(UserStateContext);
   console.log('user', user);
 
   // 사용자가 계획한 습관이 있는지 확인
