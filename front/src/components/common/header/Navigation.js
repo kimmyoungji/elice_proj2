@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Nav, Navbar, Container, Image, Offcanvas } from "react-bootstrap";
 import logo from "./logo.png";
+import api from "../../utils/axiosConfig";
+import { UserDispatchContext } from "../../Context/UserStateContext";
 
 const navMenus = [
   { href: "/", label: "서비스 소개", public: true },
@@ -16,9 +18,31 @@ const sideMenus = [
 ];
 
 function Navigation() {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
   const filteredNavMenus = navMenus.filter((menu) => menu.public !== isLogin);
   const filteredSideMenus = sideMenus.filter((menu) => menu.public !== isLogin);
+
+  useEffect(() => {
+    const loginInfo = localStorage.getItem("user");
+    if (loginInfo === "1") {
+      setIsLogin(true);
+    }
+  }, []);
+
+  const loginHandler = (email, password) => {
+    setIsLogin(true);
+  };
+
+  const logoutHandler = () => {
+    api.get("/users/logout").then((response) => {
+      console.log(response.data);
+    });
+  };
+  const dispatch = useContext(UserDispatchContext);
+  dispatch({
+    type: "LOGOUT",
+  });
+  localStorage.removeItem("user");
 
   return (
     <Navbar expand="False" className="bg-body-tertiary mb-3">
