@@ -13,6 +13,10 @@ const {
   addDummyFulfilledH,
 } = require("./db/models/modelTestCodes/dummy_data");
 
+const { searchDatabase } = require("./db/models/modelTestCodes/test_speed");
+
+const { createUsersDoc } = require("./db/redis");
+
 //라우터 가져오기
 const introRouter = require("./routers/introRouter");
 const usersRouter = require("./routers/usersRouter");
@@ -37,7 +41,7 @@ app.use(
 
 // knex 연결 test
 testKnex();
-// addDummyUsers(50);
+addDummyUsers(52, 1000);
 // addDummyPlannedH(40);
 // addDummyFulfilledH(50);
 
@@ -48,6 +52,16 @@ app.use("/planned-habits", plannedHabitsRouter);
 app.use("/fulfilled-habits", fulfilledHabitsRouter);
 // 에러처리 미들웨어
 app.use(errorMiddleware);
+
+async function testSpeed() {
+  await searchDatabase(
+    `SELECT * FROM fulfilled_habits WHERE date BETWEEN "2023-12-01" AND "2023-12-31"`
+  );
+}
+testSpeed();
+
+// create redis document
+// createUsersDoc();
 
 // Start the Express server
 app.listen(process.env.SERVER_PORT, () => {

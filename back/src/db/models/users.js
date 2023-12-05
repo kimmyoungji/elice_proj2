@@ -18,23 +18,29 @@ class UsersModel {
   async findByCursor(cursor, limit) {
     try {
       // 커서 속성을 미리 만들어둬야 할까요?
-      cursor = cursor ? cursor : "99999999999999999999"; // Replace this with your actual cursor value
-      limit = limit ? limit : "10";
-      console.log("cursor and limit", cursor, limit);
+      // cursor = cursor ? cursor : "99999999999999999999"; // Replace this with your actual cursor value
+      // limit = limit ? limit : "10";
+      // console.log("cursor and limit", cursor, limit);
       return this.knex("users")
         .transacting(this.trx)
-        .select("username", "email", "level")
         .select(
-          this.knex.raw(
-            "CONCAT(LPAD(username, 10, 0), LPAD(level, 10, 0)) as cursors"
-          )
-        )
-        .whereRaw(`CONCAT(LPAD(username, 10, 0), LPAD(level, 10, 0)) < ?`, [
-          cursor,
-        ])
-        .orderBy("username", "desc")
-        .orderBy("level", "desc")
-        .limit(limit);
+          this.knex.raw("ROW_NUMBER() OVER(ORDER BY RAND()) AS cursor"),
+          "username",
+          "email",
+          "level"
+        );
+      // .select(
+      //   this.knex.raw(
+      //     "CONCAT(LPAD(username, 10, 0), LPAD(level, 10, 0)) as cursors"
+      //   )
+      // )
+      // .whereRaw(`CONCAT(LPAD(username, 10, 0), LPAD(level, 10, 0)) < ?`, [
+      //   cursor,
+      // ])
+      // .orderByRaw("RAND()");
+      // .orderBy("username", "desc")
+      // .orderBy("level", "desc")
+      // .limit(limit);
     } catch (err) {
       throw new Error(err);
     }

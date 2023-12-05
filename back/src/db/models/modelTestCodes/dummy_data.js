@@ -1,9 +1,9 @@
 const knex = require("../../knex");
 const bcrypt = require("bcrypt");
 const dayjs = require("dayjs");
-async function makeDummyUsers(number) {
+async function makeDummyUsers(startnumber, number) {
   const users = [];
-  for (let i = 1; i <= number; i++) {
+  for (let i = startnumber; i <= number; i++) {
     let password = `password${i < 10 ? "0" + i : i}`;
     password = await bcrypt.hash(password, 10);
     const username = `user${i < 10 ? "0" + i : i}`;
@@ -18,8 +18,8 @@ async function makeDummyUsers(number) {
   return users;
 }
 
-async function setDummyUserLevel(level, number) {
-  for (let i = 1; i <= level; ++i) {
+async function setDummyUserLevel(level, startnumber, number) {
+  for (let i = startnumber; i <= level; ++i) {
     const count = Math.floor(number * i * 0.1);
     const randomUserId = await knex("users")
       .select("user_id")
@@ -31,10 +31,16 @@ async function setDummyUserLevel(level, number) {
   }
 }
 
-async function addDummyUsers(number) {
-  const newUsers = await makeDummyUsers(number);
-  await knex("users").insert(newUsers);
-  setDummyUserLevel(5, number);
+async function addDummyUsers(startnumber, number) {
+  console.log("hello");
+  try {
+    const newUsers = await makeDummyUsers(startnumber, number);
+    await knex("users").insert(newUsers);
+    setDummyUserLevel(5, startnumber, number);
+    console.log("Dummy users successfully added!");
+  } catch (err) {
+    throw err;
+  }
 }
 
 async function addDummyFulfilledH(number) {

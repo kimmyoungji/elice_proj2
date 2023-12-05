@@ -8,6 +8,9 @@ const {
 } = require("../lib/custom-error.js");
 const userService = require("../services/usersService.js");
 
+//for testing redis
+const { redis } = require("../db/redis.js");
+
 // GET /login
 usersRouter.post("/login", async (req, res, next) => {
   try {
@@ -74,15 +77,26 @@ usersRouter.get("/user", isLoggedIn, async (req, res, next) => {
 
 // GET
 usersRouter.get("/", async (req, res, next) => {
+  let redisUsersTotal;
   try {
     // 요청 바디 데이터 가져오기
     const cursor = req.query.cursor;
-    console.log("cursor", cursor);
     const limit = req.query.limit;
-    console.log("limit", limit);
+
+    // redis 먼저 조회하기
+    let users = await redis.connect().then(async (res) => {
+      // redis에 등록된 유저 정보 가져오기
+      const redisUsers = await redis.ft.search("idx:users", "*");
+      redisUsersTotal = redisUsers.total;
+      return redisUsers;
+    });
+
     // 모든 사용자 데이터 가져오기
-    const users = await userService.getUsers(cursor, limit);
-    console.log("users", users);
+    if (redisUsersTotal === 0) {
+      users = await userService.getUsers(cursor, limit);
+    } else {
+      users = users.documents.map((elem) => elem.value);
+    }
 
     // 응답
     res.status(200).send({
@@ -91,6 +105,14 @@ usersRouter.get("/", async (req, res, next) => {
     });
   } catch (err) {
     next(err);
+  } finally {
+    if (redisUsersTotal === 0) {
+      await Promise.all(
+        users.map(async (user, idx) => {
+          return await redis.json.set(`users:${idx}`, "$", user);
+        })
+      );
+    }
   }
 });
 

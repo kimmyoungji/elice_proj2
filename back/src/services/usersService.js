@@ -6,6 +6,32 @@ const UsersModel = require("../db/models/users");
 const users = new UsersModel(knex);
 const { NotFoundError, INVALID_USER_Error } = require("../lib/custom-error");
 
+// async function connectRedis(client) {
+//   await client.connect().then(async (res) => {
+//     console.log(res);
+//     console.log("redis connected");
+//   });
+//   // key-value
+//   await client.set("bike:1", "Process 1");
+//   await client.set("bike:2", "Process 2");
+//   await client.set("bike:3", "Process 3");
+//   await client.set("bike:4", "Process 4");
+//   const value = await client.get("bike:1");
+//   console.log(value);
+//   // key-object : hash
+//   const fieldsAdded = await client.hSet("bike:5", {
+//     model: "Deimos",
+//     brand: "Ergonom",
+//     type: "Enduro bikes",
+//     price: 4972,
+//   });
+//   const price = await client.hGet("bike:5", "price");
+//   console.log(`Price: ${price}`);
+//   const bike = await client.hGetAll("bike:5");
+//   console.log(bike);
+// }
+// connectRedis(client);
+
 class userService {
   static async getAccessToken(user) {
     return jwt.sign(
@@ -70,7 +96,7 @@ class userService {
         // DB: transaction 객체전달하기
         users.setTrx(trx);
         let userArr = await users.findByCursor(cursor, limit);
-        console.log("userArr", userArr);
+        // console.log("userArr", userArr);
 
         // 빈 배열일 경우 에러처리
         if (userArr.length === 0) {

@@ -67,3 +67,12 @@ INSERT INTO intro VALUES('{
 
 -- 커서기반 페이지네이션 개발용
 SELECT username, email, level, CONCAT(LPAD(username, 10, '0'), LPAD(level, 10, '0')) as cursors FROM users ORDER BY username DESC, level DESC;
+
+-- fulfilled_habits 테이블 인덱스 주기
+mysql> ALTER TABLE fulfilled_habits DROP INDEX index_date;
+Query OK, 0 rows affected (0.25 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE fulfilled_habits ADD INDEX index_date (date);
+Query OK, 0 rows affected (0.27 sec)
+Records: 0  Duplicates: 0  Warnings: 0
