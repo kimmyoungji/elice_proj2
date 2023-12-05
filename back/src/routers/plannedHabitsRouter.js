@@ -4,6 +4,7 @@ const isLoggedIn = require("../middlewares/isLoggedIn");
 const { stringToArr } = require("../lib/stringToarray");
 const plannedHabitService = require("../services/plannedHabitsService");
 const dayjs = require("dayjs");
+const { BadRequestError } = require("../lib/custom-error.js");
 
 plannedHabitsRouter.get("/", isLoggedIn, async (req, res, next) => {
   try {
@@ -42,6 +43,15 @@ plannedHabitsRouter.post("/", isLoggedIn, async (req, res, next) => {
     }
     let habitDate = req.body.habitDate;
 
+    if (
+      !habitDate ||
+      !habitIds ||
+      typeof habitDate !== "number" ||
+      habitIds.length === 0
+    ) {
+      throw new BadRequestError("필수적인 정보가 입력되지 않았습니다");
+    }
+
     // 새로운 습관 계획 추가하기
     await plannedHabitService.addPlannedHabit(user_id, habitIds, habitDate);
 
@@ -61,6 +71,10 @@ plannedHabitsRouter.delete("/", isLoggedIn, async (req, res, next) => {
     let habitIds = req.body.habitIds;
     if (typeof habitIds === "string") {
       habitIds = stringToArr(habitIds);
+    }
+
+    if (!habitIds || habitIds.length === 0) {
+      throw new BadRequestError("필수적인 정보가 입력되지 않았습니다");
     }
 
     // 계획습관아이디로 계획습관 삭제하기
