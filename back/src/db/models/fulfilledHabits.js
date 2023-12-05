@@ -5,24 +5,6 @@ class FulfilledHabitsModel {
   setTrx(trx) {
     this.trx = trx;
   }
-
-  // async findByToday(userId, today) {
-  //   try {
-  //     return await this.knex.select("habit_id").from("fulfilled_habits").where({
-  //       user_id: userId,
-  //       date: today,
-  //     });
-  //   } catch (error) {
-  //     console.error(
-  //       "오늘의 습관 달성 여부를 불러오다가 뭔가 잘못됨",
-  //       error.stack
-  //     );
-  //     throw new Error(
-  //       "오늘의 실천 습관 목록을 DB에서 불러오던 중 문제가 생겼습니다."
-  //     );
-  //   }
-  // }
-
   async findByMonth(userId, thisMonth, nextMonth) {
     try {
       return await this.knex
@@ -78,7 +60,7 @@ class FulfilledHabitsModel {
 
   async create(data) {
     try {
-      await this.knex("fulfilled_habits").insert(data);
+      await this.knex("fulfilled_habits").transacting(this.trx).insert(data);
       console.log("실천 기록이 잘 저장됨");
     } catch (error) {
       console.error("실천 습관을 저장하다가 뭔가 잘못됨", error.stack);
@@ -88,7 +70,10 @@ class FulfilledHabitsModel {
 
   async delete(data) {
     try {
-      await this.knex("fulfilled_habits").where(data).del();
+      await this.knex("fulfilled_habits")
+        .transacting(this.trx)
+        .where(data)
+        .del();
       console.log("달성 기록이 잘 삭제됨");
     } catch (error) {
       console.error("취소한 달성내역을 삭제하다가 뭔가 잘못됨", error.stack);
