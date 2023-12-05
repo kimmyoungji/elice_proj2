@@ -22,11 +22,11 @@ class UsersModel {
         "SELECT MIN(user_id)as minId FROM users;"
       );
       user_id = user_id ? user_id : minIdPacket[0][0].minId; // Replace this with your actual user_id value
-      limit = limit ? limit : "10";
+      limit = limit ? Number(limit) : 10;
       console.log("user_id and limit", user_id, limit);
       return this.knex("users")
         .transacting(this.trx)
-        .select("username", "email", "level")
+        .select("user_id AS userId", "username", "email", "level")
         .where("user_id", ">=", user_id)
         .limit(limit);
     } catch (err) {

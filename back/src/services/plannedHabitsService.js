@@ -19,8 +19,8 @@ class plannedHabitService {
         const plannedHabitArr = await plannedHabits.findUnclosedByUserId(
           user_id
         );
-        if (plannedHabitArr.length === 0)
-          throw new NotFoundError("현재 실천 중인 습관이 없습니다.");
+        // if (plannedHabitArr.length === 0)
+        //   throw new NotFoundError("현재 실천 중인 습관이 없습니다.");
         return plannedHabitArr;
       });
     } catch (err) {
