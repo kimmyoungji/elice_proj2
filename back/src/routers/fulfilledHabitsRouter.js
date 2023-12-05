@@ -43,7 +43,7 @@ fulfilledRouter.get("/", isLoggedIn, async (req, res, next) => {
 
 fulfilledRouter.post("/", isLoggedIn, async (req, res, next) => {
   try {
-    const userId = req.currentUserId;
+    const userId = parseInt(req.currentUserId);
     const checked = req.body; //실천 체크한 습관
     await fulfilledService.addFulfilledHabits(userId, checked);
     res.status(200).json({ message: "습관 달성 내역 저장 성공" });
@@ -54,7 +54,7 @@ fulfilledRouter.post("/", isLoggedIn, async (req, res, next) => {
 
 fulfilledRouter.delete("/", isLoggedIn, async (req, res, next) => {
   try {
-    const userId = req.currentUserId;
+    const userId = parseInt(req.currentUserId);
     const habitIdArray = req.body.fullfilledHabitId;
     await fulfilledService.deleteFulfilledHabits(userId, habitIdArray);
     res.status(200).json({ message: "달성 취소 습관 삭제 성공" });

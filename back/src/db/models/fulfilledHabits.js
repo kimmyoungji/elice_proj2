@@ -28,7 +28,7 @@ class FulfilledHabitsModel {
   async findByMonth(userId, month, nextMonth) {
     try {
       return await this.knex
-        .select("date")
+        .distinct("date")
         .from("fulfilled_habits")
         .where({
           user_id: userId,
@@ -44,7 +44,7 @@ class FulfilledHabitsModel {
   async findByDate(user_id, date) {
     try {
       return await this.knex
-        .select("habits.habit_title")
+        .select("habits.habit_id")
         .from("fulfilled_habits")
         .join("habits", "fulfilled_habits.habit_id", "=", "habits.habit_id")
         .where("fulfilled_habits.user_id", "=", user_id)
@@ -58,12 +58,13 @@ class FulfilledHabitsModel {
     }
   }
 
-  async findExistingRecords({ user_id, habit_id, date }) {
+  async findExistingRecords(data) {
     try {
       return await this.knex
-        .select("user_id", "habit_id", "date")
+        .select("habit_id")
         .from("fulfilled_habits")
-        .where({ user_id, habit_id, date });
+        .whereIn("habit_id", data.habit_id)
+        .andWhere({ user_id: data.user_id, date: data.date });
     } catch (error) {
       console.error(
         "요청한 데이터를 저장전 중복검사하다가 뭔가 잘못됨",
