@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../utils/axiosConfig";
+// import axios from "axios";
 import { Col, Button, Container, Image, Form, Row } from "react-bootstrap";
 import "./UserPage.css";
+
 
 const UserPageForm = (props) => {
   const { userInfo } = props;
@@ -11,6 +13,7 @@ const UserPageForm = (props) => {
   const fileInput = useRef(null);
 
   const navigate = useNavigate();
+  
 
   const [form, setForm] = useState({
     userFormName: userName,
@@ -115,7 +118,6 @@ const UserPageForm = (props) => {
       .catch((error) => {
         console.log(error);
       })
-      .then(() => {});
   };
 
   const deleteUser = () => {
@@ -135,6 +137,23 @@ const UserPageForm = (props) => {
         console.log(error);
       })
       .finally(() => {});
+    
+      api({
+        method: "get",
+        url: "/users/logout",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => {
+          alert("로그아웃");
+          // 쿠키 제거
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {});
   };
 
   return (
