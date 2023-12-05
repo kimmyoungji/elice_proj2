@@ -20,7 +20,7 @@ export default function IntroPage() {
   const getCharts = () => {
     api.get("/graphs")
       .then((res) => {
-        setCharts(res.data.data);
+        setCharts(res.data);
     })
       .catch((err) => {
         console.log(err);

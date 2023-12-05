@@ -12,8 +12,12 @@ export default function Chart({data}) {
       <XAxis dataKey={keys[0]} />
       <YAxis hide="true" />
       <Bar name="분리배출" dataKey={keys[1]} fill="#82ca9d" /> 
-      {keys[2] && (<Bar name="혼합배출" dataKey={keys[2]} fill="#8884d8" />)}
-      {keys[2] && (<Legend />)}
+      {keys[2] && (
+        <>
+          <Bar name="혼합배출" dataKey={keys[2]} fill="#8884d8" />
+          <Legend />
+        </>
+      )}
     </BarChart>
   );
 }
