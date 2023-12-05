@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import { UserStateContext } from "../../../Context/UserStateContext";
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Container, Col, Row, Image } from 'react-bootstrap';
 import HabitCardForm from "./HabitCardForm";
@@ -8,8 +7,7 @@ import calendar from "../../../assets/imgs/calendar.png";
 
 export default function HabitForm ({ userInfo, habitList, selectedDate, selectedHabits }) {
     const { userName, turtleLevel } = userInfo;
-    const { user } = useContext(UserStateContext);
-    console.log('user', user);
+    
 
     return (
         <>
