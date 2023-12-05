@@ -1,5 +1,5 @@
 import styled, { keyframes } from "styled-components";
-import useScrollAnimation from "../../../hooks/useScrollAnimation";
+import useIntersect from "../../../hooks/useIntersect";
 
 // Fadein 효과
 const FadeinAnimation = keyframes`
@@ -51,7 +51,7 @@ const Article = styled.div`
 
 // viewport 내에 해당 DOM이 있을 때, frame-in 클래스 추가
 export const ScrollAniDiv = ({ children }) => {
-  const { ref, isInViewport } = useScrollAnimation();
+  const { ref, isInViewport } = useIntersect();
   return (
     <Article ref={ref} className={isInViewport ? "frame-in" : "frame-out"}>
       {children}
