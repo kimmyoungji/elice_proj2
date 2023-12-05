@@ -18,15 +18,17 @@ class UsersModel {
   async findByCursor(user_id, limit) {
     try {
       // 커서 속성을 미리 만들어둬야 할까요?
-      const minId = await this.knex("users").min("user_id");
-      user_id = user_id ? user_id : "187949"; // Replace this with your actual user_id value
+      const minIdPacket = await this.knex.raw(
+        "SELECT MIN(user_id)as minId FROM users;"
+      );
+      user_id = user_id ? user_id : minIdPacket[0][0].minId; // Replace this with your actual user_id value
       limit = limit ? limit : "10";
       console.log("user_id and limit", user_id, limit);
       return this.knex("users")
         .transacting(this.trx)
         .select("username", "email", "level")
-        .where("user_id", ">", user_id)
-        .andWhere("user_id", "<=", user_id + limit);
+        .where("user_id", ">=", user_id)
+        .limit(limit);
     } catch (err) {
       throw new Error(err);
     }
