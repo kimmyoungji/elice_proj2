@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useContext, useMemo, useEffect } from "react";
 import { Nav, Navbar, Container, Image, Offcanvas } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import logo from "./logo.png";
+import api from "../../utils/axiosConfig";
+import { UserDispatchContext, UserStateContext } from "../../../Context/UserStateContext";
 
 const navMenus = [
   { href: "/", label: "서비스 소개", public: true },
@@ -16,20 +18,48 @@ const sideMenus = [
   { href: "/register", label: "회원가입", public: true },
 ];
 
-function Navigation() {
-  const [isLogin, setIsLogin] = useState(true);
-  // const filteredNavMenus = navMenus.filter((menu) => menu.public !== isLogin);
-  // const filteredSideMenus = sideMenus.filter((menu) => menu.public !== isLogin);
-  const [filteredNavMenus, filteredSideMenus] = useMemo(
-    () => [
-      navMenus.filter((menu) => menu.public !== isLogin),
-      sideMenus.filter((menu) => menu.public !== isLogin),
-    ],
-    [isLogin]
-  );
 
+function Navigation() {
+  const user = useContext(UserStateContext);
+  console.log('user', user);
+  const [isLogin, setIsLogin] = useState(true);
+  const [showOffcanvas, setShowOffcanvas] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!user) {
+    setIsLogin(false);
+    }
+  }, [])
+
+  const [filteredNavMenus, filteredSideMenus, loginSideMenus] = useMemo(
+    () => [
+      navMenus.filter((menu) => menu.public !== isLogin),
+      sideMenus.filter((menu) => menu.public === isLogin),
+      sideMenus.filter((menu) => menu.public !== isLogin),
+    ], [isLogin]
+  );
+
+  const dispatch = useContext(UserDispatchContext);
+
+  const handleClick = (e) => {
+    const label = e.target.innerText;
+    if (label === "로그아웃") {
+      api.get("/users/logout").then((response) => {
+        console.log(response.data);
+        dispatch({ type: "LOGOUT" });
+        localStorage.removeItem("user");
+      });
+    }
+  };
+
+  const handleOffcanvasClose = () => {
+    setShowOffcanvas(false);
+  };
+  const handleOffcanvasShow = () => {
+    setShowOffcanvas(true);
+  }
+  console.log(isLogin);
   return (
     <Navbar expand="False" className="bg-body-tertiary mb-3">
       <Container fluid>
@@ -57,32 +87,36 @@ function Navigation() {
             roundedCircle
             height="30"
             width="30"
+            onClick={() => handleOffcanvasShow()}
           />
         </Navbar.Toggle>
         <Navbar.Offcanvas
           id="offcanvasNavbar-expand-false"
           aria-labelledby="offcanvasNavbarLabel-expand-false"
           placement="end"
+          show={showOffcanvas} onHide={handleOffcanvasClose}
         >
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title id="offcanvasNavbarLabel-expand-false">
-              <Image src={logo} alt="logo" height="30" width="200" />
-            </Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            <Nav className="justify-content-end flex-grow-1 pe-3">
-              {filteredSideMenus.map((menu, index) => (
-                <Nav.Link
-                  key={`nav-menu-${index}`}
-                  onClick={() => {
-                    navigate(menu.href);
-                  }}
-                >
-                  {menu.label}
-                </Nav.Link>
-              ))}
-            </Nav>
-          </Offcanvas.Body>
+            <Offcanvas.Header closeButton>
+              <Offcanvas.Title id="offcanvasNavbarLabel-expand-false">
+                <Image src={logo} alt="logo" height="30" width="200" />
+              </Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body>
+              <Nav className="justify-content-end flex-grow-1 pe-3">
+                {(isLogin ? loginSideMenus : filteredSideMenus).map((menu, index) => (
+                  <Nav.Link
+                    key={`nav-menu-${index}`}
+                    onClick={(e) => {
+                      handleClick(e);
+                      navigate(menu.href);
+                      handleOffcanvasClose();
+                    }}
+                  >
+                    {menu.label}
+                  </Nav.Link>
+                ))}
+              </Nav>
+            </Offcanvas.Body>
         </Navbar.Offcanvas>
       </Container>
     </Navbar>
