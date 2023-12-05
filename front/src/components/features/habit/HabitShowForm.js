@@ -44,8 +44,29 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
     }, [selectHabit]) 
 
   
-    const getCheckedHabit = useMemo(() => {
-        console.log('getCheckedHabit checkHabit');
+    // const getCheckedHabit = useMemo(() => {
+    //     return <>
+    //             {selectHabit.map((habit) => (
+    //             <ListGroup.Item>
+    //                 <Form.Check inline key={habit} 
+    //                 type='checkbox'
+    //                 onClick={() => handleFulfillChange(habit)}
+    //                 style={{ fontSize: "14px"}}/>{habits[habit]}
+    //             </ListGroup.Item>
+    //             ))}
+    //             {checkHabit.map((habit) => (
+    //                 <ListGroup.Item>
+    //                     <Form.Check disabled key={habit} 
+    //                     type='checkbox'
+    //                     style={{ fontSize: "12px"}}/>{habits[habit]} (완료)
+    //                 </ListGroup.Item>
+    //                 ))
+    //             }
+    //         </>
+    // }, [selectHabit, checkHabit])
+
+    // 실천완료 버튼 눌러도 잘 넘어감.
+    const getCheckedHabit = () => {
         return <>
                 {selectHabit.map((habit) => (
                 <ListGroup.Item>
@@ -59,13 +80,12 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
                     <ListGroup.Item>
                         <Form.Check disabled key={habit} 
                         type='checkbox'
-                        //onClick={() => handleRadioChange(day)}
                         style={{ fontSize: "12px"}}/>{habits[habit]} (완료)
                     </ListGroup.Item>
                     ))
                 }
             </>
-    }, [selectHabit, checkHabit])
+    }
   
   
     const getDoneHabit = () => {
@@ -104,7 +124,7 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
               {checkHabit.length === 0 && getSelectedHabit}
   
               {/* 체크된 습관이 있는 경우 */}
-              {checkHabit.length !== 0  && getCheckedHabit}
+              {checkHabit.length !== 0  && getCheckedHabit()}
           </>
         )
     }
@@ -131,6 +151,8 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
               console.log(error)
           }).finally(() => {
             setCheckHabit(checkHabit);
+            console.log('실천 완료 후 넘어가기');
+            setCheck(false);
             getDoneHabit();
           });
           

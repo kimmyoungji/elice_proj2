@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import CalendarForm from '../features/calender/CalendarPageForm';
 import api from "../utils/axiosConfig";
 
@@ -15,7 +15,8 @@ const getDate = () => {
 }
 
 function CalendarPage() {
-  let habitList = {};
+  const [ habitList, setHabitList ] = useState({});
+  const [ isLoading, setIsLoading ] = useState(false);
   let monthCheckDate = {};
 
   useEffect(() => {
@@ -30,15 +31,27 @@ function CalendarPage() {
     })
     .then((res) => {
         const habitIds = res.habitIds;
-        habitList.date = getDate()[1]
+        // habitList.date = getDate()[1]
         if (habitIds.length === 0) {
-          habitList.habit1 = "습관을 추가해주세요"
+          setHabitList(() => ({
+            date: getDate()[1],
+            habit: "습관을 추가해주세요"
+          }));
         } else {
-          habitIds.map((habit) => habitList.habit1 = habit)
+          setHabitList(() => ({
+            date: getDate()[1],
+          ...habitIds.reduce((acc, habit, index) => {
+            acc[`habit${index + 1}`] = habit;
+            return acc;
+            }, {})
+          }));
+          // habitIds.map((habit) => habitList.habit1 = habit)
         }
     }).catch((error) => {
         // 추후 수정예정
         console.log(error)
+    }).finally(() => {
+      setIsLoading(true);
     })
     
     api({
@@ -56,12 +69,14 @@ function CalendarPage() {
     }).catch((error) => {
         // 추후 수정예정
         console.log(error)
+    }).finally(() => {
+      setIsLoading(true);
     })
   }, [])
-
+  
   return (
     <>
-      <CalendarForm habitlist={habitList} checkdate={monthCheckDate}/>
+      {isLoading && <CalendarForm habitlist={habitList} checkdate={monthCheckDate}/>}
     </>
     
   );
