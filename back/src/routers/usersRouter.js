@@ -76,13 +76,10 @@ usersRouter.get("/user", isLoggedIn, async (req, res, next) => {
 usersRouter.get("/", async (req, res, next) => {
   try {
     // 요청 바디 데이터 가져오기
-    const cursor = req.query.cursor;
-    console.log("cursor", cursor);
+    const user_id = req.query.userId;
     const limit = req.query.limit;
-    console.log("limit", limit);
     // 모든 사용자 데이터 가져오기
-    const users = await userService.getUsers(cursor, limit);
-    console.log("users", users);
+    const users = await userService.getUsers(user_id, limit);
 
     // 응답
     res.status(200).send({

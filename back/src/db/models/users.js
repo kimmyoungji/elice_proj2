@@ -15,26 +15,18 @@ class UsersModel {
     }
   }
 
-  async findByCursor(cursor, limit) {
+  async findByCursor(user_id, limit) {
     try {
       // 커서 속성을 미리 만들어둬야 할까요?
-      cursor = cursor ? cursor : "99999999999999999999"; // Replace this with your actual cursor value
+      const minId = await this.knex("users").min("user_id");
+      user_id = user_id ? user_id : "187949"; // Replace this with your actual user_id value
       limit = limit ? limit : "10";
-      console.log("cursor and limit", cursor, limit);
+      console.log("user_id and limit", user_id, limit);
       return this.knex("users")
         .transacting(this.trx)
         .select("username", "email", "level")
-        .select(
-          this.knex.raw(
-            "CONCAT(LPAD(username, 10, 0), LPAD(level, 10, 0)) as cursors"
-          )
-        )
-        .whereRaw(`CONCAT(LPAD(username, 10, 0), LPAD(level, 10, 0)) < ?`, [
-          cursor,
-        ])
-        .orderBy("username", "desc")
-        .orderBy("level", "desc")
-        .limit(limit);
+        .where("user_id", ">", user_id)
+        .andWhere("user_id", "<=", user_id + limit);
     } catch (err) {
       throw new Error(err);
     }

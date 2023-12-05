@@ -64,13 +64,12 @@ class userService {
     }
   }
 
-  static async getUsers(cursor, limit) {
+  static async getUsers(user_id, limit) {
     try {
       return await knex.transaction(async (trx) => {
         // DB: transaction 객체전달하기
         users.setTrx(trx);
-        let userArr = await users.findByCursor(cursor, limit);
-        console.log("userArr", userArr);
+        let userArr = await users.findByCursor(user_id, limit);
 
         // 빈 배열일 경우 에러처리
         if (userArr.length === 0) {
