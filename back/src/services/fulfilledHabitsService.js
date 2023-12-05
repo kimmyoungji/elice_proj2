@@ -11,8 +11,17 @@ class fulfilledHabitsService {
         const nextMonth =
           dayjs(month).month() === 11 // 쿼리로 들어온 달이 12월이면
             ? dayjs(month).add(1, "year").startOf("year").format("YYYY-MM-DD") //다음 해 01월
-            : dayjs(month).add(1, "month").format("YYYY-MM-DD"); // 아니면 같은 해 다음달
-        const result = await fulfilled.findByMonth(userId, month, nextMonth);
+            : dayjs(month)
+                .add(1, "month")
+                .startOf("month")
+                .format("YYYY-MM-DD"); // 아니면 같은 해 다음달
+        const thisMonth = dayjs(month).startOf("month").format("YYYY-MM-DD");
+        console.log(thisMonth, nextMonth);
+        const result = await fulfilled.findByMonth(
+          userId,
+          thisMonth,
+          nextMonth
+        );
         console.log(result);
         return result.map((el) => el.date);
       });
@@ -41,14 +50,11 @@ class fulfilledHabitsService {
       return await knex.transaction(async (trx) => {
         fulfilled.setTrx(trx);
         const today = dayjs();
-        const tomorrow = today.add(1, "day");
 
         console.log(today.format("YYYY-MM-DD"));
-        console.log(tomorrow.format("YYYY-MM-DD"));
         const result = await fulfilled.findByToday(
           userId,
-          today.format("YYYY-MM-DD"),
-          tomorrow.format("YYYY-MM-DD")
+          today.format("YYYY-MM-DD")
         );
         console.log(result);
         return result.map((row) => row.habit_id);

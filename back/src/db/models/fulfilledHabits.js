@@ -6,16 +6,12 @@ class FulfilledHabitsModel {
     this.trx = trx;
   }
 
-  async findByToday(userId, today, tomorrow) {
+  async findByToday(userId, today) {
     try {
-      return await this.knex
-        .select("habit_id")
-        .from("fulfilled_habits")
-        .where({
-          user_id: userId,
-        })
-        .where("date", ">=", today)
-        .andWhere("date", "<", tomorrow);
+      return await this.knex.select("habit_id").from("fulfilled_habits").where({
+        user_id: userId,
+        date: today,
+      });
     } catch (error) {
       console.error(
         "오늘의 습관 달성 여부를 불러오다가 뭔가 잘못됨",
@@ -27,7 +23,7 @@ class FulfilledHabitsModel {
     }
   }
 
-  async findByMonth(userId, month, nextMonth) {
+  async findByMonth(userId, thisMonth, nextMonth) {
     try {
       return await this.knex
         .distinct("date")
@@ -35,8 +31,8 @@ class FulfilledHabitsModel {
         .where({
           user_id: userId,
         })
-        .andWhere("date", ">=", `${month}-01`)
-        .andWhere("date", "<", `${nextMonth}-01`);
+        .andWhere("date", ">=", thisMonth)
+        .andWhere("date", "<", nextMonth);
     } catch (error) {
       console.error("월별 달성 여부 불러오다가 뭔가 잘못됨", error.stack);
       throw new Error(
@@ -48,11 +44,9 @@ class FulfilledHabitsModel {
   async findByDate(user_id, date) {
     try {
       return await this.knex
-        .select("habits.habit_id")
+        .select("habit_id")
         .from("fulfilled_habits")
-        .join("habits", "fulfilled_habits.habit_id", "=", "habits.habit_id")
-        .where("fulfilled_habits.user_id", "=", user_id)
-        .andWhere("fulfilled_habits.date", "=", date);
+        .where({ user_id, date });
     } catch (error) {
       console.error(
         "요청한 일자의 달성 여부 불러오다가 뭔가 잘못됨",
