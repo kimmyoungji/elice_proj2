@@ -1,9 +1,9 @@
 const knex = require("../../knex");
 const bcrypt = require("bcrypt");
 const dayjs = require("dayjs");
-async function makeDummyUsers(number) {
+async function makeDummyUsers(start, number) {
   const users = [];
-  for (let i = 1; i <= number; i++) {
+  for (let i = start; i <= number; i++) {
     let password = `password${i < 10 ? "0" + i : i}`;
     password = await bcrypt.hash(password, 10);
     const username = `user${i < 10 ? "0" + i : i}`;
@@ -31,10 +31,12 @@ async function setDummyUserLevel(level, number) {
   }
 }
 
-async function addDummyUsers(number) {
-  const newUsers = await makeDummyUsers(number);
+async function addDummyUsers(start, number) {
+  const newUsers = await makeDummyUsers(start, number);
+  console.log("됨?");
   await knex("users").insert(newUsers);
   setDummyUserLevel(5, number);
+  console.log("됐나?");
 }
 
 async function addDummyFulfilledH(number) {
@@ -42,15 +44,16 @@ async function addDummyFulfilledH(number) {
   const randomUserIdPakets = await knex("users")
     .select("user_id")
     .orderByRaw("RAND()")
-    .limit(number);
+    .limit(2000);
   const randUserIdArr = randomUserIdPakets.map((randUser) => randUser.user_id);
+  const userIdx = Math.floor(Math.random() * randUserIdArr.length);
   const habitIdPackets = await knex("habits").select("habit_id");
   const habitIds = habitIdPackets.map((habit) => habit.habit_id);
   for (let i = 0; i < number; i++) {
     const habitIdIdx = Math.floor(Math.random() * habitIds.length);
     const start_date = getRandomDate(dayjs("2023-11-28"), dayjs(new Date()));
     const newFh = {
-      user_id: randUserIdArr[i],
+      user_id: randUserIdArr[userIdx],
       habit_id: habitIds[habitIdIdx],
       date: start_date.utc(true).format(),
     };
@@ -65,7 +68,7 @@ async function addDummyPlannedH(number) {
   const randomUserIdPakets = await knex("users")
     .select("user_id")
     .orderByRaw("RAND()")
-    .limit(number);
+    .limit(2000);
   const randUserIdArr = randomUserIdPakets.map((randUser) => randUser.user_id);
   const habitIdPackets = await knex("habits").select("habit_id");
   const habitIds = habitIdPackets.map((habit) => habit.habit_id);
@@ -73,10 +76,11 @@ async function addDummyPlannedH(number) {
   for (let i = 0; i < number; i++) {
     const habitIdIdx = Math.floor(Math.random() * habitIds.length);
     const habitDateIdx = Math.floor(Math.random() * habitDates.length);
+    const userIdx = Math.floor(Math.random() * randUserIdArr.length);
     const start_date = getRandomDate(dayjs("2023-11-28"), dayjs(new Date()));
     const end_date = start_date.add(habitDates[habitDateIdx], "day");
     const newFh = {
-      user_id: randUserIdArr[i],
+      user_id: randUserIdArr[userIdx],
       habit_id: habitIds[habitIdIdx],
       start_date: start_date.utc(true).format(),
       end_date: end_date.utc(true).format(),
