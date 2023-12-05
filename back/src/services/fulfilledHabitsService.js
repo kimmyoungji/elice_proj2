@@ -60,29 +60,34 @@ class fulfilledHabitsService {
     try {
       return await knex.transaction(async (trx) => {
         fulfilled.setTrx(trx);
-        //fullfilledHabits:[ {habitId: [습관아이디],{...}, ...]
+        //{"fulfilledHabits": ["habit1","habit2","habit4"]}
         console.log("요청받은 습관id", checked.fulfilledHabits);
 
         const today = dayjs().format("YYYY-MM-DD");
         const data4check = {
           user_id: userId,
           date: today,
-          habit_id: checked.fulfilledHabits.map((el) => el.habitId),
+          habit_id: checked.fulfilledHabits,
         };
-
+        console.log("체크용데이터", data4check);
         const exist = await fulfilled.findExistingRecords(data4check);
         console.log("중복 습관id", exist);
         const data = checked.fulfilledHabits
           .filter((el) => {
-            return !exist.some((id) => id.habit_id === el.habitId);
+            return !exist.some((id) => id.habit_id === el);
           })
           .map((id) => ({
             user_id: userId,
             date: today,
-            habit_id: id.habitId,
+            habit_id: id,
           }));
+
         console.log("저장할 습관id", data);
-        await fulfilled.create(data);
+        if (data.length) {
+          await fulfilled.create(data);
+        } else {
+          console.log("오늘 새로 기록할 습관이 없습니다.");
+        }
       });
     } catch (error) {
       throw new Error(error);
@@ -95,7 +100,7 @@ class fulfilledHabitsService {
         fulfilled.setTrx(trx);
         const today = dayjs().format("YYYY-MM-DD");
         habitIdArray.map(async (el) => {
-          const data = { user_id: userId, habit_id: el.habitId, date: today };
+          const data = { user_id: userId, habit_id: el, date: today };
           console.log(data);
           await fulfilled.delete(data);
         });
