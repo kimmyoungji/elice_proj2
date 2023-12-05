@@ -4,7 +4,7 @@ import HabitListForm from '../features/habit/HabitListForm';
 import { Card, Container, Image } from 'react-bootstrap';
 import logo from "../common/header/logo.png"
 import api from "../utils/axiosConfig";
-import { UserStateContext } from "../Context/UserStateContext";
+import { UserStateContext } from "../../Context/UserStateContext";
 
 
 const habitList = {
@@ -22,7 +22,7 @@ export default function HabitPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const { user } = useContext(UserStateContext);
-    console.log(user);
+  console.log('user', user);
 
   // 사용자가 계획한 습관이 있는지 확인
   // if yes -> 계획한 습관 띄우기
@@ -49,7 +49,6 @@ export default function HabitPage() {
     });
   }, [])
   
-  // 수정 예정
   const userInfo = {
     userName : user.username,
     turtleLevel: user.level
