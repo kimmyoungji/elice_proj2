@@ -8,12 +8,13 @@ import Toothbrush from "../features/IntroContents/toothbrush.png";
 import Logo from "../common/header/logo.png";
 import Chat from "../features/IntroContents/kakaotalk.png";
 import Chart from "../features/IntroContents/Chart";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import api from "../utils/axiosConfig";
+import { UserStateContext } from "../../Context/UserStateContext";
 
 
 export default function IntroPage() {
-
+  const user = useContext(UserStateContext);
   const navigate = useNavigate();
   const [charts, setCharts] = useState();
 
@@ -132,13 +133,14 @@ export default function IntroPage() {
         </ScrollAniDiv>
       </Row>
 
-      {/* TODO: 로그인 되어있는 상태라면 시작하기 눌렀을 때, 해빗페이지로 이동하도록 */}
       <Row className="vh-100">
         <Col>
           <ScrollAniDiv>
             <p>해양생물을 위해, 나를 위해</p>
             <p>환경 습관을 형성하기 위한 여정</p>
-            <Button variant="primary" onClick={() => navigate('/register')}>시작하기</Button>
+            <Button variant="primary" onClick={() => {
+              user ? navigate('/habit') : navigate('/login')
+            }}>시작하기</Button>
           </ScrollAniDiv>
         </Col>
       </Row>
@@ -146,4 +148,3 @@ export default function IntroPage() {
     
   );
 }
-
