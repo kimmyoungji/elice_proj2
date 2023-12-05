@@ -34,7 +34,7 @@ export default function LoginPage() {
       { email, password },
       { withCredentials: true })
       .then((res) => {
-        const user = res.data.user;
+        const user = res.user;
         dispatch({
           type: "LOGIN_SUCCESS",
           payload: user,
@@ -45,8 +45,7 @@ export default function LoginPage() {
   
       })
       .catch((e) => {
-        console.log("로그인 실패!", e.response.data.message)
-        alert(e.response.data.message);
+        console.log("로그인 실패!", e.response.message);
       });
 
   }
