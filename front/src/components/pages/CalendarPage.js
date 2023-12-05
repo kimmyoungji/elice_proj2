@@ -27,7 +27,7 @@ function CalendarPage() {
     
     axios({
         method: 'get',
-        url: "http://"+ window.location.hostname +":5001/fulfilledHabits",
+        url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
         params: {date: getDate()[1]},
         withCredentials: true,
         headers: {
@@ -46,11 +46,12 @@ function CalendarPage() {
         // 추후 수정예정
         console.log(error)
     }).finally(() => {
+      setIsLoading(true);
     });
 
     axios({
         method: 'get',
-        url: "http://"+ window.location.hostname +":5001/fulfilledHabits",
+        url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
         params: {month: getDate()[0]},
         withCredentials: true,
         headers: {
@@ -69,6 +70,7 @@ function CalendarPage() {
     });
     
   }, [isLoading])
+  console.log('월별 체크 날짜', monthCheckDate);
 
   return (
     <>

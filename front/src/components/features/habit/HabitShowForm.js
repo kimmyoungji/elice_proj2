@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Card, Button, ListGroup, Form } from 'react-bootstrap';
 import api from "../../utils/axiosConfig";
 
@@ -16,11 +16,11 @@ const getDate = () => {
 export default function HabitShowForm ({ userName, habits, selectedDate, selectedHabit, request }) {
     const [ check, setCheck ] = useState(false);
     const [ selectHabit, setSelectHabit ]= useState(selectedHabit)
-    const [ checkHabit, setCheckHabit ] = useState();
+    const [ checkHabit, setCheckHabit ] = useState([]);
     const [ fulfillHabit, setFulfillHabit ] = useState([]);
     const today = getDate();
   
-    const handleFulfillChange = (key) => {
+    const handleFulfillChange = useCallback((key) => {
       setFulfillHabit((prev) => {
           if (prev.includes(key)) {
               return prev.filter((habitKey) => habitKey !== key);
@@ -28,85 +28,99 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
           return [...prev, key]
           }
       })
-    }
+    }, [])
   
-    const getSelectedHabit = selectHabit.map((habit) => (
-        <ListGroup.Item>
-            <Form.Check inline key={habit} 
-            type='checkbox'
-            onClick={() => handleFulfillChange(habit)}
-            style={{ fontSize: "14px"}}/>{habits[habit]}
-        </ListGroup.Item>
-    ));
+    const getSelectedHabit = useMemo(() => {
+        return selectHabit.map((habit) => (
+            <ListGroup>
+            <ListGroup.Item>
+                <Form.Check inline key={habit} 
+                type='checkbox'
+                onClick={() => handleFulfillChange(habit)}
+                style={{ fontSize: "14px"}}/>{habits[habit]}
+            </ListGroup.Item>
+            </ListGroup>
+        ));
+    }, [selectHabit]) 
+
   
-    const getCheckedHabit = [checkHabit].map((habit) => (
-      <ListGroup.Item>
-          <Form.Check disabled key={habit} 
-          type='checkbox'
-          //onClick={() => handleRadioChange(day)}
-          style={{ fontSize: "14px"}}/>{habits[habit]}(완료)
-      </ListGroup.Item>
-      ));
+    const getCheckedHabit = useMemo(() => {
+        return <>
+                {selectHabit.map((habit) => (
+                <ListGroup.Item>
+                    <Form.Check inline key={habit} 
+                    type='checkbox'
+                    onClick={() => handleFulfillChange(habit)}
+                    style={{ fontSize: "14px"}}/>{habits[habit]}
+                </ListGroup.Item>
+                ))}
+                {[checkHabit].map((habit) => (
+                    <ListGroup.Item>
+                        <Form.Check disabled key={habit} 
+                        type='checkbox'
+                        //onClick={() => handleRadioChange(day)}
+                        style={{ fontSize: "12px"}}/>{habits[habit]} (완료)
+                    </ListGroup.Item>
+                    ))
+                }
+            </>
+    }, [selectHabit, checkHabit])
   
   
     const getDoneHabit = () => {
-        // 백에서 수정 중이심.
-        //   api({
-        //       method: 'get',
-        //       url: "http://"+ window.location.hostname +":5001/fulfilledHabits",
-        //       params: {date: today},
-        //       withCredentials: true,
-        //       headers: {
-        //       "Content-Type": "application/json",
-        //       }
-        //   })
-        //   .then((res) => {
-        //       console.log('res.data.habitIds', res.data.habitIds);
-        //       // const { habitId } = res.data.habitIds;
-        //       const habitId = ['habit2'];
-        //       if (!habitId) {
-        //       // setCheckHabit();
-        //       // let difference = selectedHabit.filter(x => !checkHabit.includes(x));
-        //       // setSelectHabit(difference)
-        //       } else {
-        //     //   setCheckHabit(habitId);
-        //       }
-        //   }).catch((error) => {
-        //       // 추후 수정예정
-        //       console.log(error)
-        //   }).then(() => {
-        //   });
+        console.log('시작');
+        if (!check) {
+            api({
+                method: 'get',
+                url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
+                params: {date: today},
+                withCredentials: true,
+                headers: {
+                "Content-Type": "application/json",
+                }
+            })
+            .then((res) => {
+                console.log('res.data.habitIds', res.data.habitIds);
+                const habitId = res.data.habitIds;
+                if (!habitId) {
+                  setCheckHabit(false);
+                } else {
+                  let difference = selectedHabit.filter(x => !habitId.includes(x));
+                  setCheckHabit(habitId);
+                  setSelectHabit(difference);
+                }
+            }).catch((error) => {
+                // 추후 수정예정
+                console.log(error)
+            }).finally(() => {
+                setCheck(true);
+            });
+        }
+          
   
         return (
           <>
               {/* 현재까지 체크된 습관이 없는 경우 */}
-              {!checkHabit && getSelectedHabit}
+              {checkHabit.length === 0 && getSelectedHabit}
   
               {/* 체크된 습관이 있는 경우 */}
-              {checkHabit && getSelectedHabit && getCheckedHabit}
+              {checkHabit.length !== 0  && getCheckedHabit}
           </>
         )
     }
-    useEffect(() => {
-      if (!checkHabit) {
-          console.log('checkHabit', checkHabit);
-          let difference = selectedHabit.filter(x => [!checkHabit].includes(x));
-          // setSelectHabit(difference)
-      }
-      }, [checkHabit, selectedHabit])
   
-  
+
       const fulfilledButton = () => {
           console.log(fulfillHabit);
           api({
               method: 'post',
-              url: "http://"+ window.location.hostname +":5001/fulfilledHabits",
+              url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
               withCredentials: true,
               headers: {
               "Content-Type": "application/json",
               },
               data: {
-                  fulfilledHabits: fulfillHabit
+                  fulfilledHabits: checkHabit
               }
           })
           .then((res) => {
@@ -115,7 +129,9 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
               // 추후 수정예정
               console.log(error)
           }).finally(() => {
+            setCheckHabit(checkHabit);
           });
+          
       }
     return (
         <>
@@ -136,14 +152,16 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
                   {getDoneHabit()}
                 </ListGroup>}
             </Card.Body>
-                <div className="d-flex justify-content-center">
-                    <Button className="select-button" variant="primary" size="lg"
-                        onClick={() => fulfilledButton()}
-                        style={{ width: "30%", fontSize: '13px', margin: "10px"}}>
-                            실천완료
-                    </Button>
-                </div>
+            <div className="d-flex justify-content-center">
+                <Button className="select-button" variant="primary" size="lg"
+                    onClick={() => fulfilledButton()}
+                    style={{ width: "30%", fontSize: '13px', margin: "10px"}}>
+                        실천완료
+                </Button>
+            </div>
         </>
     )
   }
+
+
 
