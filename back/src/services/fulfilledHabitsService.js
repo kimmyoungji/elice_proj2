@@ -49,13 +49,10 @@ class fulfilledHabitsService {
     try {
       return await knex.transaction(async (trx) => {
         fulfilled.setTrx(trx);
-        const today = dayjs();
+        const today = dayjs().format("YYYY-MM-DD");
 
-        console.log(today.format("YYYY-MM-DD"));
-        const result = await fulfilled.findByToday(
-          userId,
-          today.format("YYYY-MM-DD")
-        );
+        console.log(today);
+        const result = await fulfilled.findByDate(userId, today);
         console.log(result);
         return result.map((row) => row.habit_id);
       });

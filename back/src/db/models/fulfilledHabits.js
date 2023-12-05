@@ -6,22 +6,22 @@ class FulfilledHabitsModel {
     this.trx = trx;
   }
 
-  async findByToday(userId, today) {
-    try {
-      return await this.knex.select("habit_id").from("fulfilled_habits").where({
-        user_id: userId,
-        date: today,
-      });
-    } catch (error) {
-      console.error(
-        "오늘의 습관 달성 여부를 불러오다가 뭔가 잘못됨",
-        error.stack
-      );
-      throw new Error(
-        "오늘의 실천 습관 목록을 DB에서 불러오던 중 문제가 생겼습니다."
-      );
-    }
-  }
+  // async findByToday(userId, today) {
+  //   try {
+  //     return await this.knex.select("habit_id").from("fulfilled_habits").where({
+  //       user_id: userId,
+  //       date: today,
+  //     });
+  //   } catch (error) {
+  //     console.error(
+  //       "오늘의 습관 달성 여부를 불러오다가 뭔가 잘못됨",
+  //       error.stack
+  //     );
+  //     throw new Error(
+  //       "오늘의 실천 습관 목록을 DB에서 불러오던 중 문제가 생겼습니다."
+  //     );
+  //   }
+  // }
 
   async findByMonth(userId, thisMonth, nextMonth) {
     try {
