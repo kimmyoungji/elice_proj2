@@ -164,4 +164,3 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
         </>
     )
   }
-
