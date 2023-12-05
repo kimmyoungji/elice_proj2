@@ -27,7 +27,7 @@ class fulfilledHabitsService {
       console.log(result);
       return result.map((row) => row.habit_id);
     } catch (error) {
-      console.error(error.message);
+      console.error(error.stack);
       throw error;
     }
   }
@@ -41,7 +41,7 @@ class fulfilledHabitsService {
       console.log(result);
       return result.map((row) => row.habit_id);
     } catch (error) {
-      console.error(error.message);
+      console.error(error.stack);
       throw error;
     }
   }
@@ -62,9 +62,7 @@ class fulfilledHabitsService {
         const exist = await fulfilled.findExistingRecords(data4check);
         console.log("중복 습관id", exist);
         const data = checked.fulfilledHabits
-          .filter((el) => {
-            return !exist.some((id) => id.habit_id === el);
-          })
+          .filter((el) => !exist.some((id) => id.habit_id === el))
           .map((id) => ({
             user_id: userId,
             date: today,
@@ -79,7 +77,8 @@ class fulfilledHabitsService {
         }
       });
     } catch (error) {
-      console.error(error.message);
+      console.error(error.stack);
+      await trx.rollback();
       throw error;
     }
   }
@@ -99,6 +98,7 @@ class fulfilledHabitsService {
       });
     } catch (error) {
       console.error(error.stack);
+      await trx.rollback();
       throw error;
     }
   }

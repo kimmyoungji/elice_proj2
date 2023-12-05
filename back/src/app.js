@@ -37,9 +37,9 @@ app.use(
 
 // knex 연결 test
 testKnex();
-// addDummyUsers(50);
-// addDummyPlannedH(40);
-// addDummyFulfilledH(50);
+// addDummyUsers(1501, 2000);
+// addDummyPlannedH(10000);
+// addDummyFulfilledH(100000);
 
 // 라우터
 app.use("/graphs", introRouter);
