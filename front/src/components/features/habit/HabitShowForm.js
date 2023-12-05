@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Card, Button, ListGroup, Form } from 'react-bootstrap';
 import api from "../../utils/axiosConfig";
 
@@ -45,7 +45,6 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
 
   
     const getCheckedHabit = useMemo(() => {
-        console.log('getCheckedHabit checkHabit');
         return <>
                 {selectHabit.map((habit) => (
                 <ListGroup.Item>
@@ -57,10 +56,8 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
                 ))}
                 {checkHabit.map((habit) => (
                     <ListGroup.Item>
-                        <Form.Check disabled key={habit} 
-                        type='checkbox'
-                        //onClick={() => handleRadioChange(day)}
-                        style={{ fontSize: "12px"}}/>{habits[habit]} (완료)
+                        <Form key={habit} 
+                        style={{ fontSize: "12px"}}/><s>{habits[habit]} (완료)</s>
                     </ListGroup.Item>
                     ))
                 }
@@ -111,7 +108,6 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
   
 
       const fulfilledButton = () => {
-          console.log('실천완료 fulfillHabit', fulfillHabit);
           api({
               method: 'post',
               url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
@@ -130,7 +126,9 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
               // 추후 수정예정
               console.log(error)
           }).finally(() => {
+            alert('실천 완료 !😊');
             setCheckHabit(checkHabit);
+            setCheck(false);
             getDoneHabit();
           });
           

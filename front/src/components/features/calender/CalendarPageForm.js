@@ -7,7 +7,7 @@ import { Col, Container, Row, Card, ListGroup } from 'react-bootstrap';
 import './Calendar.css';
 import api from "../../utils/axiosConfig";
 
-// const checkExp = [{date:'2023-11-30'}, {date:'2023-12-01'}, {date:'2023-12-03'}];
+
 const habits = {
   habit1: "장바구니(에코백) 사용하기",
   habit2: "음식 포장 시 다회용기 사용하기",
@@ -17,12 +17,10 @@ const habits = {
   habit6: "무라벨 제품 구매하기"
 }
 
-// fullfilledDate만 받아올 것 //
 const CalendarForm = ({ habitlist, checkdate }) => {
   console.log('Form으로 넘겨진 데이터', habitlist, checkdate );
   const [habitList, setHabitList] = useState(habitlist);
   const [checkDate, setCheckDate ] = useState(checkdate.current);
-  const [firstRender, setFirstRender] = useState(true);
   // const [scrollPosition, setScrollPosition] = useState(0);
   // const [scroll, setScroll] = useState(false);
   const renderEventContent = useCallback((eventInfo) => {
@@ -163,7 +161,7 @@ const CalendarForm = ({ habitlist, checkdate }) => {
             <ListGroup variant="flush">
               {Object.keys(habitList).map((key) => (
                 <ListGroup.Item key={key}>
-                  {(key === "date" || key === "habit") ? habitList[key] : habits[key]}
+                  {(key === "date" || key === "habit") ? habitList[key] : habits[habitList[key]]}
                 </ListGroup.Item>))}
             </ListGroup>
           </Card>
