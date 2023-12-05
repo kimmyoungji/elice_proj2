@@ -3,8 +3,8 @@ import api from "../utils/axiosConfig";
 import HabitCard from "../features/HabitContents/HabitCard";
 import { Row, Container } from "react-bootstrap";
 import { CardWrapperDiv } from "../features/CommunityContents/CardScollStyled";
-import useScrollAnimation from "../../hooks/useScrollAnimation";
 import LoadingCard from "../features/CommunityContents/LoadingCard";
+import useIntersect from "../../hooks/useIntersect";
 
 
 export default function CommunityPage() {
@@ -12,21 +12,19 @@ export default function CommunityPage() {
   const lastCusor = useRef();
 
   const getTurtleCards = () =>
-    api.get(lastCusor.current ? `/users?cursor=${lastCusor.current}&limit=6` : "/users?limit=6", {
+    api.get(lastCusor.current ? `/users?userId=${lastCusor.current}&limit=6` : "/users?limit=6", {
       withCredentials: true,
     })
       .then(res => {
         console.log("응답데이터:", res.users);
         turtleCards === undefined ? setTurtleCards(res.users) : setTurtleCards((prev) => [...prev].concat(res.users));
         console.log("카드데이터:", turtleCards);
-        lastCusor.current = res.users[res.users.length - 1].cursors;
+        lastCusor.current = res.users[res.users.length - 1].userId;
         console.log("커서데이터:", lastCusor.current);
       })
       .catch(err => console.log("거북이를 불러오지 못했어요! 페이지를 새로고침 해주세요 🐢", err));
   
-  const { ref, isInViewport } = useScrollAnimation();
-  const lastIdx = turtleCards && turtleCards.length - 1;
-
+  const { ref, isInViewport } = useIntersect();
 
   useEffect(() => {
       getTurtleCards();
@@ -42,20 +40,14 @@ export default function CommunityPage() {
         <h3 className="text-center">🐢 거북이 구경하기 🐢</h3>
       </Row>
       <CardWrapperDiv>
-        {turtleCards && turtleCards.map((turtleCard) =>
-          turtleCard === turtleCards[lastIdx] ? (
-            <div ref={ref} key={turtleCard.cursors}>
+        {turtleCards && turtleCards.map((turtleCard, idx) =>
               <HabitCard
-                turtleCard={turtleCard}
-              />
-            </div>
-          ) : (
-              <HabitCard
-                key={turtleCard.cursors}
+                key={idx}
                 turtleCard={turtleCard}
           />
           )
-        )}
+        }
+        <div ref={ref}></div>
         { isInViewport && <LoadingCard/> }
       </CardWrapperDiv>
     </Container> 

@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useContext, useMemo } from "react";
 import { Nav, Navbar, Container, Image, Offcanvas } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import logo from "./logo.png";
+import api from "../../utils/axiosConfig";
+import { UserDispatchContext } from "../../../../src/Context/UserStateContext";
 
 const navMenus = [
   { href: "/", label: "서비스 소개", public: true },
@@ -29,6 +31,43 @@ function Navigation() {
   );
 
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   const loginInfo = localStorage.getItem("user");
+  //   if (loginInfo === "1") {
+  //     setIsLogin(true);
+  //   }
+  // }, []);
+
+  // const loginHandler = (email, password) => {
+  //   setIsLogin(true);
+  // };
+
+  // const logoutButton = document.getElementById("logout-button");
+  // if (logoutButton) {
+  //   logoutButton.click();
+  //   api.get("/users/logout").then((response) => {
+  //     console.log(response.data);
+  //   });
+  //   dispatch({ type: "LOGOUT" });
+  //   localStorage.removeItem("user");
+  // }
+
+  const dispatch = useContext(UserDispatchContext);
+  const handleClick = (e) => {
+    console.log(e.target.innerText);
+    const label = e.target.innerText;
+    if (label === "로그아웃") {
+      api.get("/users/logout").then((response) => {
+        console.log(response.data);
+        dispatch({ type: "LOGOUT" });
+        localStorage.removeItem("user");
+        navigate("/");
+      });
+    } else {
+      navigate("/userpage");
+    }
+  };
 
   return (
     <Navbar expand="False" className="bg-body-tertiary mb-3">
@@ -74,8 +113,8 @@ function Navigation() {
               {filteredSideMenus.map((menu, index) => (
                 <Nav.Link
                   key={`nav-menu-${index}`}
-                  onClick={() => {
-                    navigate(menu.href);
+                  onClick={(e) => {
+                    handleClick(e);
                   }}
                 >
                   {menu.label}
