@@ -19,7 +19,7 @@ export const CardWrapperDiv = ({ children }) => {
     const el = scrollDiv.current;
 
     el.scrollTo({
-      left: el.scrollLeft + deltaY,
+      left: el.scrollLeft + deltaY * 5,
       behavior: "smooth",
     });
     
