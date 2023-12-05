@@ -1,19 +1,28 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useCallback } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import check from "../../../assets/imgs/check.png"
 import { Col, Container, Row, Card, ListGroup } from 'react-bootstrap';
 import './Calendar.css';
-import axios from 'axios';
+import api from "../../utils/axiosConfig";
 
 // const checkExp = [{date:'2023-11-30'}, {date:'2023-12-01'}, {date:'2023-12-03'}];
+const habits = {
+  habit1: "장바구니(에코백) 사용하기",
+  habit2: "음식 포장 시 다회용기 사용하기",
+  habit3: "텀블러나 머그컵 사용하기",
+  habit4: "플라스틱 빨대 안 쓰기",
+  habit5: "플라스틱 세척해서 분리배출하기",
+  habit6: "무라벨 제품 구매하기"
+}
 
 // fullfilledDate만 받아올 것 //
-const CalendarForm = ({ habitlist, checkdata }) => {
-  
+const CalendarForm = ({ habitlist, checkdate }) => {
+  console.log('Form으로 넘겨진 데이터', habitlist, checkdate );
   const [habitList, setHabitList] = useState(habitlist);
-  const [checkData, setCheckData ] = useState(checkdata);
+  const [checkDate, setCheckDate ] = useState(checkdate.current);
+  const [firstRender, setFirstRender] = useState(true);
   // const [scrollPosition, setScrollPosition] = useState(0);
   // const [scroll, setScroll] = useState(false);
   const renderEventContent = useCallback((eventInfo) => {
@@ -26,14 +35,6 @@ const CalendarForm = ({ habitlist, checkdata }) => {
     )
   }, [])
 
-  const HabitListGroup = useMemo(() => {
-    return Object.keys(habitList).map((key) => (
-          <ListGroup.Item key={key}>
-            {habitList[key]}
-          </ListGroup.Item>
-    ))
-  },[habitList])
-
   // 체크한 이미지 클릭
   const handleCheckClick = (event) => {
     const startDate = event._instance.range.start
@@ -42,7 +43,7 @@ const CalendarForm = ({ habitlist, checkdata }) => {
     const clickFullDate = `${startDate.getFullYear()}-${month}-${date}`
     
     // api 요청으로 받은 데이터로 변경
-    axios({
+    api({
         method: 'get',
         url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
         params: {date: clickFullDate},
@@ -52,13 +53,14 @@ const CalendarForm = ({ habitlist, checkdata }) => {
         }
     })
     .then((res) => {
-        // 백에 수정 요청함
-        const habits = res.data.habitIds[clickFullDate];
-        console.log('habits', habits);
+        const habits = res.habitIds;
         setHabitList(() => ({
           date: clickFullDate,
-          habit1: habits
-        }))
+        ...habits.reduce((acc, habit, index) => {
+          acc[`habit${index + 1}`] = habit;
+          return acc;
+          }, {})
+        }));
     }).catch((error) => {
         // 추후 수정예정
         console.log(error)
@@ -81,7 +83,7 @@ const CalendarForm = ({ habitlist, checkdata }) => {
         setHabitList(habitlist)
     }
     console.log('월별 데이터 불러오기');
-      axios({
+    api({
           method: 'get',
           url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
           params: {month: monthString},
@@ -91,13 +93,10 @@ const CalendarForm = ({ habitlist, checkdata }) => {
           }
       })
       .then((res) => {
-          let checkDates = res.data.dates;
-          checkDates = checkDates.map((date) => date.split('T')[0]);
-          const checkDateObject = checkDates.reduce((acc, date) => {
-            acc["date"] = date;
-            return acc;
-          }, {});
-          setCheckData([checkDateObject]);
+          const checkDates = res.dates;
+          console.log('월별 체크 날짜', checkDates);
+          const checkDateObject = checkDates.map((date) => ({ date }));
+          setCheckDate(checkDateObject);
       }).catch((error) => {
           // 추후 수정예정
           console.log(error)
@@ -149,11 +148,11 @@ const CalendarForm = ({ habitlist, checkdata }) => {
                         return date.date.year +"년 "+(date.date.month +1)+"월" }}
                   eventBackgroundColor='transparent'
                   eventBorderColor='transparent'
-                  events={checkData}
+                  events={checkDate}
                   dateClick={(info) => {
                     setHabitList(() => ({
                       date: info.dateStr,
-                      habit1: "달성한 습관이 없습니다😭"
+                      habit: "달성한 습관이 없습니다😭"
                     }))
                   }}
                   datesSet={(e) => handleDatesSet(e)}
@@ -162,7 +161,10 @@ const CalendarForm = ({ habitlist, checkdata }) => {
           </Row>
           <Card className="calendar-text" style={{ width: '30rem', height: "300px" }}>
             <ListGroup variant="flush">
-              {HabitListGroup}
+              {Object.keys(habitList).map((key) => (
+                <ListGroup.Item key={key}>
+                  {(key === "date" || key === "habit") ? habitList[key] : habits[key]}
+                </ListGroup.Item>))}
             </ListGroup>
           </Card>
         </Col>
