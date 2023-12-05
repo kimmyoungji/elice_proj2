@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 
 
-export default function useScrollAnimation() {
+export default function useIntersect() {
   // 뷰포트 내부에 존재하는 지 확인하는 상태
   const [isInViewport, setIsInViewport] = useState(false);
   const ref = useRef();
