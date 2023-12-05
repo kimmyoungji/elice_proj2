@@ -17,7 +17,8 @@ class fulfilledHabitsService {
         return result.map((el) => el.date);
       });
     } catch (error) {
-      throw new Error(error);
+      console.error(error.stack);
+      throw error;
     }
   }
 
@@ -30,7 +31,8 @@ class fulfilledHabitsService {
         return result.map((row) => row.habit_id);
       });
     } catch (error) {
-      throw new Error(error);
+      console.error(error.message);
+      throw error;
     }
   }
 
@@ -52,7 +54,8 @@ class fulfilledHabitsService {
         return result.map((row) => row.habit_id);
       });
     } catch (error) {
-      throw new Error(error);
+      console.error(error.message);
+      throw error;
     }
   }
 
@@ -90,7 +93,8 @@ class fulfilledHabitsService {
         }
       });
     } catch (error) {
-      throw new Error(error);
+      console.error(error.message);
+      throw new error();
     }
   }
 
@@ -106,7 +110,8 @@ class fulfilledHabitsService {
         });
       });
     } catch (error) {
-      throw new Error(error);
+      console.error(error.stack);
+      throw error;
     }
   }
 }
