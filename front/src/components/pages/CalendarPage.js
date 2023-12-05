@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import CalendarForm from '../features/calender/CalendarPageForm';
-import axios from 'axios';
+import api from "../utils/axiosConfig";
 
 const getDate = () => {
   const today = new Date();
@@ -15,17 +15,11 @@ const getDate = () => {
 }
 
 function CalendarPage() {
-  const [isLoading, setIsLoading] = useState(false);
-  // api 연결 후 수정할 변수
-  let habitList = {}; //{date: '2023-11-25', habit1: "오늘 습관1", habit2: "오늘 습관2", habit3: "오늘 습관3"}
+  let habitList = {};
   let monthCheckDate = {};
 
-  // get api로 기본 정보 가져오기
-  // 달마다 습관 완료한 날짜만 받아옴 -> fullfilledDate : date 배열
   useEffect(() => {
-    console.log('get 요청');
-    
-    axios({
+    api({
         method: 'get',
         url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
         params: {date: getDate()[1]},
@@ -35,7 +29,7 @@ function CalendarPage() {
         }
     })
     .then((res) => {
-        const habitIds = res.data.habitIds;
+        const habitIds = res.habitIds;
         habitList.date = getDate()[1]
         if (habitIds.length === 0) {
           habitList.habit1 = "습관을 추가해주세요"
@@ -45,11 +39,9 @@ function CalendarPage() {
     }).catch((error) => {
         // 추후 수정예정
         console.log(error)
-    }).finally(() => {
-      setIsLoading(true);
-    });
-
-    axios({
+    })
+    
+    api({
         method: 'get',
         url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
         params: {month: getDate()[0]},
@@ -59,22 +51,17 @@ function CalendarPage() {
         }
     })
     .then((res) => {
-        // 백에 카멜케이스로 요청
-        const checkDates = res.data.dates;
+        const checkDates = res.dates;
         monthCheckDate.current = checkDates;
     }).catch((error) => {
         // 추후 수정예정
         console.log(error)
-    }).finally(() => {
-      setIsLoading(true);
-    });
-    
-  }, [isLoading])
-  console.log('월별 체크 날짜', monthCheckDate);
+    })
+  }, [])
 
   return (
     <>
-      {isLoading && <CalendarForm habitlist={habitList} checkdate={monthCheckDate}/>}
+      <CalendarForm habitlist={habitList} checkdate={monthCheckDate}/>
     </>
     
   );
