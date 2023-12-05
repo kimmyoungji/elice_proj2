@@ -22,7 +22,6 @@ export default function HabitPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const user = useContext(UserStateContext);
-  console.log('user', user);
 
   // 사용자가 계획한 습관이 있는지 확인
   // if yes -> 계획한 습관 띄우기
@@ -39,11 +38,15 @@ export default function HabitPage() {
     })
     .then((res) => {
       const habitIds = res.habitIds;
-      const date = res.habitDates[0];
-      setSelectedHabits( habitIds );
-      setSelectedDate(date);
+      if (habitIds.length === 0) {
+        setSelectedHabits( false );
+      } else {
+        const date = res.habitDates[0];
+        setSelectedHabits( habitIds );
+        setSelectedDate(date);
+      }
     }).catch((error) => {
-      setSelectedHabits( false );
+      
     }).finally(() => {
       setIsLoading(false);
     });
