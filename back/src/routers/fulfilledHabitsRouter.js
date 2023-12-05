@@ -13,6 +13,7 @@ fulfilledRouter.get("/", isLoggedIn, async (req, res, next) => {
     if (month) {
       //캘린더에 표시된 month 에 따라 습관을 실천한 모든 날짜를 조회
       const data = await fulfilledService.getDatesByMonth(userId, month);
+      console.log(data);
       res.status(200).json({
         message: `${month}월에 습관을 실천한 날짜 목록 조회 성공`,
         dates: data,

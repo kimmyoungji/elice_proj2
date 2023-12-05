@@ -23,7 +23,7 @@ class fulfilledHabitsService {
           nextMonth
         );
         console.log(result);
-        return result.map((el) => el.date);
+        return result.map((el) => dayjs(el.date).format("YYYY-MM-DD"));
       });
     } catch (error) {
       console.error(error.stack);
