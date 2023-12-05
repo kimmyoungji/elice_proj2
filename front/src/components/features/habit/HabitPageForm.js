@@ -9,7 +9,7 @@ import calendar from "../../../assets/imgs/calendar.png";
 export default function HabitForm ({ userInfo, habitList, selectedDate, selectedHabits }) {
     const { userName, turtleLevel } = userInfo;
     const { user } = useContext(UserStateContext);
-    console.log(user);
+    console.log('user', user);
 
     return (
         <>
