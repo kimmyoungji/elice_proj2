@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext, useMemo } from "react";
 import { Nav, Navbar, Container, Image, Offcanvas } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import logo from "./logo.png";
 import api from "../../utils/axiosConfig";
 import { UserDispatchContext } from "../../Context/UserStateContext";
@@ -18,31 +19,41 @@ const sideMenus = [
 ];
 
 function Navigation() {
-  const [isLogin, setIsLogin] = useState(false);
-  const filteredNavMenus = navMenus.filter((menu) => menu.public !== isLogin);
-  const filteredSideMenus = sideMenus.filter((menu) => menu.public !== isLogin);
+  const [isLogin, setIsLogin] = useState(true);
+  // const filteredNavMenus = navMenus.filter((menu) => menu.public !== isLogin);
+  // const filteredSideMenus = sideMenus.filter((menu) => menu.public !== isLogin);
+  const [filteredNavMenus, filteredSideMenus] = useMemo(
+    () => [
+      navMenus.filter((menu) => menu.public !== isLogin),
+      sideMenus.filter((menu) => menu.public !== isLogin),
+    ],
+    [isLogin]
+  );
 
-  useEffect(() => {
-    const loginInfo = localStorage.getItem("user");
-    if (loginInfo === "1") {
-      setIsLogin(true);
-    }
-  }, []);
+  const navigate = useNavigate();
 
-  const loginHandler = (email, password) => {
-    setIsLogin(true);
-  };
+  // useEffect(() => {
+  //   const loginInfo = localStorage.getItem("user");
+  //   if (loginInfo === "1") {
+  //     setIsLogin(true);
+  //   }
+  // }, []);
 
-  const logoutHandler = () => {
+  // const loginHandler = (email, password) => {
+  //   setIsLogin(true);
+  // };
+
+  const dispatch = useContext(UserDispatchContext);
+
+  const logoutButton = document.getElementById("logout-button");
+  if (logoutButton) {
+    logoutButton.click();
     api.get("/users/logout").then((response) => {
       console.log(response.data);
     });
-  };
-  const dispatch = useContext(UserDispatchContext);
-  dispatch({
-    type: "LOGOUT",
-  });
-  localStorage.removeItem("user");
+    dispatch({ type: "LOGOUT" });
+    localStorage.removeItem("user");
+  }
 
   return (
     <Navbar expand="False" className="bg-body-tertiary mb-3">
@@ -54,9 +65,11 @@ function Navigation() {
           {(isLogin ? navMenus : filteredNavMenus).map((menu, index) => (
             <Nav.Link
               key={`nav-menu-${index}`}
-              href={menu.href}
               className="me-3"
               style={{ fontSize: "85%" }}
+              onClick={() => {
+                navigate(menu.href);
+              }}
             >
               {menu.label}
             </Nav.Link>
@@ -84,7 +97,13 @@ function Navigation() {
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 pe-3">
               {filteredSideMenus.map((menu, index) => (
-                <Nav.Link key={`nav-menu-${index}`} href={menu.href}>
+                <Nav.Link
+                  key={`nav-menu-${index}`}
+                  id={menu.label === "로그아웃" ? "logout-button" : undefined}
+                  onClick={() => {
+                    navigate(menu.href);
+                  }}
+                >
                   {menu.label}
                 </Nav.Link>
               ))}
