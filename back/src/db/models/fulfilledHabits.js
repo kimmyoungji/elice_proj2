@@ -8,7 +8,6 @@ class FulfilledHabitsModel {
   async findByMonth(userId, thisMonth, nextMonth) {
     try {
       return await this.knex
-        .transacting(this.trx)
         .distinct("date")
         .from("fulfilled_habits")
         .where({
@@ -27,7 +26,6 @@ class FulfilledHabitsModel {
   async findByDate(user_id, date) {
     try {
       return await this.knex
-        .transacting(this.trx)
         .select("habit_id")
         .from("fulfilled_habits")
         .where({ user_id, date });
@@ -45,7 +43,6 @@ class FulfilledHabitsModel {
   async findExistingRecords(data) {
     try {
       return await this.knex
-        .transacting(this.trx)
         .select("habit_id")
         .from("fulfilled_habits")
         .whereIn("habit_id", data.habit_id)
