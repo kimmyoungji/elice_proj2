@@ -4,7 +4,7 @@ import HabitListForm from '../features/habit/HabitListForm';
 import { Card, Container, Image } from 'react-bootstrap';
 import logo from "../common/header/logo.png"
 import api from "../utils/axiosConfig";
-import { UserStateContext } from "../Context/UserStateContext";
+import { UserStateContext } from "../../Context/UserStateContext";
 
 
 const habitList = {
