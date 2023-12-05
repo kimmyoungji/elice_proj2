@@ -1,11 +1,11 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useReducer } from "react";
 import LoginReducer from "./LoginReducer";
 
-export const UserStateContext = createContext(null);
+export const UserStateContext = createContext(JSON.parse(localStorage.getItem('user')));
 export const UserDispatchContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
-  const [userState, dispatch] = useReducer(LoginReducer, {user : null})
+  const [userState, dispatch] = useReducer(LoginReducer, { user: null });
 
   return (
     <UserStateContext.Provider value={userState}>
@@ -13,5 +13,5 @@ export const UserProvider = ({ children }) => {
         {children}
       </UserDispatchContext.Provider>
     </UserStateContext.Provider>
-  )
-}
+  );
+};

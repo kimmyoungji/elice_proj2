@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { Button, Form, Stack, Row, Col, Container } from 'react-bootstrap';
 import { useNavigate } from "react-router";
-import axios from 'axios';
 import { UserDispatchContext } from "../../Context/UserStateContext";
+import api from "../utils/axiosConfig";
 
 
 export default function LoginPage() {
@@ -29,24 +29,17 @@ export default function LoginPage() {
   // 로그인 버튼 클릭 시, API post 요청
   const onClickLogin = (e) => {
     e.preventDefault();
-    // TODO : API_URL 정의해두고 사용, api config 파일 추가
-    axios.post("http://"+ window.location.hostname +":5001/users/login",
-      JSON.stringify({
-        email,
-        password,
-      }),
-      {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    })
+
+    api.post("/users/login",
+      { email, password },
+      { withCredentials: true })
       .then((res) => {
         const user = res.data.user;
         dispatch({
           type: "LOGIN_SUCCESS",
           payload: user,
         });
+        localStorage.setItem('user', JSON.stringify(user));
         alert(`${user.username}님 환영합니다!`);
         navigate("/habit", { replace: true });
   
