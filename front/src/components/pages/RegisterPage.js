@@ -5,7 +5,7 @@ import {
   validateEmail,
   validateUsername,
   validatePassword,
-} from "../features/Register/validate";
+} from "../utils/validate";
 import { api } from "../utils/axiosConfig";
 
 export default function RegisterPage() {

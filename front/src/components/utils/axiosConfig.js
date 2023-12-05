@@ -8,7 +8,7 @@ export const api = axios.create({
   baseURL: "http://" + window.location.hostname + ":5001", // API의 기본 URL
   //headers: { "Content-Type": "application/json" }, // HTTP 헤더 설정
   timeout: 5000, // 요청 타임아웃(ms)
-  //withCredentials: true, // 크로스 도메인 요청 시에도 인증 정보를 포함할지 여부
+  withCredentials: true, // 크로스 도메인 요청 시에도 인증 정보를 포함할지 여부
 });
 
 // [Client] ------[ Interceptor ] -----> [Server]
@@ -24,7 +24,7 @@ api.interceptors.request.use(
       request.headers["Content-Type"] = "application/json";
       request.data = JSON.stringify(request.data);
     }
-    // 4xx 범위의 에러를 캐치
+    // 4xx 범위의 에러를 캐치(404말고는 거의 없을 것)
     if (request.status >= 400 && request.status < 500) {
       console.log(`잘못된 요청입니다. ${request.status}`);
       alert("잘못된 요청입니다.");
@@ -43,7 +43,7 @@ api.interceptors.request.use(
 // 2xx 범위에 있는 상태 코드는 응답 데이터가 있는 작업 수행
 api.interceptors.response.use(
   function (response) {
-    return response;
+    return response.data;
   },
   // 2xx 외의 범위에 있는 상태 코드는 응답 오류가 있는 작업 수행.
   function (error) {
@@ -69,7 +69,7 @@ api.interceptors.response.use(
           return Promise.reject(error);
       }
     } else if (error.response.status >= 500) {
-      alert(`문제가 발생하였습니다. 관리자에게 문의하세요.`);
+      alert("문제가 발생하였습니다. 관리자에게 문의하세요.");
     }
     return Promise.reject(error);
   }

@@ -104,8 +104,6 @@ const UserPageForm = (props) => {
     api({
       method: "put",
       url: "/users",
-
-      withCredentials: true,
       data: formData,
       headers: {
         "Content-Type": "multipart/form-data",
@@ -124,7 +122,6 @@ const UserPageForm = (props) => {
     api({
       method: "delete",
       url: "/users",
-      withCredentials: true,
       headers: {
         "Content-Type": "application/json",
       },
@@ -137,7 +134,7 @@ const UserPageForm = (props) => {
       .catch((error) => {
         console.log(error);
       })
-      .then(() => {});
+      .finally(() => {});
   };
 
   return (
