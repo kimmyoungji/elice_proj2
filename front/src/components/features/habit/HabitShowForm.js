@@ -45,6 +45,7 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
 
   
     const getCheckedHabit = useMemo(() => {
+        console.log('getCheckedHabit checkHabit');
         return <>
                 {selectHabit.map((habit) => (
                 <ListGroup.Item>
@@ -54,7 +55,7 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
                     style={{ fontSize: "14px"}}/>{habits[habit]}
                 </ListGroup.Item>
                 ))}
-                {[checkHabit].map((habit) => (
+                {checkHabit.map((habit) => (
                     <ListGroup.Item>
                         <Form.Check disabled key={habit} 
                         type='checkbox'
@@ -68,7 +69,6 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
   
   
     const getDoneHabit = () => {
-        console.log('시작');
         if (!check) {
             api({
                 method: 'get',
@@ -80,8 +80,8 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
                 }
             })
             .then((res) => {
-                console.log('res.data.habitIds', res.data.habitIds);
-                const habitId = res.data.habitIds;
+                console.log('완료된 습관들 받기', res.habitIds);
+                const habitId = res.habitIds;
                 if (!habitId) {
                   setCheckHabit(false);
                 } else {
@@ -111,7 +111,7 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
   
 
       const fulfilledButton = () => {
-          console.log(fulfillHabit);
+          console.log('실천완료 fulfillHabit', fulfillHabit);
           api({
               method: 'post',
               url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
@@ -120,16 +120,18 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
               "Content-Type": "application/json",
               },
               data: {
-                  fulfilledHabits: checkHabit
+                  fulfilledHabits: fulfillHabit
               }
           })
           .then((res) => {
               console.log(res);
+              
           }).catch((error) => {
               // 추후 수정예정
               console.log(error)
           }).finally(() => {
             setCheckHabit(checkHabit);
+            getDoneHabit();
           });
           
       }
@@ -162,4 +164,3 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
         </>
     )
   }
-

@@ -39,7 +39,6 @@ const HabitAddForm = ({ userName, habits, onSubmit }) => {
   const [ addButton, setAddButton ] = useState(true);
   const [ selectedHabit, setSelectedHabit ] = useState([]);
   const [ selectedDate, setSelectedDate ] = useState(null);
-  const [ pass, setPass ] = useState(false);
 
   const handleAddButton = () => {
       setAddButton(false);
@@ -83,7 +82,6 @@ const HabitAddForm = ({ userName, habits, onSubmit }) => {
 
 
   const handleSelectButton = () => {
-      setPass(true)
       if (selectedHabit.length === 0) {
         alert('실천할 습관을 선택하세요');
       } else if (!selectedDate) {
@@ -110,8 +108,7 @@ const HabitAddForm = ({ userName, habits, onSubmit }) => {
             console.log(res)
         }).catch((error) => {
             console.log(error)
-        }).finally(() => {
-        });
+        })
       }
       
   }

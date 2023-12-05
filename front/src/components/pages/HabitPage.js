@@ -34,8 +34,8 @@ export default function HabitPage() {
       }
     })
     .then((res) => {
-      const habitIds = res.data.habitIds;
-      const date = res.data.habitDates[0];
+      const habitIds = res.habitIds;
+      const date = res.habitDates[0];
       setSelectedHabits( habitIds );
       setSelectedDate(date);
     }).catch((error) => {
