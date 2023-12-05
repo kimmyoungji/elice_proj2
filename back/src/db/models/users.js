@@ -17,6 +17,7 @@ class UsersModel {
 
   async findByCursor(cursor, limit) {
     try {
+      // 커서 속성을 미리 만들어둬야 할까요?
       cursor = cursor ? cursor : "99999999999999999999"; // Replace this with your actual cursor value
       limit = limit ? limit : "10";
       console.log("cursor and limit", cursor, limit);
