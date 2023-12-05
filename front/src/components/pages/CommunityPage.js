@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import api from "../utils/axiosConfig";
 import HabitCard from "../features/HabitContents/HabitCard";
 import { Row, Container } from "react-bootstrap";
@@ -8,98 +8,56 @@ import LoadingCard from "../features/CommunityContents/LoadingCard";
 
 
 export default function CommunityPage() {
-  const [turtleCards, setTurtleCards] = useState(
-    [{
-      idx: 0,
-      userName: "유림님",
-      level: 1,
-    },
-    {
-      idx: 1,
-      userName: "민정님",
-      level: 2,
-    },
-    {
-      idx: 2,
-      userName: "명지님",
-      level: 3,
-    },
-    {
-      idx: 3,
-      userName: "혜연님",
-      level: 4,
-    },
-    {
-      idx: 4,
-      userName: "성혜님",
-      level: 5,
-    },
-    {
-      idx: 5,
-      userName: "깍두기",
-      level: 1,
-    },
-    ]);
+  const [turtleCards, setTurtleCards] = useState();
+  const lastCusor = useRef();
 
-
-  // const getTurtleCards = () =>
-  //   api.get("/users",{
-  //     withCredentials: true,
-  //   })
-  //     .then(res => {
-  //       if (turtleCards) {
-  //         setTurtleCards(...turtleCards, res.data);
-  //       } else {
-  //         setTurtleCards(res.data);
-  //       }
-  //     })
-  //     .catch(err => alert("거북이를 불러오지 못했어요! 페이지를 새로고침 해주세요 🐢", err));
+  const getTurtleCards = () =>
+    api.get(lastCusor.current ? `/users?cursor=${lastCusor.current}&limit=6` : "/users?limit=6", {
+      withCredentials: true,
+    })
+      .then(res => {
+        console.log("응답데이터:", res.data.users);
+        turtleCards === undefined ? setTurtleCards(res.data.users) : setTurtleCards((prev) => [...prev].concat(res.data.users));
+        console.log("카드데이터:", turtleCards);
+        lastCusor.current = res.data.users[res.data.users.length - 1].cursors;
+        console.log("커서데이터:", lastCusor.current);
+      })
+      .catch(err => console.log("거북이를 불러오지 못했어요! 페이지를 새로고침 해주세요 🐢", err));
   
-  // useEffect(() => {
-  //   getTurtleCards();
-  // }, []);
-  
-  const [isLoading, setIsLoading] = useState(false);
-  const lastindex = turtleCards.length - 1;
   const { ref, isInViewport } = useScrollAnimation();
+  const lastIdx = turtleCards && turtleCards.length - 1;
 
 
   useEffect(() => {
-    if (isInViewport === true) {
-      // getTurtleCards();
-      setIsLoading(true);
-    } else {
-      setIsLoading(false);
-    }
+      getTurtleCards();
   }, [isInViewport]);
 
+  console.log("ref값은?:",ref);
+  console.log("ref가 뷰포트 안에 있는가?:",isInViewport);
 
 
   return (
-    <Container className="justify-content-center mt-5 " >
+    <Container className="justify-content-center mt-5 ">
       <Row className="mb-5">
         <h3 className="text-center">🐢 거북이 구경하기 🐢</h3>
       </Row>
       <CardWrapperDiv>
-        {turtleCards.map((turtleCard) =>
-          turtleCard.idx === lastindex ? (
-            <div ref={ref} key={turtleCard.idx}>
+        {turtleCards && turtleCards.map((turtleCard) =>
+          turtleCard === turtleCards[lastIdx] ? (
+            <div ref={ref} key={turtleCard.cursors}>
               <HabitCard
-                key={turtleCard.idx}
                 turtleCard={turtleCard}
               />
             </div>
           ) : (
-            <HabitCard
-            key={turtleCard.idx}
-            turtleCard={turtleCard}
+              <HabitCard
+                key={turtleCard.cursors}
+                turtleCard={turtleCard}
           />
           )
         )}
-        { isLoading && <LoadingCard/> }
+        { isInViewport && <LoadingCard/> }
       </CardWrapperDiv>
-    </Container>
+    </Container> 
   );
-}
-
-
+} 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -16,7 +16,7 @@ const CalendarForm = ( habitlist, checkdata ) => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [scroll, setScroll] = useState(false);
 
-  const renderEventContent = useMemo((eventInfo) => {
+  const renderEventContent = useCallback((eventInfo) => {
     console.log('eventInfo', eventInfo);
     return (
         <img className="check-image" src={check} alt="check"
