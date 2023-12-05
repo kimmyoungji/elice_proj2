@@ -16,10 +16,10 @@ export default function CommunityPage() {
       withCredentials: true,
     })
       .then(res => {
-        console.log("응답데이터:", res.data.users);
-        turtleCards === undefined ? setTurtleCards(res.data.users) : setTurtleCards((prev) => [...prev].concat(res.data.users));
+        console.log("응답데이터:", res.users);
+        turtleCards === undefined ? setTurtleCards(res.users) : setTurtleCards((prev) => [...prev].concat(res.users));
         console.log("카드데이터:", turtleCards);
-        lastCusor.current = res.data.users[res.data.users.length - 1].cursors;
+        lastCusor.current = res.users[res.users.length - 1].cursors;
         console.log("커서데이터:", lastCusor.current);
       })
       .catch(err => console.log("거북이를 불러오지 못했어요! 페이지를 새로고침 해주세요 🐢", err));

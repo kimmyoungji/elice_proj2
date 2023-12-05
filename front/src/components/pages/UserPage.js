@@ -8,7 +8,6 @@ const UserPage = () => {
       const res = await api({
         method: "get",
         url: "users/user",
-        withCredentials: true,
         headers: {
           "Content-Type": "application/json",
         },
