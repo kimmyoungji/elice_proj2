@@ -1,8 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Card, Button, Col, ListGroup, Form } from 'react-bootstrap';
-import './HabitPage.css';
-import axios from 'axios';
 import HabitShowForm from './HabitShowForm';
+import api from "../../utils/axiosConfig";
 
 
 export default function HabitCardForm ({ userName, habits, selectedDate, selectedHabits }) {
@@ -95,7 +94,7 @@ const HabitAddForm = ({ userName, habits, onSubmit }) => {
         }
 
         // 새롭게 선택한 습관 추가하기
-        axios({
+        api({
             method: 'post',
             url: "http://"+ window.location.hostname +":5001/planned-habits",
             withCredentials: true,
@@ -111,7 +110,7 @@ const HabitAddForm = ({ userName, habits, onSubmit }) => {
             console.log(res)
         }).catch((error) => {
             console.log(error)
-        }).then(() => {
+        }).finally(() => {
         });
       }
       

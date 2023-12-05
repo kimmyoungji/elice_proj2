@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -7,17 +7,16 @@ import { Col, Container, Row, Card, ListGroup } from 'react-bootstrap';
 import './Calendar.css';
 import axios from 'axios';
 
+// const checkExp = [{date:'2023-11-30'}, {date:'2023-12-01'}, {date:'2023-12-03'}];
 
 // fullfilledDate만 받아올 것 //
-const CalendarForm = ( habitlist, checkdata ) => {
-  const [habitList, setHabitList] = useState(habitlist.habitlist);
-  const checkExp = [{date:'2023-11-30'}, {date:'2023-12-01'}, {date:'2023-12-03'}];
-  const [checkData, setCheckData ] = useState(checkExp);
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const [scroll, setScroll] = useState(false);
-
+const CalendarForm = ({ habitlist, checkdata }) => {
+  
+  const [habitList, setHabitList] = useState(habitlist);
+  const [checkData, setCheckData ] = useState(checkdata);
+  // const [scrollPosition, setScrollPosition] = useState(0);
+  // const [scroll, setScroll] = useState(false);
   const renderEventContent = useCallback((eventInfo) => {
-    console.log('eventInfo', eventInfo);
     return (
         <img className="check-image" src={check} alt="check"
         onClick={() => handleCheckClick(eventInfo.event)}
@@ -27,13 +26,13 @@ const CalendarForm = ( habitlist, checkdata ) => {
     )
   }, [])
 
-  const HabitListGroup = () => {
+  const HabitListGroup = useMemo(() => {
     return Object.keys(habitList).map((key) => (
           <ListGroup.Item key={key}>
             {habitList[key]}
           </ListGroup.Item>
     ))
-  }
+  },[habitList])
 
   // 체크한 이미지 클릭
   const handleCheckClick = (event) => {
@@ -55,6 +54,7 @@ const CalendarForm = ( habitlist, checkdata ) => {
     .then((res) => {
         // 백에 수정 요청함
         const habits = res.data.habitIds[clickFullDate];
+        console.log('habits', habits);
         setHabitList(() => ({
           date: clickFullDate,
           habit1: habits
@@ -62,14 +62,10 @@ const CalendarForm = ( habitlist, checkdata ) => {
     }).catch((error) => {
         // 추후 수정예정
         console.log(error)
-    }).then(() => {
-    });
-
-    
+    })
   };
 
-  // 월 전환 버튼 클릭하다가 이번달에 오면, 오늘 날짜 기준의 습관 출력하도록
-  // 🤔 setState로 변경하는 방식보다 더 효율적인 방법이 있을까?
+ 
   const handleDatesSet = (e) => {
     const startDate = new Date(e.startStr);
     const endDate = new Date(e.endStr);
@@ -82,10 +78,9 @@ const CalendarForm = ( habitlist, checkdata ) => {
     const monthString = year + '-' + month;
 
     if (middleMonth === new Date().getMonth() + 1) {
-        setHabitList(habitlist.habitlist)
+        setHabitList(habitlist)
     }
-
-    console.log('middleMonth', middleMonth);
+    console.log('월별 데이터 불러오기');
       axios({
           method: 'get',
           url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
@@ -96,47 +91,49 @@ const CalendarForm = ( habitlist, checkdata ) => {
           }
       })
       .then((res) => {
-          const checkDates = res.data.dates;
-          console.log('checkDates', checkDates);
-          // setCheckData(checkDates);
+          let checkDates = res.data.dates;
+          checkDates = checkDates.map((date) => date.split('T')[0]);
+          const checkDateObject = checkDates.reduce((acc, date) => {
+            acc["date"] = date;
+            return acc;
+          }, {});
+          setCheckData([checkDateObject]);
       }).catch((error) => {
           // 추후 수정예정
           console.log(error)
-      }).then(() => {
-      });
-    
+      })
   };
 
-  const MyHabitData = () => {
-    return (
-      <>
-        <Card style={{ height: "200px" }}>
-          <Card.Title>
-            <h2>데이터 서비스</h2>
-          </Card.Title>
-        </Card>
-      </>
-    )
-  }
+  // const MyHabitData = () => {
+  //   return (
+  //     <>
+  //       <Card style={{ height: "200px" }}>
+  //         <Card.Title>
+  //           <h2>데이터 서비스</h2>
+  //         </Card.Title>
+  //       </Card>
+  //     </>
+  //   )
+  // }
 
   
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollPosition(window.scrollY);
-    };
-    window.addEventListener('scroll', handleScroll);
-  }, []);
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     setScrollPosition(window.scrollY);
+  //   };
+  //   window.addEventListener('scroll', handleScroll);
+  // }, []);
 
 
-  // 추후 작업 - 데이터 서비스 부분
-  // 한 번만 API 요청하도록
-  useEffect(() => {
-    const { offsetHeight } = document.documentElement;
-    if (!scroll && window.innerHeight >= Math.floor(offsetHeight - scrollPosition)) {
-      console.log('API 요청');
-      setScroll(true);
-    }
-  }, [scroll, scrollPosition]);
+  // // 추후 작업 - 데이터 서비스 부분
+  // // 한 번만 API 요청하도록
+  // useEffect(() => {
+  //   const { offsetHeight } = document.documentElement;
+  //   if (!scroll && window.innerHeight >= Math.floor(offsetHeight - scrollPosition)) {
+  //     console.log('API 요청');
+  //     setScroll(true);
+  //   }
+  // }, [scroll, scrollPosition]);
   
 
   return (
@@ -162,11 +159,10 @@ const CalendarForm = ( habitlist, checkdata ) => {
                   datesSet={(e) => handleDatesSet(e)}
                   height="550px"
                 />
-                  
           </Row>
           <Card className="calendar-text" style={{ width: '30rem', height: "300px" }}>
             <ListGroup variant="flush">
-              <HabitListGroup/>
+              {HabitListGroup}
             </ListGroup>
           </Card>
         </Col>
@@ -179,7 +175,7 @@ const CalendarForm = ( habitlist, checkdata ) => {
         <h6 style={{ color: "grey", marginTop: '30px', marginBottom: '50px' }}>
             ▼ 아래로 내려서 나만의 Data를 확인해보세요
         </h6><br />
-        {scroll && <MyHabitData/>}
+        {/* {scroll && <MyHabitData/>} */}
     </Container>
     </>
   );

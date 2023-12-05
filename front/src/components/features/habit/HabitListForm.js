@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Container, Col, Row, Modal, Button, Image } from 'react-bootstrap';
-import './HabitPage.css';
 import { ScrollAniDiv } from "../IntroContents/AnimationStyled";
-// import axios from 'axios';
+import api from "../../utils/axiosConfig";
 
 const cheerUpTexts = [
     "같이 시작해봐요, 플라스틱 줄이기! 😊",

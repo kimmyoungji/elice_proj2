@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import HabitForm from '../features/habit/HabitPageForm';
 import HabitListForm from '../features/habit/HabitListForm';
-import axios from 'axios';
+import { Card, Container, Image } from 'react-bootstrap';
+import logo from "../common/header/logo.png"
+import api from "../utils/axiosConfig";
 
 
 const habitList = {
@@ -23,7 +25,7 @@ export default function HabitPage() {
   // if no -> 추가하기 버튼 띄우기
   useEffect(() => {
     setIsLoading(true);
-    axios({
+    api({
       method: 'get',
       url: "http://"+ window.location.hostname +":5001/planned-habits",
       withCredentials: true,
@@ -32,7 +34,6 @@ export default function HabitPage() {
       }
     })
     .then((res) => {
-      console.log('Page', res.data);
       const habitIds = res.data.habitIds;
       const date = res.data.habitDates[0];
       setSelectedHabits( habitIds );
@@ -52,7 +53,17 @@ export default function HabitPage() {
 
   return (
     <>
-      {isLoading && <div>로딩중입니다</div>}
+      {isLoading &&
+        <Container className="loading-container">
+            <Card className="d-flex justify-content-center align-items-center"
+              style={{ height: '450px', marginTop: "7%" }}>
+                <Card.Title>
+                    <span style={{ fontSize: "30px" }}>로딩중입니다</span>
+                </Card.Title>
+                <Image src={logo} alt="Logo image"
+                style={{ width: '70%', marginTop: "70px" }}/>       
+            </Card>
+        </Container>}
       {selectedHabits !== null && <HabitForm
             userInfo={userInfo}
             habitList={habitList}
