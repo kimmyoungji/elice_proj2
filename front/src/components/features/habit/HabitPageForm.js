@@ -23,7 +23,6 @@ export default function HabitForm ({ userInfo, habitList, selectedDate, selected
     )
 };
 
-
 const TurtleForm = ({ userName, turtleLevel }) => {
     const navigate = useNavigate();
 
