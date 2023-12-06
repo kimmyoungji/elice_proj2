@@ -55,7 +55,7 @@ export default function RegisterPage() {
       <Col lg={5}>
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="registerEmail">
-            <Form.Label>이메일 주소</Form.Label>
+            <Form.Label>이메일</Form.Label>
             <Form.Control
               type="email"
               autoComplete="off"
@@ -63,7 +63,7 @@ export default function RegisterPage() {
               onChange={(e) => setEmail(e.target.value)}
             />
             {!isEmailValid && (
-              <Form.Text className="text-success">
+              <Form.Text className="text-danger">
                 이메일 형식이 올바르지 않습니다.
               </Form.Text>
             )}
@@ -78,7 +78,7 @@ export default function RegisterPage() {
               onChange={(e) => setPassword(e.target.value)}
             />
             {!isPasswordValid && (
-              <Form.Text className="text-success">
+              <Form.Text className="text-danger">
                 비밀번호는 8글자 이상부터 설정 가능합니다.
               </Form.Text>
             )}
@@ -93,7 +93,7 @@ export default function RegisterPage() {
               onChange={(e) => setConfirmPwd(e.target.value)}
             />
             {!isPasswordSame && (
-              <Form.Text className="text-success">
+              <Form.Text className="text-danger">
                 비밀번호가 일치하지 않습니다.
               </Form.Text>
             )}
@@ -108,7 +108,7 @@ export default function RegisterPage() {
               onChange={(e) => setUsername(e.target.value)}
             />
             {!isUsernameValid && (
-              <Form.Text className="text-success">
+              <Form.Text className="text-danger">
                 2~8자로 설정 가능합니다.
               </Form.Text>
             )}
