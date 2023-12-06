@@ -11,9 +11,6 @@ const UserPage = () => {
       const res = await api({
         method: "get",
         url: "users/user",
-        headers: {
-          "Content-Type": "application/json",
-        },
       });
       console.log(res);
     } catch (error) {
