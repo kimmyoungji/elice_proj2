@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card } from "react-bootstrap";
-import TurtleCardModal from "./TurtleCardModal";
 
 export default function UserTurtleCard({ turtleCard }) {
 
