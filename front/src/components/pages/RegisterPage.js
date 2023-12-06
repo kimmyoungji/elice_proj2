@@ -56,12 +56,23 @@ export default function RegisterPage() {
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="registerEmail">
             <Form.Label>이메일</Form.Label>
-            <Form.Control
-              type="email"
-              autoComplete="off"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            {isEmailValid ? (
+              <Form.Control
+                type="email"
+                autoComplete="off"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="bg-success p-2 text-dark bg-opacity-10"
+              />
+            ) : (
+              <Form.Control
+                type="email"
+                autoComplete="off"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="bg-danger p-2 text-dark bg-opacity-10"
+              />
+            )}
             {!isEmailValid && (
               <Form.Text className="text-danger">
                 이메일 형식이 올바르지 않습니다.
@@ -71,42 +82,83 @@ export default function RegisterPage() {
 
           <Form.Group controlId="registerPassword" className="mt-3">
             <Form.Label>비밀번호</Form.Label>
-            <Form.Control
-              type="password"
-              autoComplete="off"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {!isPasswordValid && (
+            {isPasswordValid ? (
+              <Form.Control
+                type="password"
+                autoComplete="off"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="bg-success p-2 text-dark bg-opacity-10"
+              />
+            ) : (
+              <Form.Control
+                type="password"
+                autoComplete="off"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="bg-danger p-2 text-dark bg-opacity-10"
+              />
+            )}
+            {!isPasswordValid ? (
               <Form.Text className="text-danger">
                 비밀번호는 8글자 이상부터 설정 가능합니다.
+              </Form.Text>
+            ) : (
+              <Form.Text className="text-success">
+                사용 가능한 비밀번호입니다.
               </Form.Text>
             )}
           </Form.Group>
 
-          <Form.Group controlId="registerConfirmPassword" className="mt-3">
+          <Form.Group controlId="registerConfirmPassword">
             <Form.Label>비밀번호 확인</Form.Label>
-            <Form.Control
-              type="password"
-              autoComplete="off"
-              value={confirmPwd}
-              onChange={(e) => setConfirmPwd(e.target.value)}
-            />
-            {!isPasswordSame && (
+            {!isPasswordSame ? (
+              <Form.Control
+                type="password"
+                autoComplete="off"
+                value={confirmPwd}
+                onChange={(e) => setConfirmPwd(e.target.value)}
+                className="bg-danger p-2 text-dark bg-opacity-10"
+              />
+            ) : (
+              <Form.Control
+                type="password"
+                autoComplete="off"
+                value={confirmPwd}
+                onChange={(e) => setConfirmPwd(e.target.value)}
+                className="bg-success p-2 text-dark bg-opacity-10"
+              />
+            )}
+            {!isPasswordSame ? (
               <Form.Text className="text-danger">
                 비밀번호가 일치하지 않습니다.
+              </Form.Text>
+            ) : (
+              <Form.Text className="text-success">
+                비밀번호가 일치합니다.
               </Form.Text>
             )}
           </Form.Group>
 
           <Form.Group controlId="registerName" className="mt-3">
             <Form.Label>닉네임</Form.Label>
-            <Form.Control
-              type="text"
-              autoComplete="off"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
+            {isUsernameValid ? (
+              <Form.Control
+                type="text"
+                autoComplete="off"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="bg-success p-2 text-dark bg-opacity-10"
+              />
+            ) : (
+              <Form.Control
+                type="text"
+                autoComplete="off"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="bg-danger p-2 text-dark bg-opacity-10"
+              />
+            )}
             {!isUsernameValid && (
               <Form.Text className="text-danger">
                 2~8자로 설정 가능합니다.
