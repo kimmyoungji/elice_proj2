@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
-import useIntersect from "../../../hooks/useIntersect";
+import { useIntersectionObserver } from "../../../hooks/useIntersectionObserver";
+import { useCallback, useState } from "react";
 
 // Fadein 효과
 const FadeinAnimation = keyframes`
@@ -35,7 +36,6 @@ const Article = styled.div`
   height: 100%;
   opacity: 0;
 
-
   &.frame-in {
     position: relative;
     animation: ${FadeinAnimation} 2s forwards;
@@ -45,17 +45,26 @@ const Article = styled.div`
     position: relative;
     animation: ${FadeoutAnimation} 2s forwards;
   }
-
 `;
-
 
 // viewport 내에 해당 DOM이 있을 때, frame-in 클래스 추가
 export const ScrollAniDiv = ({ children }) => {
-  const { ref, isInViewport } = useIntersect();
+
+  const [isInViewport, setIsInViewport] = useState(false);
+
+  const onIntersect = useCallback(([{isIntersecting}]) => {
+    if (isIntersecting) {
+      setIsInViewport(true);
+    } else {
+      setIsInViewport(false);
+    }
+  },[])
+
+  const [setTarget] = useIntersectionObserver({ onIntersect });
+  
   return (
-    <Article ref={ref} className={isInViewport ? "frame-in" : "frame-out"}>
+    <Article ref={setTarget} className={isInViewport ? "frame-in" : "frame-out"}>
       {children}
     </Article>
   );
 };
-
