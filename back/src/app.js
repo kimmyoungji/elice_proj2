@@ -38,7 +38,7 @@ app.use(
 
 // knex 연결 test
 testKnex();
-dummy_fulfilled(5000);
+//dummy_fulfilled(5000);
 // addDummyUsers(1501, 2000);
 // addDummyPlannedH(5000);
 // addDummyFulfilledH(1000);

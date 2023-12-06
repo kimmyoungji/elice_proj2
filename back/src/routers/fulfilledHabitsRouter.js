@@ -13,11 +13,15 @@ fulfilledRouter.get("/", isLoggedIn, async (req, res, next) => {
     //쿼리파라미터 중 month 가 사용된 경우
     if (month) {
       //캘린더에 표시된 month 에 따라 습관을 실천한 모든 날짜를 조회
-      const data = await fulfilledService.getDatesByMonth(userId, month);
-      console.log(data);
+      const monthData = await fulfilledService.getDatesByMonth(userId, month);
+      //주차별 실천한 습관 수 카운팅
+      const weekData = await fulfilledService.getCountsByWeeks(userId);
+      console.log(monthData);
+      console.log(weekData);
       res.status(200).json({
         message: `${month}월에 습관을 실천한 날짜 목록 조회 성공`,
-        dates: data,
+        dates: monthData,
+        counts: weekData,
       });
     }
     //쿼리 파라미터 중 date 가 사용된 경우

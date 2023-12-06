@@ -23,6 +23,23 @@ class FulfilledHabitsModel {
     }
   }
 
+  async findByWeek(userId, monday, sunday) {
+    try {
+      return await this.knex
+        .count("fulfilled_habit_id as count")
+        .from("fulfilled_habits")
+        .where({
+          user_id: userId,
+        })
+        .whereBetween("date", [monday, sunday]);
+    } catch (error) {
+      console.error("주차별 실천 습관 수 불러오다가 뭔가 잘못됨", error.stack);
+      throw new Error(
+        "요청한 주차에 실천한 습관 수를 DB에서 불러오던 중 문제가 생겼습니다."
+      );
+    }
+  }
+
   async findByDate(user_id, date) {
     try {
       return await this.knex
