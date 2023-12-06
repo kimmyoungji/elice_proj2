@@ -18,7 +18,6 @@ const habits = {
 }
 
 const CalendarForm = ({ habitlist, checkdate }) => {
-  console.log('Form으로 넘겨진 데이터', habitlist, checkdate );
   const [habitList, setHabitList] = useState(habitlist);
   const [checkDate, setCheckDate ] = useState(checkdate.current);
   // const [scrollPosition, setScrollPosition] = useState(0);
@@ -43,12 +42,8 @@ const CalendarForm = ({ habitlist, checkdate }) => {
     // api 요청으로 받은 데이터로 변경
     api({
         method: 'get',
-        url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
+        url: "/fulfilled-habits",
         params: {date: clickFullDate},
-        withCredentials: true,
-        headers: {
-        "Content-Type": "application/json",
-        }
     })
     .then((res) => {
         const habits = res.habitIds;
@@ -80,19 +75,14 @@ const CalendarForm = ({ habitlist, checkdate }) => {
     if (middleMonth === new Date().getMonth() + 1) {
         setHabitList(habitlist)
     }
-    console.log('월별 데이터 불러오기');
+
     api({
           method: 'get',
-          url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
+          url: "/fulfilled-habits",
           params: {month: monthString},
-          withCredentials: true,
-          headers: {
-          "Content-Type": "application/json",
-          }
       })
       .then((res) => {
           const checkDates = res.dates;
-          console.log('월별 체크 날짜', checkDates);
           const checkDateObject = checkDates.map((date) => ({ date }));
           setCheckDate(checkDateObject);
       }).catch((error) => {
