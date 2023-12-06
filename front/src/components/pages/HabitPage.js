@@ -22,6 +22,7 @@ export default function HabitPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const user = useContext(UserStateContext);
+  console.log('쿠키 user', user);
 
   // 사용자가 계획한 습관이 있는지 확인
   // if yes -> 계획한 습관 띄우기
