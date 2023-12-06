@@ -31,15 +31,14 @@ export default function LoginPage() {
     e.preventDefault();
 
     api.post("/users/login",
-      { email, password },
-      { withCredentials: true })
+      { email, password })
       .then((res) => {
         const user = res.user;
+        localStorage.setItem('user', JSON.stringify(user));
         dispatch({
           type: "LOGIN_SUCCESS",
           payload: user,
         });
-        localStorage.setItem('user', JSON.stringify(user));
         alert(`${user.username}님 환영합니다!`);
         navigate("/habit", { replace: true });
   

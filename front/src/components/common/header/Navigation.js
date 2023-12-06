@@ -21,7 +21,6 @@ const sideMenus = [
 
 function Navigation() {
   const user = useContext(UserStateContext);
-  console.log('user', user);
   const [isLogin, setIsLogin] = useState(true);
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const navigate = useNavigate();
@@ -42,11 +41,13 @@ function Navigation() {
 
   const dispatch = useContext(UserDispatchContext);
 
+
   const handleClick = (e) => {
     const label = e.target.innerText;
     if (label === "로그아웃") {
-      api.get("/users/logout").then((response) => {
-        console.log(response.data);
+      api.get("/users/logout")
+      .then((res) => {
+        console.log(res.data);
         dispatch({ type: "LOGOUT" });
         localStorage.removeItem("user");
       });
@@ -59,7 +60,7 @@ function Navigation() {
   const handleOffcanvasShow = () => {
     setShowOffcanvas(true);
   }
-  console.log(isLogin);
+  
   return (
     <Navbar expand="False" className="bg-body-tertiary mb-3">
       <Container fluid>

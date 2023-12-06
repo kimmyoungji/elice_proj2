@@ -30,11 +30,7 @@ export default function HabitPage() {
     setIsLoading(true);
     api({
       method: 'get',
-      url: "http://"+ window.location.hostname +":5001/planned-habits",
-      withCredentials: true,
-      headers: {
-        "Content-Type": "application/json",
-      }
+      url: "/planned-habits",
     })
     .then((res) => {
       const habitIds = res.habitIds;
