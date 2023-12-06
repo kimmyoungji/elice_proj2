@@ -13,7 +13,6 @@ class fulfilledHabitsService {
       const thisMonth = dayjs(month).startOf("month").format("YYYY-MM-DD");
       console.log(thisMonth, nextMonth);
       const result = await fulfilled.findByMonth(userId, thisMonth, nextMonth);
-      console.log(result);
       return result.map((el) => dayjs(el.date).format("YYYY-MM-DD"));
     } catch (error) {
       console.error(error.stack);
@@ -78,7 +77,7 @@ class fulfilledHabitsService {
       });
     } catch (error) {
       console.error(error.stack);
-      await trx.rollback();
+      // await trx.rollback();
       throw error;
     }
   }
@@ -91,14 +90,13 @@ class fulfilledHabitsService {
         await Promise.all(
           habitIdArray.map(async (el) => {
             const data = { user_id: userId, habit_id: el, date: today };
-            console.log(data);
             await fulfilled.delete(data);
           })
         );
       });
     } catch (error) {
       console.error(error.stack);
-      await trx.rollback();
+      // await trx.rollback();
       throw error;
     }
   }

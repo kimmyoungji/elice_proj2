@@ -1,7 +1,7 @@
 const usersRouter = require("express").Router();
 const usersService = require("../services/usersService.js");
 const isLoggedIn = require("../middlewares/isLoggedIn.js");
-const cookieOption = require("../lib/cookieOption.js");
+const { cookieOption, cookieOption2 } = require("../lib/cookieOption.js");
 const {
   INVALID_USER_Error,
   BadRequestError,
@@ -44,7 +44,7 @@ usersRouter.post("/login", async (req, res, next) => {
 // GET /logout
 usersRouter.get("/logout", isLoggedIn, async (req, res, next) => {
   try {
-    res.cookie("accessToken", "", cookieOption);
+    res.cookie("accessToken", "", cookieOption2);
     res.status(200).json({
       message: "로그아웃 성공",
     });
@@ -60,7 +60,9 @@ usersRouter.get("/user", isLoggedIn, async (req, res, next) => {
     const user_id = req.currentUserId;
 
     // user_id로 사용자정보 가져오기
-    const user = await usersService.getUserById(user_id);
+    let user = await usersService.getUserById(user_id);
+    const level = await userService.setAndGetUserLevel(user_id);
+    user.level = level;
 
     // 응답
     res.status(200).send({

@@ -1,6 +1,7 @@
 const fulfilledRouter = require("express").Router();
 const fulfilledService = require("../services/fulfilledHabitsService");
 const isLoggedIn = require("../middlewares/isLoggedIn.js");
+const { stringToArr } = require("../lib/stringToarray.js");
 
 fulfilledRouter.get("/", isLoggedIn, async (req, res, next) => {
   try {
@@ -46,6 +47,9 @@ fulfilledRouter.post("/", isLoggedIn, async (req, res, next) => {
   try {
     const userId = parseInt(req.currentUserId);
     const checked = req.body; //실천 체크한 습관
+    if (typeof checked.fulfilledHabits === "string") {
+      checked.fulfilledHabits = stringToArr(checked.fulfilledHabits);
+    }
     await fulfilledService.addFulfilledHabits(userId, checked);
     res.status(200).json({ message: "습관 실천 내역 저장 성공" });
   } catch (error) {
@@ -56,8 +60,12 @@ fulfilledRouter.post("/", isLoggedIn, async (req, res, next) => {
 fulfilledRouter.delete("/", isLoggedIn, async (req, res, next) => {
   try {
     const userId = parseInt(req.currentUserId);
-    const habitIdArray = req.body.fullfilledHabitId;
-    await fulfilledService.deleteFulfilledHabits(userId, habitIdArray);
+    let habitIds = req.body.fullfilledHabitId;
+    if (typeof habitIds === "string") {
+      habitIds = stringToArr(habitIds);
+    }
+    console.log(habitIds);
+    await fulfilledService.deleteFulfilledHabits(userId, habitIds);
     res.status(200).json({ message: "습관 실천 취소 성공" });
   } catch (error) {
     next(error);
