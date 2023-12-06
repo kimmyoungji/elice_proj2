@@ -6,6 +6,7 @@ import check from "../../../assets/imgs/check.png"
 import { Col, Container, Row, Card, ListGroup } from 'react-bootstrap';
 import './Calendar.css';
 import api from "../../utils/axiosConfig";
+import { CalendarChart } from "../../common/Chart";
 
 
 const habits = {
@@ -22,6 +23,11 @@ const CalendarForm = ({ habitlist, checkdate }) => {
   const [checkDate, setCheckDate ] = useState(checkdate.current);
   // const [scrollPosition, setScrollPosition] = useState(0);
   // const [scroll, setScroll] = useState(false);
+  const [charts, setCharts] = useState(false);
+  const [lastWeekCount, setLastWeekCount] = useState(false);
+  const [thisWeekCount, setThisWeekCount] = useState(false);
+  const [render, setRender] = useState(false);
+
   const renderEventContent = useCallback((eventInfo) => {
     return (
         <img className="check-image" src={check} alt="check"
@@ -85,6 +91,20 @@ const CalendarForm = ({ habitlist, checkdate }) => {
           const checkDates = res.dates;
           const checkDateObject = checkDates.map((date) => ({ date }));
           setCheckDate(checkDateObject);
+
+          const countDate = res.counts;
+          const lastWeekCount = countDate.lastWeek;
+          const thisWeekCount = countDate.thisWeek;
+          const countDateArr = [];
+          Object.keys(countDate).map((key) => (
+            countDateArr.push({
+              'week': key, "value": countDate[key]
+            })
+          ))
+          setCharts(countDateArr);
+          setLastWeekCount(lastWeekCount);
+          setThisWeekCount(thisWeekCount);
+          setRender(true);
       }).catch((error) => {
           // 추후 수정예정
           console.log(error)
@@ -121,6 +141,7 @@ const CalendarForm = ({ habitlist, checkdate }) => {
   //     setScroll(true);
   //   }
   // }, [scroll, scrollPosition]);
+
   
 
   return (
@@ -157,20 +178,25 @@ const CalendarForm = ({ habitlist, checkdate }) => {
           </Card>
         </Col>
       </Container>
+      {render && <>
       <Container
         className='text-center'
         style={{ marginTop: '30px'}}>
-        <h3>지난 주 *회 달성 ! 0회 남았어요😊</h3>
-
-        <h6 style={{ color: "grey", marginTop: '30px', marginBottom: '50px' }}>
-            ▼ 아래로 내려서 나만의 Data를 확인해보세요
+        <h3>지난 주 {lastWeekCount}회 달성</h3>
+        {(lastWeekCount - thisWeekCount) > 0 ?
+        <h3>{lastWeekCount - thisWeekCount}회 남았어요😊</h3>
+        : <h3>이번주는 지난주보다 실천을 많이 했어요 !!</h3>}
+        <h6 style={{ color: "grey", marginTop: '30px' }}>
+            ▼ 아래에서 나만의 Data를 확인해보세요
         </h6><br />
         {/* {scroll && <MyHabitData/>} */}
-    </Container>
+      </Container>
+      <Container className="d-flex justify-content-center" style={{ marginBottom: "30px"}}>
+        {charts && <CalendarChart data={charts}/>}
+      </Container>
+      </>}
     </>
   );
 }
-
-// 데이터 서비스 진행하면, 컴포넌트로 따로 뺄 것.
 
 export default CalendarForm;

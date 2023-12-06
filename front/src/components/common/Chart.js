@@ -2,10 +2,8 @@ import React from 'react';
 import { Bar, BarChart, XAxis, YAxis, Legend } from "recharts";
 
 
-export default function Chart({data}) {
-  
+export function IntroChart({data}) {
   const keys = Object.keys(data[0]);
-
 
   return (
     <BarChart width={600} height={250} data={data}>
@@ -19,5 +17,17 @@ export default function Chart({data}) {
         </>
       )}
     </BarChart>
+  );
+}
+
+export function CalendarChart ({data}) {
+  const keys = Object.keys(data[0]);
+
+  return (
+      <BarChart width={700} height={200} data={data}>
+        <XAxis dataKey={keys[0]} />
+        <YAxis domain={['dataMin - 0.0', 'dataMax + 1.0']}/>
+        <Bar name="일별데이터" dataKey={keys[1]} fill="#82ca9d" /> 
+      </BarChart>
   );
 }
