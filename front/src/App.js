@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import { UserProvider } from "./Context/UserStateContext";
 import Navigation from "./components/common/header/Navigation";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LoadingPage from "./components/common/header/LoadingPage";
 
 const IntroPage = React.lazy(() => import("./components/pages/IntroPage"));
 const LoginPage = React.lazy(() => import("./components/pages/LoginPage"));
@@ -22,7 +23,7 @@ export default function App() {
     <UserProvider>
       <BrowserRouter>
         <Navigation />
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<LoadingPage/>}>
           <Routes>
             <Route path="/" element={<IntroPage />} />
             <Route path="/login" element={<LoginPage />} />

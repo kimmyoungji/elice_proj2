@@ -13,7 +13,7 @@ export default function CommunityPage() {
 
   const onIntersect = useCallback(([{isIntersecting}]) => {
     if (isIntersecting) {
-      console.log(isIntersecting);
+      // console.log(isIntersecting);
       setIsLoading(true);
       api
       .get(
