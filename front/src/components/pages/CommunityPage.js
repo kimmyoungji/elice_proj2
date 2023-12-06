@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from "react";
 import api from "../utils/axiosConfig";
-import HabitCard from "../features/HabitContents/HabitCard";
+import UserTurtleCard from "../features/CommunityContents/UserTurtleCard";
 import { Row, Container } from "react-bootstrap";
 import { CardWrapperDiv } from "../features/CommunityContents/CardScollStyled";
 import LoadingCard from "../features/CommunityContents/LoadingCard";
@@ -44,14 +44,16 @@ export default function CommunityPage() {
   const [setTarget] = useIntersectionObserver({onIntersect});
 
   return (
-    <Container className="justify-content-center mt-5 ">
+    <Container className="justify-content-center mt-5">
       <Row className="mb-5">
-        <h3 className="text-center">🐢 거북이 구경하기 🐢</h3>
+        <h3 className="text-center mb-3">🐢 거북이 구경하기 🐢</h3>
+        <span className="text-center text-secondary">다른 유저의 거북이는 이만큼 자랐어요!</span>
+        <span className="text-center text-secondary">매일매일 습관 실천으로 거북이를 키워보아요~</span>
       </Row>
       <CardWrapperDiv>
         {turtleCards &&
           turtleCards.map((turtleCard, idx) => (
-            <HabitCard key={idx} turtleCard={turtleCard} />
+            <UserTurtleCard key={idx} turtleCard={turtleCard}/>
           ))}
         <div ref={setTarget}></div>
         {setIsLoading && <LoadingCard />}
