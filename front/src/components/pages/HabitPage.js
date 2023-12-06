@@ -28,10 +28,7 @@ export default function HabitPage() {
   // if no -> 추가하기 버튼 띄우기
   useEffect(() => {
     setIsLoading(true);
-    api({
-      method: 'get',
-      url: "/planned-habits",
-    })
+    api.get("/planned-habits")
     .then((res) => {
       const habitIds = res.habitIds;
       if (habitIds.length === 0) {

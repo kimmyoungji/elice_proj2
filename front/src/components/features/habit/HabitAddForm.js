@@ -59,14 +59,11 @@ export default function HabitAddForm ({ userName, habits, onSubmit }) {
           }
   
           // 새롭게 선택한 습관 추가하기
-          api({
-              method: 'post',
-              url: "/planned-habits",
-              data: {
+          api.post("/planned-habits", {
                   habitIds: selectedHabit,
                   habitDate: selectedDate
               }
-          })
+          )
           .then((res) => {
               console.log(res)
           }).catch((error) => {

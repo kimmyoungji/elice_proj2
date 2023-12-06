@@ -103,13 +103,9 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
   
 
       const fulfilledButton = () => {
-          api({
-              method: 'post',
-              url: "/fulfilled-habits",
-              data: {
+          api.post("/fulfilled-habits", {
                   fulfilledHabits: fulfillHabit
-              }
-          })
+              })
           .then((res) => {
               console.log(res);
               

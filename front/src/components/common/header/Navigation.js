@@ -49,7 +49,6 @@ function Navigation() {
       .then((res) => {
         console.log(res.data);
         dispatch({ type: "LOGOUT" });
-        localStorage.removeItem("user");
       });
     }
   };
