@@ -79,7 +79,7 @@ class fulfilledHabitsService {
       });
     } catch (error) {
       console.error(error.stack);
-      await trx.rollback();
+      // await trx.rollback();
       throw error;
     }
   }
@@ -92,14 +92,13 @@ class fulfilledHabitsService {
         await Promise.all(
           habitIdArray.map(async (el) => {
             const data = { user_id: userId, habit_id: el, date: today };
-            console.log(data);
             await fulfilled.delete(data);
           })
         );
       });
     } catch (error) {
       console.error(error.stack);
-      await trx.rollback();
+      // await trx.rollback();
       throw error;
     }
   }

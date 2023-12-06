@@ -5,4 +5,11 @@ const cookieOption = {
   maxAge: 14 * 24 * 60 * 60 * 1000,
 };
 
-module.exports = cookieOption;
+const cookieOption2 = {
+  path: "/",
+  httpOnly: true,
+  sameSite: "lax",
+  maxAge: 0,
+};
+
+module.exports = { cookieOption, cookieOption2 };

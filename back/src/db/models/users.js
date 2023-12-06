@@ -23,7 +23,6 @@ class UsersModel {
       );
       user_id = user_id ? user_id : minIdPacket[0][0].minId - 1; // Replace this with your actual user_id value
       limit = limit ? Number(limit) : 10;
-      console.log("user_id and limit", user_id, limit);
       return this.knex("users")
         .transacting(this.trx)
         .select("user_id AS userId", "username", "email", "level")
@@ -78,6 +77,43 @@ class UsersModel {
         .update(toUpdate);
     } catch (err) {
       throw new Error(err);
+    }
+  }
+
+  async updateLevel(user_id) {
+    try {
+      let countPacket = await this.knex("fulfilled_habits")
+        .transacting(this.trx)
+        .count("*", { as: "count" })
+        .where("user_id", user_id);
+      const count = countPacket[0].count;
+      let level = 1;
+      switch (count) {
+        case count >= 0:
+          level = 1;
+          break;
+        case count >= 10:
+          level = 2;
+          break;
+        case count >= 25:
+          level = 3;
+          break;
+        case count >= 45:
+          level = 4;
+          break;
+        case count >= 70:
+          level = 5;
+          break;
+        default:
+          level = 1;
+      }
+      await this.knex("users")
+        .transacting(this.trx)
+        .where("user_id", user_id)
+        .update({ level });
+      return level;
+    } catch (error) {
+      throw new Error("레벨 정보 업데이트 실패");
     }
   }
 
