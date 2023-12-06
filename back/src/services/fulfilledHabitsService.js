@@ -14,6 +14,7 @@ class fulfilledHabitsService {
       console.log(thisMonth, nextMonth);
       const result = await fulfilled.findByMonth(userId, thisMonth, nextMonth);
       console.log(result);
+
       return result.map((el) => dayjs(el.date).format("YYYY-MM-DD"));
     } catch (error) {
       console.error(error.stack);
