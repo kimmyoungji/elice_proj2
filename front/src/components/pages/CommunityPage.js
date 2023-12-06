@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from "react";
 import api from "../utils/axiosConfig";
-import HabitCard from "../features/HabitContents/HabitCard";
+import UserTurtleCard from "../features/CommunityContents/UserTurtleCard";
 import { Row, Container } from "react-bootstrap";
 import { CardWrapperDiv } from "../features/CommunityContents/CardScollStyled";
 import LoadingCard from "../features/CommunityContents/LoadingCard";
@@ -53,7 +53,7 @@ export default function CommunityPage() {
       <CardWrapperDiv>
         {turtleCards &&
           turtleCards.map((turtleCard, idx) => (
-            <HabitCard key={idx} turtleCard={turtleCard}/>
+            <UserTurtleCard key={idx} turtleCard={turtleCard}/>
           ))}
         <div ref={setTarget}></div>
         {setIsLoading && <LoadingCard />}
