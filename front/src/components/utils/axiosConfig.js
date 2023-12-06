@@ -7,7 +7,7 @@ import axios from "axios";
 export const api = axios.create({
   baseURL: "http://" + window.location.hostname + ":5001", // API의 기본 URL
   //headers: { "Content-Type": "application/json" }, // HTTP 헤더 설정
-  timeout: 5000, // 요청 타임아웃(ms)
+  timeout: 10000, // 요청 타임아웃(ms)
   withCredentials: true, // 크로스 도메인 요청 시에도 인증 정보를 포함할지 여부
 });
 
