@@ -19,10 +19,7 @@ export default function CommunityPage() {
       .get(
         lastCusor.current
           ? `/users?userId=${lastCusor.current}&limit=6`
-          : "/users?limit=6",
-        {
-          withCredentials: true,
-        }
+          : "/users?limit=6"
       )
       .then((res) => {
         console.log("응답데이터:", res.users);
