@@ -1,13 +1,11 @@
 import { createContext, useReducer } from "react";
 import LoginReducer from "./LoginReducer";
 
-let user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : "";
-
-export const UserStateContext = createContext(user);
+export const UserStateContext = createContext(null);
 export const UserDispatchContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
-  const [userState, dispatch] = useReducer(LoginReducer, user);
+  const [userState, dispatch] = useReducer(LoginReducer, {user : null});
 
   return (
     <UserStateContext.Provider value={userState}>
