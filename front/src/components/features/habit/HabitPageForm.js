@@ -8,7 +8,6 @@ import calendar from "../../../assets/imgs/calendar.png";
 export default function HabitForm ({ userInfo, habitList, selectedDate, selectedHabits }) {
     const { userName, turtleLevel } = userInfo;
     
-
     return (
         <>
             <Container className="habits-container">

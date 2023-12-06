@@ -33,12 +33,12 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
     const getSelectedHabit = useMemo(() => {
         return selectHabit.map((habit) => (
             <ListGroup>
-            <ListGroup.Item>
-                <Form.Check inline key={habit} 
-                type='checkbox'
-                onClick={() => handleFulfillChange(habit)}
-                style={{ fontSize: "14px"}}/>{habits[habit]}
-            </ListGroup.Item>
+                <ListGroup.Item>
+                    <Form.Check inline key={habit} 
+                    type='checkbox'
+                    onClick={() => handleFulfillChange(habit)}
+                    style={{ fontSize: "14px"}}/>{habits[habit]}
+                </ListGroup.Item>
             </ListGroup>
         ));
     }, [selectHabit]) 
@@ -69,15 +69,10 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
         if (!check) {
             api({
                 method: 'get',
-                url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
+                url: "/fulfilled-habits",
                 params: {date: today},
-                withCredentials: true,
-                headers: {
-                "Content-Type": "application/json",
-                }
             })
             .then((res) => {
-                console.log('완료된 습관들 받기', res.habitIds);
                 const habitId = res.habitIds;
                 if (!habitId) {
                   setCheckHabit(false);
@@ -110,11 +105,7 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
       const fulfilledButton = () => {
           api({
               method: 'post',
-              url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
-              withCredentials: true,
-              headers: {
-              "Content-Type": "application/json",
-              },
+              url: "/fulfilled-habits",
               data: {
                   fulfilledHabits: fulfillHabit
               }

@@ -22,16 +22,11 @@ function CalendarPage() {
   useEffect(() => {
     api({
         method: 'get',
-        url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
+        url: "/fulfilled-habits",
         params: {date: getDate()[1]},
-        withCredentials: true,
-        headers: {
-        "Content-Type": "application/json",
-        }
     })
     .then((res) => {
         const habitIds = res.habitIds;
-        // habitList.date = getDate()[1]
         if (habitIds.length === 0) {
           setHabitList(() => ({
             date: getDate()[1],
@@ -56,12 +51,8 @@ function CalendarPage() {
     
     api({
         method: 'get',
-        url: "http://"+ window.location.hostname +":5001/fulfilled-habits",
+        url: "/fulfilled-habits",
         params: {month: getDate()[0]},
-        withCredentials: true,
-        headers: {
-        "Content-Type": "application/json",
-        }
     })
     .then((res) => {
         const checkDates = res.dates;

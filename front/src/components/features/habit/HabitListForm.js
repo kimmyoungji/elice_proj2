@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Container, Col, Row, Modal, Button, Image } from 'react-bootstrap';
 import { ScrollAniDiv } from "../IntroContents/AnimationStyled";
-import api from "../../utils/axiosConfig";
 
 const cheerUpTexts = [
     "같이 시작해봐요, 플라스틱 줄이기! 😊",
@@ -18,7 +17,6 @@ export default function HabitListForm ({ habitList }) {
 
     const HabitModal = (props) => {
         const { key, name } = props.habitinfo;
-        console.log('HabitModal 모달');
         return (
             <Modal
                 {...props}
@@ -49,7 +47,6 @@ export default function HabitListForm ({ habitList }) {
             key: key,
             name: name });
         setModalShow(true)
-        console.log('handleModal 모달');
     }
 
     useEffect(() => {
