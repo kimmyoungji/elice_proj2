@@ -15,6 +15,10 @@ class fulfilledHabitsService {
       const result = await fulfilled.findByMonth(userId, thisMonth, nextMonth);
       console.log(result);
 
+      const today = dayjs();
+      const thisMonday = today.startOf("week");
+      const thisSunday = today.endOf("week");
+
       return result.map((el) => dayjs(el.date).format("YYYY-MM-DD"));
     } catch (error) {
       console.error(error.stack);
