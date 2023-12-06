@@ -84,6 +84,21 @@ class userService {
     }
   }
 
+  static async setAndGetUserLevel(user_id) {
+    try {
+      return await knex.transaction(async (trx) => {
+        // DB: transaction 객체전달하기
+        users.setTrx(trx);
+        let level = await users.updateLevel(user_id);
+
+        return level;
+      });
+    } catch (err) {
+      // 여기가 실행된면 트랜젝션이 rollback 된것이다.
+      throw err;
+    }
+  }
+
   static async addUser(username, email, password) {
     try {
       return await knex.transaction(async (trx) => {
