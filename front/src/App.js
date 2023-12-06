@@ -1,8 +1,9 @@
-import React, { Suspense } from "react";
-import { UserProvider } from "./Context/UserStateContext";
+import React, { Suspense, useContext, useEffect } from "react";
+import { UserDispatchContext } from "./Context/UserStateContext";
 import Navigation from "./components/common/header/Navigation";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import LoadingPage from "./components/common/header/LoadingPage";
+import api from "./components/utils/axiosConfig";
 
 const IntroPage = React.lazy(() => import("./components/pages/IntroPage"));
 const LoginPage = React.lazy(() => import("./components/pages/LoginPage"));
@@ -19,9 +20,30 @@ const CalendarPage = React.lazy(() =>
 const UserPage = React.lazy(() => import("./components/pages/UserPage"));
 
 export default function App() {
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useContext(UserDispatchContext);
+
+  useEffect(() => {
+    if (location.pathname === '/community' || location.pathname === '/') return;
+    api.get("/users/user")
+      .then((res) => {
+        const user = res.user[0];
+        dispatch({
+          type: "COOKIE_CHECK",
+          payload: user,
+        });
+      })
+      .catch(() => {
+        console.log("쿠키 없음❌")
+        navigate("/login");
+      })
+  },[location.pathname])
+
+
   return (
-    <UserProvider>
-      <BrowserRouter>
+    <>
         <Navigation />
         <Suspense fallback={<LoadingPage/>}>
           <Routes>
@@ -35,7 +57,6 @@ export default function App() {
             <Route path="*" element={<IntroPage />} />
           </Routes>
         </Suspense>
-      </BrowserRouter>
-    </UserProvider>
+      </>
   );
 }

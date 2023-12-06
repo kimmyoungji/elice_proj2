@@ -7,14 +7,19 @@ export default function LoginReducer(userState, action) {
         ...userState,
         user: action.payload,
       };
+    case "COOKIE_CHECK":
+      console.log("쿠키 있음 🍪");
+      return {
+        ...userState ,
+        user: action.payload,
+      };
     case "LOGOUT":
       console.log("로그아웃!");
       return {
         ...userState,
-        user: null,
-      }
+        user : null ,
+      };
     default:
       return userState;
   }
 }
-

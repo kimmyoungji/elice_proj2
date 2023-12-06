@@ -145,6 +145,5 @@ export default function IntroPage() {
         </Col>
       </Row>
     </div>
-    
   );
 }

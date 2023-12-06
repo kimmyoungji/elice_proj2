@@ -199,6 +199,4 @@ const CalendarForm = ({ habitlist, checkdate }) => {
   );
 }
 
-// 데이터 서비스 진행하면, 컴포넌트로 따로 뺄 것.
-
 export default CalendarForm;

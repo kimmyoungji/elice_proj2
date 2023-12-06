@@ -49,7 +49,6 @@ function Navigation() {
       .then((res) => {
         console.log(res.data);
         dispatch({ type: "LOGOUT" });
-        localStorage.removeItem("user");
       });
     }
   };
@@ -62,7 +61,7 @@ function Navigation() {
   }
   
   return (
-    <Navbar expand="False" className="bg-body-tertiary mb-3">
+    <Navbar expand="False" className="bg-body-tertiary">
       <Container fluid>
         <Navbar.Brand href="/">
           <Image src={logo} alt="logo" height="30" width="200" />
