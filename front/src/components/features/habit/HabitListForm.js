@@ -8,7 +8,6 @@ import {
   Button,
   Image,
 } from "react-bootstrap";
-import { ScrollAniDiv } from "../IntroContents/AnimationStyled";
 
 const cheerUpTexts = [
   "같이 시작해봐요, 플라스틱 줄이기! 😊",
@@ -94,7 +93,7 @@ export default function HabitListForm({ habitList }) {
       className="mb-4"
       style={{ marginRight: "0" }}
     >
-      <ScrollAniDiv>
+
         <Card border="light" style={{ width: "80%" }}>
           <Card.Body>
             <Card.Img
@@ -108,7 +107,6 @@ export default function HabitListForm({ habitList }) {
             </Card.Title>
           </Card.Body>
         </Card>
-      </ScrollAniDiv>
     </Col>
   ));
 

@@ -94,6 +94,7 @@ const UserPageForm = (props) => {
     api
       .delete("/users")
       .then((res) => {
+        setUser(null);
         alert("탈퇴되었습니다. 감사합니다.");
         navigate("/");
       })

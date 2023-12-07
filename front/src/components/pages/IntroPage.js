@@ -66,6 +66,21 @@ export default function IntroPage() {
       <Row className="vh-100">
         <Col>
           <ScrollAniDiv>
+            <p>바다로 가는</p>
+            <p>플라스틱 쓰레기</p>
+            <span className="important">세계적으로 증가</span>
+          </ScrollAniDiv>
+        </Col>
+        <Col>
+          <ScrollAniDiv>
+            {charts && <IntroChart data={charts[1]} />}
+          </ScrollAniDiv>
+        </Col>
+      </Row>
+      
+      <Row className="vh-100">
+        <Col>
+          <ScrollAniDiv>
             {charts && <IntroChart data={charts[0]} />}
           </ScrollAniDiv>
         </Col>
@@ -78,20 +93,7 @@ export default function IntroPage() {
         </Col>
       </Row>
 
-      <Row className="vh-100">
-        <Col>
-          <ScrollAniDiv>
-            <p>바다로 가는</p>
-            <p>플라스틱 쓰레기</p>
-            <span className="important">세계적으로 증가</span>
-          </ScrollAniDiv>
-        </Col>
-        <Col>
-          <ScrollAniDiv>
-            {charts && <IntroChart data={charts[1]} />}
-          </ScrollAniDiv>
-        </Col>
-      </Row>
+
 
       <Row className="vh-100">
         <Stack className="my-auto">
