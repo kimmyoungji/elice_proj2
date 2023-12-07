@@ -1,24 +1,12 @@
-<<<<<<< HEAD
 import React, { useState, useContext, useEffect } from "react";
 import { Button, Form, Stack, Row, Col, Container } from "react-bootstrap";
 import { useNavigate } from "react-router";
-=======
-import React, { useState, useContext, useEffect } from 'react';
-import { Button, Form, Stack, Row, Col, Container } from 'react-bootstrap';
-import { useNavigate } from "react-router";
-import { UserDispatchContext, UserStateContext } from "../../Context/UserStateContext";
->>>>>>> f526b958a2213e5bf3bc191cea57bc196d1051dc
 import api from "../utils/axiosConfig";
 import { UserContext } from "../../Context/UserContext";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-<<<<<<< HEAD
   const { user, setUser } = useContext(UserContext);
-=======
-  const dispatch = useContext(UserDispatchContext);
-  const { user } = useContext(UserStateContext);
->>>>>>> f526b958a2213e5bf3bc191cea57bc196d1051dc
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
