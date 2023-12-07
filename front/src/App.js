@@ -29,7 +29,8 @@ export default function App() {
     if (location.pathname === "/register" || location.pathname === "/login") return;
     api.get("/users/user")
       .then((res) => {
-        const data = res.user[0];
+        const data = res.user;
+        console.log(res);
         setUser(data);
       })
       .catch(() => {
