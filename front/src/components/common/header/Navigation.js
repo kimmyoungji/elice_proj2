@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "./logo.png";
 import api from "../../utils/axiosConfig";
 import { UserDispatchContext, UserStateContext } from "../../../Context/UserStateContext";
+const profile = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
 
 const navMenus = [
   { href: "/", label: "서비스 소개", public: true },
@@ -81,7 +82,7 @@ function Navigation() {
         </Nav>
         <Navbar.Toggle>
           <Image
-            src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+            src={user ? (user.imgurl ? user.imgurl : profile) : profile}
             alt="profile"
             roundedCircle
             height="30"

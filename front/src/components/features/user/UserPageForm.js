@@ -1,14 +1,18 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../utils/axiosConfig";
 import { Col, Button, Container, Image, Form, Row } from "react-bootstrap";
 import "./UserPage.css";
+import { validatePassword } from "../../utils/validate";
+import { UserDispatchContext } from "../../../Context/UserStateContext";
 
 const UserPageForm = (props) => {
   const { userInfo } = props;
   const { userName, userImg, userEmail, password, passwordCheck } = userInfo;
   const [image, setImage] = useState(userImg); //filereader를 위한 image
   const fileInput = useRef(null);
+
+  const dispatch = useContext(UserDispatchContext);
 
   const navigate = useNavigate();
 
@@ -81,15 +85,18 @@ const UserPageForm = (props) => {
 
   const editing = (e) => {
     e.preventDefault();
+    if (form.userFormPassword.length < 8) {
+      alert("비밀번호는 8자 이상이어야 합니다.");
+      return false;
+    }
     if (form.userFormPassword !== form.userFormPasswordCheck) {
       alert("비밀번호가 일치하지 않습니다.");
       return false;
     }
     const formData = new FormData();
-    formData.append("name", form.userFormName);
+    formData.append("username", form.userFormName);
     formData.append("file", form.userFormImg);
     formData.append("password", form.userFormPassword);
-    formData.append("passwordcheck", form.userFormPasswordCheck);
 
     // FormData 확인
     // for (let key of formData.keys()) {
@@ -103,6 +110,16 @@ const UserPageForm = (props) => {
     api.put("/users", formData)
       .then((res) => {
         console.log(res);
+        const userinfo = {
+          username: form.userFormName,
+          email: userEmail,
+          // level: level,
+          imgurl: form.userFormImg
+      };
+        dispatch({
+            type: "USERINFO_EDIT",
+            payload: userinfo,
+          });
       })
       .catch((error) => {
         console.log(error);
