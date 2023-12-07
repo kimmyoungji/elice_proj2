@@ -1,10 +1,10 @@
 import React, { useEffect, useContext } from "react";
 import UserPageForm from "../features/user/UserPageForm";
 import api from "../utils/axiosConfig";
-import { UserStateContext } from "../../Context/UserStateContext";
+import { UserContext } from "../../Context/UserContext";
 
 const UserPage = () => {
-  const { user } = useContext(UserStateContext);
+  const { user } = useContext(UserContext);
 
   const fetchData = async () => {
     try {
@@ -35,4 +35,3 @@ const UserPage = () => {
 };
 
 export default UserPage;
-

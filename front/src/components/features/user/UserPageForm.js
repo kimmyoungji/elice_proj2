@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../utils/axiosConfig";
 import { Col, Button, Container, Image, Form, Row } from "react-bootstrap";
 import "./UserPage.css";
-import { UserDispatchContext } from "../../../Context/UserStateContext";
+import { UserContext } from "../../../Context/UserContext";
 
 const UserPageForm = (props) => {
   const { userInfo } = props;
@@ -11,7 +11,7 @@ const UserPageForm = (props) => {
   const [image, setImage] = useState(userImg); //filereader를 위한 image
   const fileInput = useRef(null);
 
-  const dispatch = useContext(UserDispatchContext);
+  const {user, setUser} = useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -106,7 +106,8 @@ const UserPageForm = (props) => {
     //   console.log(value);
     // }
 
-    api.put("/users", formData)
+    api
+      .put("/users", formData)
       .then((res) => {
         console.log(res);
         const userinfo = {
@@ -115,21 +116,19 @@ const UserPageForm = (props) => {
           // level: level,
           img_url: form.userFormImg
       };
-        dispatch({
-            type: "USERINFO_EDIT",
-            payload: userinfo,
-          });
+        setUser(userinfo);
         alert('회원정보 수정이 완료되었습니다.');
         navigate('/userpage');
       })
       .catch((error) => {
         console.log(error);
-        alert('회원정보 수정에 실패했습니다. 다시 시도해주세요.')
-      })
+        alert("회원정보 수정에 실패했습니다. 다시 시도해주세요.");
+      });
   };
 
   const deleteUser = () => {
-    api.delete("/users")
+    api
+      .delete("/users")
       .then((res) => {
         alert("탈퇴되었습니다. 감사합니다.");
         navigate("/");
