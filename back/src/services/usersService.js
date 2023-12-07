@@ -4,6 +4,8 @@ const bcrypt = require("bcrypt");
 const knex = require("../db/knex");
 const UsersModel = require("../db/models/users");
 const users = new UsersModel(knex);
+const FulfilledHabitsModel = require("../db/models/fulfilledHabits");
+const fulfilledHabits = new FulfilledHabitsModel(knex);
 const { NotFoundError, INVALID_USER_Error } = require("../lib/custom-error");
 
 class userService {
@@ -84,13 +86,34 @@ class userService {
     }
   }
 
-  static async setAndGetUserLevel(user_id) {
+  static async setAndgetUserLevel(user_id) {
     try {
       return await knex.transaction(async (trx) => {
         // DB: transaction 객체전달하기
         users.setTrx(trx);
-        let level = await users.updateLevel(user_id);
-
+        fulfilledHabits.setTrx(trx);
+        const count = await fulfilledHabits.countByUserId(user_id);
+        let level = 1;
+        switch (count) {
+          case count >= 0:
+            level = 1;
+            break;
+          case count >= 10:
+            level = 2;
+            break;
+          case count >= 25:
+            level = 3;
+            break;
+          case count >= 45:
+            level = 4;
+            break;
+          case count >= 70:
+            level = 5;
+            break;
+          default:
+            level = 1;
+        }
+        await users.updateLevel(user_id, level);
         return level;
       });
     } catch (err) {
