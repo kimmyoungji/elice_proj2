@@ -1,7 +1,7 @@
 import React, { Suspense, useContext, useEffect } from "react";
 import { UserDispatchContext } from "./Context/UserStateContext";
 import Navigation from "./components/common/header/Navigation";
-import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import LoadingPage from "./components/common/header/LoadingPage";
 import api from "./components/utils/axiosConfig";
 import { ErrorBoundary } from "react-error-boundary";
@@ -22,18 +22,16 @@ const CalendarPage = React.lazy(() =>
 const UserPage = React.lazy(() => import("./components/pages/UserPage"));
 
 
-
 export default function App() {
 
   const location = useLocation();
-  const navigate = useNavigate();
   const dispatch = useContext(UserDispatchContext);
 
-  useEffect(() => {
-    if (location.pathname === '/register' || location.pathname === '/login') return;
+  const cookieCheck = () => {
     api.get("/users/user")
       .then((res) => {
         const user = res.user[0];
+        console.log(res);
         dispatch({
           type: "COOKIE_CHECK",
           payload: user,
@@ -42,9 +40,18 @@ export default function App() {
       .catch(() => {
         console.log("쿠키 없음❌")
       })
-  },[location.pathname])
+  };
 
-  
+  useEffect(() => {
+    if (location.pathname === '/register' || location.pathname === '/login') return;
+    if (location.pathname === '/') {
+      setTimeout(() => {
+        cookieCheck();
+      },1000)
+    } else {
+      cookieCheck();
+    }
+  },[location.pathname])
 
   return (
     <>
@@ -66,4 +73,3 @@ export default function App() {
     </>
   );
 }
-
