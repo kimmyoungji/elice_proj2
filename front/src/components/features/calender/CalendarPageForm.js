@@ -77,6 +77,7 @@ const CalendarForm = ({ habitlist, checkdate }) => {
     const year = middleDate.getFullYear();
     const month = middleMonth.toString().padStart(2, '0');
     const monthString = year + '-' + month;
+    console.log(render);
 
     if (middleMonth === new Date().getMonth() + 1) {
         setHabitList(habitlist)
@@ -107,7 +108,7 @@ const CalendarForm = ({ habitlist, checkdate }) => {
           setCharts(countDateArr);
           setLastWeekCount(lastWeekCount);
           setThisWeekCount(thisWeekCount);
-          setRender(true);
+        setRender(true);
       }).catch((error) => {
           // 추후 수정예정
           console.log(error)

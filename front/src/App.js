@@ -25,28 +25,16 @@ export default function App() {
   const location = useLocation();
   const {user, setUser} = useContext(UserContext);
 
-  const cookieCheck = () => {
-    api
-      .get("/users/user")
+  useEffect(() => {
+    if (location.pathname === "/register" || location.pathname === "/login") return;
+    api.get("/users/user")
       .then((res) => {
         const data = res.user[0];
         setUser(data);
       })
       .catch(() => {
         console.log("쿠키 없음❌");
-      });
-  };
-
-  useEffect(() => {
-    if (location.pathname === "/register" || location.pathname === "/login")
-      return;
-    if (location.pathname === "/") {
-      setTimeout(() => {
-        cookieCheck();
-      }, 1000);
-    } else {
-      cookieCheck();
-    }
+      })
   }, [location.pathname]);
 
   return (
