@@ -1,14 +1,12 @@
-import React, { useState, useContext } from 'react';
-import { Button, Form, Stack, Row, Col, Container } from 'react-bootstrap';
+import React, { useState, useContext, useEffect } from "react";
+import { Button, Form, Stack, Row, Col, Container } from "react-bootstrap";
 import { useNavigate } from "react-router";
-import { UserDispatchContext } from "../../Context/UserStateContext";
 import api from "../utils/axiosConfig";
-
+import { UserContext } from "../../Context/UserContext";
 
 export default function LoginPage() {
-
   const navigate = useNavigate();
-  const dispatch = useContext(UserDispatchContext);
+  const { user, setUser } = useContext(UserContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,7 +16,8 @@ export default function LoginPage() {
   const submitPassword = (e) => setPassword(e.target.value);
 
   // 정규표현식으로 이메일 유효성 검사
-  const regexp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+  const regexp =
+    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
   const validateEmail = (email) => email.match(regexp);
 
   // 이메일, 패스워드 규칙 확인 (안내 문구 표시, 로그인 버튼 활성화)
@@ -26,33 +25,37 @@ export default function LoginPage() {
   const isPasswordValid = password.length >= 4;
   const isAllValid = isEmailValid && isPasswordValid;
 
+  useEffect(() => {
+    if (user) {
+      navigate("/habit");
+    }
+  },[user])
+
   // 로그인 버튼 클릭 시, API post 요청
   const onClickLogin = (e) => {
     e.preventDefault();
 
-    api.post("/users/login",
-      { email, password })
+    api
+      .post("/users/login", { email, password })
       .then((res) => {
-        const user = res.user;
-        dispatch({
-          type: "LOGIN_SUCCESS",
-          payload: user,
-        });
-        alert(`${user.username}님 환영합니다!`);
-        navigate("/habit", { replace: true });
-  
+        const data = res.user;
+        setUser(...user, data);
+        alert(`${data.username}님 환영합니다!`);
       })
       .catch((e) => {
+        console.log(e);
         console.log("로그인 실패!", e.response.message);
       });
 
-  }
+
+  };
 
   return (
     <Container>
       <Row className="justify-content-md-center mt-5">
         <Col lg={5}>
-          <h1 className="text-center">LOGIN</h1><br/>
+          <h1 className="text-center">LOGIN</h1>
+          <br />
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>이메일</Form.Label>
             <Form.Control
@@ -62,11 +65,11 @@ export default function LoginPage() {
               onChange={submitEmail}
               autoComplete="off"
             />
-            {email && !isEmailValid &&
-              (<Form.Text className="text-danger">
-              올바른 형식의 이메일을 입력해주세요.
-              </Form.Text>)
-            }
+            {email && !isEmailValid && (
+              <Form.Text className="text-danger">
+                올바른 형식의 이메일을 입력해주세요.
+              </Form.Text>
+            )}
           </Form.Group>
 
           <Form.Group className="mb-5" controlId="formBasicPassword">
@@ -78,21 +81,30 @@ export default function LoginPage() {
               onChange={submitPassword}
               autoComplete="off"
             />
-            {password && !isPasswordValid &&
-              (<Form.Text className="text-danger">
+            {password && !isPasswordValid && (
+              <Form.Text className="text-danger">
                 올바른 비밀번호를 입력해주세요.
-              </Form.Text>)
-            }
+              </Form.Text>
+            )}
           </Form.Group>
 
           <Stack>
-            <Button className="mx-auto" variant="primary" type="submit" onClick={onClickLogin} disabled={!isAllValid}>
+            <Button
+              className="mx-auto"
+              variant="primary"
+              type="submit"
+              onClick={onClickLogin}
+              disabled={!isAllValid}
+            >
               로그인
             </Button>
-            <Form.Text className="text-muted my-0 mx-auto" >
-              또는
-            </Form.Text>
-            <Button className="mx-auto" variant="secondary" type="submit" onClick={()=> navigate("/register")}>
+            <Form.Text className="text-muted my-0 mx-auto">또는</Form.Text>
+            <Button
+              className="mx-auto"
+              variant="secondary"
+              type="submit"
+              onClick={() => navigate("/register")}
+            >
               회원가입
             </Button>
           </Stack>

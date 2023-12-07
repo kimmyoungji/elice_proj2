@@ -1,10 +1,10 @@
 import React, { useEffect, useContext } from "react";
 import UserPageForm from "../features/user/UserPageForm";
 import api from "../utils/axiosConfig";
-import { UserStateContext } from "../../Context/UserStateContext";
+import { UserContext } from "../../Context/UserContext";
 
 const UserPage = () => {
-  const { user } = useContext(UserStateContext);
+  const { user } = useContext(UserContext);
 
   const fetchData = async () => {
     try {
@@ -20,8 +20,11 @@ const UserPage = () => {
 
   const userInfo = {
     userName: user && user.username,
-    userImg: user && (user.imgurl ? user.imgurl :
-      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
+    userImg:
+      user &&
+      (user.imgurl
+        ? user.imgurl
+        : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
     userEmail: user && user.email,
     password: "",
     passwordCheck: "",
@@ -35,4 +38,3 @@ const UserPage = () => {
 };
 
 export default UserPage;
-
