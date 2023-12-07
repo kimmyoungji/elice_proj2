@@ -146,11 +146,17 @@ class userService {
 
   static async setUser(user_id, toUpdate) {
     try {
+      const { username, password, img_url } = toUpdate;
+      const exUsername = await users.findUsername(user_id);
+      const updateSet =
+        exUsername === username ? { password, img_url } : toUpdate;
+
       return await knex.transaction(async (trx) => {
         // DB: transaction 객체전달하기
         users.setTrx(trx);
         // DB: DB 데이터 수정하기
-        await users.update(user_id, toUpdate);
+
+        await users.update(user_id, updateSet);
       });
     } catch (err) {
       throw err;

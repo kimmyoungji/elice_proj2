@@ -58,6 +58,14 @@ class UsersModel {
     }
   }
 
+  async findUsername(user_id) {
+    try {
+      return this.knex("users").select("username").where("user_id", user_id);
+    } catch (error) {
+      throw new Error(err);
+    }
+  }
+
   async findByUsername(username) {
     try {
       return this.knex("users")
