@@ -7,11 +7,8 @@ const {
   BadRequestError,
 } = require("../lib/custom-error.js");
 const userService = require("../services/usersService.js");
-<<<<<<< HEAD
 const upload = require("../middlewares/multer");
-=======
 const bcrypt = require("bcrypt");
->>>>>>> c86f49fbf39fceb3bee1ed09851b00583d54efa1
 
 // GET /login
 usersRouter.post("/login", async (req, res, next) => {
@@ -131,7 +128,6 @@ usersRouter.post("/", async (req, res, next) => {
 // );
 
 // UPDATE
-<<<<<<< HEAD
 usersRouter.put(
   "/",
   isLoggedIn,
@@ -140,26 +136,24 @@ usersRouter.put(
     try {
       // 요청 쿠키, 바디에서 값 받아오기
       const user_id = req.currentUserId;
-      const toUpdate = { ...req.body };
+      let toUpdate = { ...req.body };
+      if (!toUpdate.username && !toUpdate.password) {
+        throw new BadRequestError("업데이트할 정보를 전달해주세요!");
+      }
+      if (toUpdate.email || toUpdate.user_id || toUpdate.level) {
+        throw new BadRequestError("수정할 수 없는 정보가 있습니다.");
+      }
+      if (toUpdate.password) {
+        toUpdate.password = await bcrypt.hash(password, 10);
+      }
       const userProfile = req.file.location;
-      toUpdate[image] = userProfile;
-=======
-usersRouter.put("/", isLoggedIn, async (req, res, next) => {
-  try {
-    // 요청 쿠키, 바디에서 값 받아오기
-    const user_id = req.currentUserId;
-    let toUpdate = { ...req.body };
-    if (!toUpdate.username && !toUpdate.password) {
-      throw new BadRequestError("업데이트할 정보를 전달해주세요!");
-    }
-    if (toUpdate.email || toUpdate.user_id || toUpdate.level) {
-      throw new BadRequestError("수정할 수 없는 정보가 있습니다.");
-    }
-    if (toUpdate.password) {
-      toUpdate.password = await bcrypt.hash(password, 10);
-    }
->>>>>>> c86f49fbf39fceb3bee1ed09851b00583d54efa1
-
+      if (userProfile) {
+        // "https://turtine-image.s3.ca-central-1.amazonaws.com/ [img_url]" 으로 파일명만 저장해놓고 프론트에서 쓸 때 앞부분 붙여쓰기?
+        // 주소를 그냥 통으로 저장하기?
+        toUpdate.img_url = userProfile;
+        //toUpdate.img_url = userProfile.split("/")[3];
+        console.log(toUpdate);
+      }
       // 현재 사용자 정보 수정하기
       await usersService.setUser(user_id, toUpdate);
 
