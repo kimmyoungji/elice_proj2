@@ -126,25 +126,23 @@ usersRouter.put(
     try {
       // 요청 쿠키, 바디에서 값 받아오기
       const user_id = req.currentUserId;
-      const { username, password } = req.body;
-      if (username && password) {
+      let { username, password } = req.body;
+      if (!username && !password) {
         throw new BadRequestError("업데이트할 정보를 전달해주세요!");
       }
 
       if (password) {
         password = await bcrypt.hash(password, 10);
       }
-      console.log(req.file);
 
-      const filepath = req.file ? req.file.location : "";
-      const toUpdate = { username, password, filepath };
+      const img_url = req.file ? req.file.location : "";
+      const toUpdate = { username, password, img_url };
       // 현재 사용자 정보 수정하기
       await usersService.setUser(user_id, toUpdate);
 
       // 응답
       res.status(200).send({
         message: "DB 데이터 수정 성공",
-        // img_url: userProfile,
       });
     } catch (err) {
       next(err);
