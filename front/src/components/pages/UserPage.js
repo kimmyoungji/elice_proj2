@@ -4,14 +4,12 @@ import api from "../utils/axiosConfig";
 import { UserStateContext } from "../../Context/UserStateContext";
 
 const UserPage = () => {
-  const user = useContext(UserStateContext);
+  const { user } = useContext(UserStateContext);
+  console.log(user);
 
   const fetchData = async () => {
     try {
-      const res = await api({
-        method: "get",
-        url: "users/user",
-      });
+      const res = await api.get("users/user");
       console.log(res);
     } catch (error) {
       console.log(error);
