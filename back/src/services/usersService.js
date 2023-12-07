@@ -146,7 +146,7 @@ class userService {
 
   static async setUser(user_id, toUpdate) {
     try {
-      const { username, password, img_url } = toUpdate;
+      const { username } = toUpdate;
       const exUsername = await users.findUsername(user_id);
       const updateSet =
         exUsername === username ? { password, img_url } : toUpdate;

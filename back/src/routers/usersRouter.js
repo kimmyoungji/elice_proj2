@@ -137,8 +137,7 @@ usersRouter.put(
       console.log(req.file);
 
       const filepath = req.file ? req.file.location : "";
-      toUpdate.img_url = filepath;
-
+      const toUpdate = { username, password, filepath };
       // 현재 사용자 정보 수정하기
       await usersService.setUser(user_id, toUpdate);
 
