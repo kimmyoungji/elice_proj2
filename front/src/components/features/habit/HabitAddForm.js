@@ -65,7 +65,7 @@ export default function HabitAddForm ({ userName, habits, onSubmit }) {
               }
           )
           .then((res) => {
-              console.log(res)
+              console.log('습관 추가 완료');
           }).catch((error) => {
               console.log(error)
           })
