@@ -31,12 +31,11 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
     }, [])
   
     const getSelectedHabit = useMemo(() => {
-        return selectHabit.map((habit) => (
-            <ListGroup>
+        return selectHabit.map((habit, idx) => (
+            <ListGroup key={idx}>
                 <ListGroup.Item>
                     <Form.Check
                         inline
-                        key={`${habit}_1`}
                         type='checkbox'
                         onClick={() => handleFulfillChange(habit)}
                         style={{ fontSize: "14px"}}/>
@@ -49,21 +48,19 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
   
     const getCheckedHabit = useMemo(() => {
         return <>
-                {selectHabit.map((habit) => (
-                <ListGroup.Item>
+                {selectHabit.map((habit, idx) => (
+                <ListGroup.Item key={idx}>
                     <Form.Check 
                         inline
-                        key={`${habit}_2`}
                         type='checkbox'
                         onClick={() => handleFulfillChange(habit)}
                         style={{ fontSize: "14px"}}/>
                         {habits[habit]}
                 </ListGroup.Item>
                 ))}
-                {checkHabit.map((habit) => (
-                    <ListGroup.Item>
+                {checkHabit.map((habit, idx) => (
+                    <ListGroup.Item key={idx}>
                         <Form
-                            key={`${habit}_3`}
                             style={{ fontSize: "12px"}}/>
                             <s>{habits[habit]} (완료)</s>
                     </ListGroup.Item>
