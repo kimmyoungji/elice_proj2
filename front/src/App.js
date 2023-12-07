@@ -30,8 +30,7 @@ export default function App() {
       .get("/users/user")
       .then((res) => {
         const data = res.user[0];
-        console.log(res);
-        setUser({...user, data});
+        setUser(data);
       })
       .catch(() => {
         console.log("쿠키 없음❌");

@@ -39,7 +39,7 @@ export default function LoginPage() {
       .post("/users/login", { email, password })
       .then((res) => {
         const data = res.user;
-        setUser({...user, data});
+        setUser(data);
         alert(`${data.username}님 환영합니다!`);
       })
       .catch((e) => {

@@ -116,7 +116,7 @@ const UserPageForm = (props) => {
           // level: level,
           img_url: form.userFormImg
       };
-        setUser({...user, userinfo});
+        setUser(userinfo);
         alert('회원정보 수정이 완료되었습니다.');
         navigate('/userpage');
       })
