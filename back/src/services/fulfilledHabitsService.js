@@ -70,11 +70,31 @@ class fulfilledHabitsService {
         count4WsAgo[0].count
       );
       return {
-        thisWeek: countThisWeek[0].count,
-        lastWeek: countlastWeek[0].count,
-        twoWeeksAgo: count2WsAgo[0].count,
-        threeWeeksAgo: count3WsAgo[0].count,
-        fourWeeksAgo: count4WsAgo[0].count,
+        thisWeek: [
+          thisMonday.format("YYYY-MM-DD"),
+          thisSunday.format("YYYY-MM-DD"),
+          countThisWeek[0].count,
+        ],
+        lastWeek: [
+          lastMonday.format("YYYY-MM-DD"),
+          lastSunday.format("YYYY-MM-DD"),
+          countlastWeek[0].count,
+        ],
+        twoWeeksAgo: [
+          mon2WsAgo.format("YYYY-MM-DD"),
+          sun2WsAgo.format("YYYY-MM-DD"),
+          count2WsAgo[0].count,
+        ],
+        threeWeeksAgo: [
+          mon3WsAgo.format("YYYY-MM-DD"),
+          sun3WsAgo.format("YYYY-MM-DD"),
+          count3WsAgo[0].count,
+        ],
+        fourWeeksAgo: [
+          mon4WsAgo.format("YYYY-MM-DD"),
+          sun4WsAgo.format("YYYY-MM-DD"),
+          count4WsAgo[0].count,
+        ],
       };
     } catch (error) {
       console.error(error.stack);
