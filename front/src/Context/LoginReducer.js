@@ -13,6 +13,12 @@ export default function LoginReducer(userState, action) {
         ...userState ,
         user: action.payload,
       };
+    case "USERINFO_EDIT":
+      console.log("유저 정보 수정!");
+      return {
+        ...userState ,
+        user: action.payload,
+      };
     case "LOGOUT":
       console.log("로그아웃!");
       return {
