@@ -2,6 +2,8 @@ const knex = require("../db/knex.js");
 const FulfilledHabitsModel = require("../db/models/fulfilledHabits");
 const fulfilled = new FulfilledHabitsModel(knex);
 const dayjs = require("dayjs");
+const weekOfYear = require("dayjs/plugin/weekOfYear.js");
+dayjs.extend(weekOfYear);
 
 class fulfilledHabitsService {
   static async getCountsByWeeks(userId) {
@@ -9,93 +11,44 @@ class fulfilledHabitsService {
       //주차 계산
       const today = dayjs(); //오늘
       //이번주 월~일
-      const thisMonday = today.startOf("week").add(1, "day");
-      const thisSunday = today.endOf("week").add(1, "day");
-      //저번주 월~일
-      const lastMonday = thisMonday.subtract(7, "day");
-      const lastSunday = thisSunday.subtract(7, "day");
-      //저저번주 월~일
-      const mon2WsAgo = lastMonday.subtract(7, "day");
-      const sun2WsAgo = lastSunday.subtract(7, "day");
-      //3주전 월~일
-      const mon3WsAgo = mon2WsAgo.subtract(7, "day");
-      const sun3WsAgo = sun2WsAgo.subtract(7, "day");
-      //4주전 월~일
-      const mon4WsAgo = mon3WsAgo.subtract(7, "day");
-      const sun4WsAgo = sun3WsAgo.subtract(7, "day");
+      const thisMonday = today.startOf("week");
+      const sun4WsAgo = thisMonday.subtract(4, "week");
 
-      console.log(
-        thisMonday.format("YYYY-MM-DD"),
-        thisSunday.format("YYYY-MM-DD"),
-        lastMonday.format("YYYY-MM-DD"),
-        lastSunday.format("YYYY-MM-DD"),
-        mon2WsAgo.format("YYYY-MM-DD"),
-        sun2WsAgo.format("YYYY-MM-DD"),
-        mon3WsAgo.format("YYYY-MM-DD"),
-        sun3WsAgo.format("YYYY-MM-DD"),
-        mon4WsAgo.format("YYYY-MM-DD"),
-        sun4WsAgo.format("YYYY-MM-DD")
-      ); //월~일 사이 실천 습관 수 카운팅
       //SELECT COUNT(habit_id) FROM fulfilled_habits WHERE user_id = user and date <= monday and date >=sunday;
-      const countThisWeek = await fulfilled.findByWeek(
+      const dates = await fulfilled.findByDateRange(
         userId,
-        thisMonday.format("YYYY-MM-DD"),
-        thisSunday.format("YYYY-MM-DD")
+        sun4WsAgo.utc(true).format("YYYY-MM-DD"),
+        thisMonday.utc(true).format("YYYY-MM-DD")
       );
-      const countlastWeek = await fulfilled.findByWeek(
-        userId,
-        lastMonday.format("YYYY-MM-DD"),
-        lastSunday.format("YYYY-MM-DD")
-      );
-      const count2WsAgo = await fulfilled.findByWeek(
-        userId,
-        mon2WsAgo.format("YYYY-MM-DD"),
-        sun2WsAgo.format("YYYY-MM-DD")
-      );
-      const count3WsAgo = await fulfilled.findByWeek(
-        userId,
-        mon3WsAgo.format("YYYY-MM-DD"),
-        sun3WsAgo.format("YYYY-MM-DD")
-      );
-      const count4WsAgo = await fulfilled.findByWeek(
-        userId,
-        mon4WsAgo.format("YYYY-MM-DD"),
-        sun4WsAgo.format("YYYY-MM-DD")
-      );
-      console.log(
-        countThisWeek[0].count,
-        countlastWeek[0].count,
-        count2WsAgo[0].count,
-        count3WsAgo[0].count,
-        count4WsAgo[0].count
-      );
-      return {
-        thisWeek: [
-          thisMonday.format("YYYY-MM-DD"),
-          thisSunday.format("YYYY-MM-DD"),
-          countThisWeek[0].count,
-        ],
-        lastWeek: [
-          lastMonday.format("YYYY-MM-DD"),
-          lastSunday.format("YYYY-MM-DD"),
-          countlastWeek[0].count,
-        ],
-        twoWeeksAgo: [
-          mon2WsAgo.format("YYYY-MM-DD"),
-          sun2WsAgo.format("YYYY-MM-DD"),
-          count2WsAgo[0].count,
-        ],
-        threeWeeksAgo: [
-          mon3WsAgo.format("YYYY-MM-DD"),
-          sun3WsAgo.format("YYYY-MM-DD"),
-          count3WsAgo[0].count,
-        ],
-        fourWeeksAgo: [
-          mon4WsAgo.format("YYYY-MM-DD"),
-          sun4WsAgo.format("YYYY-MM-DD"),
-          count4WsAgo[0].count,
-        ],
-      };
+
+      const weeks = dates.map((date) => {
+        return dayjs(date.date).week();
+      });
+
+      let weeksCount = {};
+
+      for (let i = weeks[0]; i <= weeks[weeks.length - 1]; ++i) {
+        weeksCount[i] = 0;
+      }
+
+      weeks.map((week) => {
+        const temp = weeksCount[week];
+        weeksCount[week] = temp + 1;
+      });
+
+      const values = Object.values(weeksCount);
+
+      let result = {};
+      let startDate = sun4WsAgo;
+      values.map((val, i) => {
+        let key = `${startDate.format("YYYY-MM-DD")}~`;
+        startDate = startDate.add(6, "day");
+        key = key + `${startDate.format("YYYY-MM-DD")}`;
+        result[key] = val;
+        startDate = startDate.add(1, "day");
+      });
+
+      return result;
     } catch (error) {
       console.error(error.stack);
       throw error;
@@ -111,15 +64,12 @@ class fulfilledHabitsService {
           : dayjs(month).add(1, "month").startOf("month").format("YYYY-MM-DD"); // 아니면 같은 해 다음달
       //이번달 첫날
       const thisMonth = dayjs(month).startOf("month").format("YYYY-MM-DD");
-      console.log(thisMonth, nextMonth);
       //이번달에 습관 실천할 날짜들 조회
       const resultMonth = await fulfilled.findByMonth(
         userId,
         thisMonth,
         nextMonth
       );
-
-      console.log(resultMonth);
 
       return resultMonth.map((el) => dayjs(el.date).format("YYYY-MM-DD"));
     } catch (error) {

@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const dayjs = require("dayjs");
 async function makeDummyUsers(start, number) {
   const users = [];
-  for (let i = start; i <= number; i++) {
+  for (let i = start; i <= start + number; i++) {
     let password = `password${i < 10 ? "0" + i : i}`;
     password = await bcrypt.hash(password, 10);
     const username = `user${i < 10 ? "0" + i : i}`;
@@ -33,10 +33,9 @@ async function setDummyUserLevel(level, number) {
 
 async function addDummyUsers(start, number) {
   const newUsers = await makeDummyUsers(start, number);
-  console.log("됨?");
+  console.log("newusers", newUsers);
   await knex("users").insert(newUsers);
   setDummyUserLevel(5, number);
-  console.log("됐나?");
 }
 
 async function addDummyFulfilledH(number) {

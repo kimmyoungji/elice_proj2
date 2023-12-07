@@ -23,15 +23,16 @@ class FulfilledHabitsModel {
     }
   }
 
-  async findByWeek(userId, monday, sunday) {
+  async findByDateRange(userId, startDate, endDate) {
     try {
+      console.log("findByDateRange", userId, startDate, endDate);
       return await this.knex
-        .count("fulfilled_habit_id as count")
+        .select("date")
         .from("fulfilled_habits")
         .where({
           user_id: userId,
         })
-        .whereBetween("date", [monday, sunday]);
+        .whereBetween("date", [startDate, endDate]);
     } catch (error) {
       console.error("주차별 실천 습관 수 불러오다가 뭔가 잘못됨", error.stack);
       throw new Error(
