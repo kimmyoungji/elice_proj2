@@ -14,7 +14,7 @@ import { UserStateContext } from "../../Context/UserStateContext";
 
 
 export default function IntroPage() {
-  const user = useContext(UserStateContext);
+  const {user} = useContext(UserStateContext);
   const navigate = useNavigate();
   const [charts, setCharts] = useState();
 
@@ -139,7 +139,7 @@ export default function IntroPage() {
             <p>해양생물을 위해, 나를 위해</p>
             <p>환경 습관을 형성하기 위한 여정</p>
             <Button variant="primary" onClick={() => {
-              user ? navigate('/habit') : navigate('/login')
+              user === null ? navigate('/login') : navigate('/habit')
             }}>시작하기</Button>
           </ScrollAniDiv>
         </Col>

@@ -27,16 +27,14 @@ function Navigation() {
   console.log('Navigation user', user);
 
   useEffect(() => {
-    if (user) {
-    setIsLogin(true);
-    }
+    user ? setIsLogin(true) : setIsLogin(false);
   }, [user])
 
   const [filteredNavMenus, filteredSideMenus, loginSideMenus] = useMemo(
     () => [
       navMenus.filter((menu) => menu.public !== isLogin),
-      sideMenus.filter((menu) => menu.public !== isLogin),
-      sideMenus.filter((menu) => menu.public === isLogin),
+      sideMenus.filter((menu) => menu.public === true),
+      sideMenus.filter((menu) => menu.public === false),
     ], [isLogin]
   );
 
@@ -50,6 +48,7 @@ function Navigation() {
       .then((res) => {
         console.log(res.data);
         dispatch({ type: "LOGOUT" });
+        navigate('/', {replace:true});
       });
     }
   };
@@ -125,3 +124,4 @@ function Navigation() {
 }
 
 export default Navigation;
+
