@@ -30,7 +30,7 @@ export default function App() {
   const dispatch = useContext(UserDispatchContext);
 
   useEffect(() => {
-    if (location.pathname === '/community' || location.pathname === '/' || location.pathname === '/register') return;
+    if (location.pathname === '/community' || location.pathname === '/' || location.pathname === '/register' || location.pathname === '/login') return;
     api.get("/users/user")
       .then((res) => {
         const user = res.user[0];
@@ -67,3 +67,4 @@ export default function App() {
     </>
   );
 }
+
