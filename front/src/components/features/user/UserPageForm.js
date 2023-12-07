@@ -80,9 +80,13 @@ const UserPageForm = (props) => {
         alert("회원정보 수정이 완료되었습니다.");
         navigate("/userpage");
       })
-      .catch((error) => {
-        console.log(error);
-        alert("회원정보 수정에 실패했습니다. 다시 시도해주세요.");
+      .catch((err) => {
+        const error = err.response.data;
+        if (error.statusCode === 409) {
+          alert(error.message);
+        } else {
+          alert("회원정보 수정에 실패했습니다. 다시 시도해주세요.");
+        }
       });
   };
 
