@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../utils/axiosConfig";
 import { Col, Button, Container, Image, Form, Row } from "react-bootstrap";
 import "./UserPage.css";
-import { UserDispatchContext } from "../../../Context/UserStateContext";
+import { UserContext } from "../../../Context/UserContext";
 
 const UserPageForm = (props) => {
   const { userInfo } = props;
@@ -11,7 +11,7 @@ const UserPageForm = (props) => {
   const [image, setImage] = useState(userImg); //filereader를 위한 image
   const fileInput = useRef(null);
 
-  const dispatch = useContext(UserDispatchContext);
+  const { user, setUser } = useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -114,12 +114,10 @@ const UserPageForm = (props) => {
           username: form.userFormName,
           email: userEmail,
           // level: level,
+
           img_url: form.userFormImg,
         };
-        dispatch({
-          type: "USERINFO_EDIT",
-          payload: userinfo,
-        });
+        setUser(userinfo);
         alert("회원정보 수정이 완료되었습니다.");
         navigate("/userpage");
       })
