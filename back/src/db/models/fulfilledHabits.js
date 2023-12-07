@@ -75,6 +75,17 @@ class FulfilledHabitsModel {
     }
   }
 
+  async countByUserId(user_id) {
+    try {
+      return await this.knex("fulfilled_habits")
+        .transacting(this.trx)
+        .count("*", { as: "count" })
+        .where("user_id", user_id);
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async create(data) {
     try {
       await this.knex("fulfilled_habits").transacting(this.trx).insert(data);

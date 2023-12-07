@@ -7,6 +7,7 @@ const {
   BadRequestError,
 } = require("../lib/custom-error.js");
 const userService = require("../services/usersService.js");
+const bcrypt = require("bcrypt");
 
 // GET /login
 usersRouter.post("/login", async (req, res, next) => {
@@ -61,7 +62,7 @@ usersRouter.get("/user", isLoggedIn, async (req, res, next) => {
 
     // user_id로 사용자정보 가져오기
     let user = await usersService.getUserById(user_id);
-    const level = await userService.setAndGetUserLevel(user_id);
+    const level = await userService.setAndgetUserLevel(user_id);
     user.level = level;
 
     // 응답
@@ -119,7 +120,16 @@ usersRouter.put("/", isLoggedIn, async (req, res, next) => {
   try {
     // 요청 쿠키, 바디에서 값 받아오기
     const user_id = req.currentUserId;
-    const toUpdate = { ...req.body };
+    let toUpdate = { ...req.body };
+    if (!toUpdate.username && !toUpdate.password) {
+      throw new BadRequestError("업데이트할 정보를 전달해주세요!");
+    }
+    if (toUpdate.email || toUpdate.user_id || toUpdate.level) {
+      throw new BadRequestError("수정할 수 없는 정보가 있습니다.");
+    }
+    if (toUpdate.password) {
+      toUpdate.password = await bcrypt.hash(password, 10);
+    }
 
     // 현재 사용자 정보 수정하기
     await usersService.setUser(user_id, toUpdate);
