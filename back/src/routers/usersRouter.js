@@ -8,6 +8,7 @@ const {
 } = require("../lib/custom-error.js");
 const userService = require("../services/usersService.js");
 const upload = require("../middlewares/multer");
+const bcrypt = require("bcrypt");
 
 // GET /login
 usersRouter.post("/login", async (req, res, next) => {
@@ -35,6 +36,7 @@ usersRouter.post("/login", async (req, res, next) => {
         username: user.username,
         email: user.email,
         level: user.level,
+        imgurl: user.img_url,
       },
     });
   } catch (err) {
@@ -62,7 +64,7 @@ usersRouter.get("/user", isLoggedIn, async (req, res, next) => {
 
     // user_id로 사용자정보 가져오기
     let user = await usersService.getUserById(user_id);
-    const level = await userService.setAndGetUserLevel(user_id);
+    const level = await userService.setAndgetUserLevel(user_id);
     user.level = level;
 
     // 응답
@@ -115,17 +117,6 @@ usersRouter.post("/", async (req, res, next) => {
   }
 });
 
-// 이미지 업로드 테스트
-// usersRouter.post(
-//   "/imagetest",
-//   isLoggedIn,
-//   upload.single("file"),
-//   (req, res, next) => {
-//     const filePath = req.file.location;
-//     res.send(filePath);
-//   }
-// );
-
 // UPDATE
 usersRouter.put(
   "/",
@@ -135,16 +126,31 @@ usersRouter.put(
     try {
       // 요청 쿠키, 바디에서 값 받아오기
       const user_id = req.currentUserId;
-      const toUpdate = { ...req.body };
+      let toUpdate = { ...req.body };
+      if (!toUpdate.username && !toUpdate.password) {
+        throw new BadRequestError("업데이트할 정보를 전달해주세요!");
+      }
+      if (toUpdate.email || toUpdate.user_id || toUpdate.level) {
+        throw new BadRequestError("수정할 수 없는 정보가 있습니다.");
+      }
+      if (toUpdate.password) {
+        toUpdate.password = await bcrypt.hash(password, 10);
+      }
       const userProfile = req.file.location;
-
+      if (userProfile) {
+        // "https://turtine-image.s3.ca-central-1.amazonaws.com/ [img_url]" 으로 파일명만 저장해놓고 프론트에서 쓸 때 앞부분 붙여쓰기?
+        // 주소를 그냥 통으로 저장하기?
+        toUpdate.imgurl = userProfile;
+        //toUpdate.imgurl = userProfile.split("/")[3];
+        console.log(toUpdate);
+      }
       // 현재 사용자 정보 수정하기
       await usersService.setUser(user_id, toUpdate);
 
       // 응답
       res.status(200).send({
         message: "DB 데이터 수정 성공",
-        file: userProfile,
+        imgurl: userProfile,
       });
     } catch (err) {
       next(err);

@@ -12,14 +12,12 @@ const {
   addDummyPlannedH,
   addDummyFulfilledH,
 } = require("./db/models/modelTestCodes/dummy_data");
-const dummy_fulfilled = require("./db/models/modelTestCodes/dummy_fulfilled");
 
 //라우터 가져오기
 const introRouter = require("./routers/introRouter");
 const usersRouter = require("./routers/usersRouter");
 const fulfilledHabitsRouter = require("./routers/fulfilledHabitsRouter");
 const plannedHabitsRouter = require("./routers/plannedHabitsRouter");
-const userService = require("./services/usersService");
 
 //라우터 가져오기
 const app = express();

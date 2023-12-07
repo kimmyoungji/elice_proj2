@@ -80,33 +80,8 @@ class UsersModel {
     }
   }
 
-  async updateLevel(user_id) {
+  async updateLevel(user_id, level) {
     try {
-      let countPacket = await this.knex("fulfilled_habits")
-        .transacting(this.trx)
-        .count("*", { as: "count" })
-        .where("user_id", user_id);
-      const count = countPacket[0].count;
-      let level = 1;
-      switch (count) {
-        case count >= 0:
-          level = 1;
-          break;
-        case count >= 10:
-          level = 2;
-          break;
-        case count >= 25:
-          level = 3;
-          break;
-        case count >= 45:
-          level = 4;
-          break;
-        case count >= 70:
-          level = 5;
-          break;
-        default:
-          level = 1;
-      }
       await this.knex("users")
         .transacting(this.trx)
         .where("user_id", user_id)
