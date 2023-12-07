@@ -27,7 +27,7 @@ class fulfilledHabitsService {
 
       let weeksCount = {};
 
-      for (let i = weeks[0]; i <= weeks[weeks.length - 1]; ++i) {
+      for (let i = sun4WsAgo.week(); i <= thisMonday.week(); ++i) {
         weeksCount[i] = 0;
       }
 
@@ -36,7 +36,10 @@ class fulfilledHabitsService {
         weeksCount[week] = temp + 1;
       });
 
+      console.log(weeks);
+
       const values = Object.values(weeksCount);
+      console.log(values);
 
       let result = {};
       let startDate = sun4WsAgo;
