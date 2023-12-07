@@ -11,7 +11,7 @@ class fulfilledHabitsService {
       //주차 계산
       const today = dayjs(); //오늘
       //이번주 월~일
-      const thisMonday = today.startOf("week");
+      const thisMonday = today.endOf("week");
       const sun4WsAgo = thisMonday.subtract(4, "week");
 
       //SELECT COUNT(habit_id) FROM fulfilled_habits WHERE user_id = user and date <= monday and date >=sunday;
