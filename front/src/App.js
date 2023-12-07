@@ -50,20 +50,20 @@ export default function App() {
   return (
     <>
       <Navigation />
-        {/* <ErrorBoundary FallbackComponent={ErrorFallBack}> */}
-        <Suspense fallback={<LoadingPage/>}>
-          <Routes>
-            <Route path="/" element={<IntroPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/userpage" element={<UserPage />} />
-            <Route path="/community" element={<CommunityPage />} />
-            <Route path="/habit" element={<HabitPage />} />
-            <Route path="/calendar" element={<CalendarPage />} />
-            <Route path="*" element={<IntroPage />} />
-          </Routes>
-        </Suspense>
-        {/* </ErrorBoundary> */}
+        <ErrorBoundary FallbackComponent={ErrorFallBack}>
+          <Suspense fallback={<LoadingPage/>}>
+            <Routes>
+              <Route path="/" element={<IntroPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/userpage" element={<UserPage />} />
+              <Route path="/community" element={<CommunityPage />} />
+              <Route path="/habit" element={<HabitPage />} />
+              <Route path="/calendar" element={<CalendarPage />} />
+              <Route path="*" element={<IntroPage />} />
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
     </>
   );
 }
