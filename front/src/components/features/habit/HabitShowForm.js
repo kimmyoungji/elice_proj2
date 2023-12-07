@@ -34,7 +34,7 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
         return selectHabit.map((habit) => (
             <ListGroup>
                 <ListGroup.Item>
-                    <Form.Check inline key={habit} 
+                    <Form.Check inline key={`${habit}_1`}
                     type='checkbox'
                     onClick={() => handleFulfillChange(habit)}
                     style={{ fontSize: "14px"}}/>{habits[habit]}
@@ -48,7 +48,7 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
         return <>
                 {selectHabit.map((habit) => (
                 <ListGroup.Item>
-                    <Form.Check inline key={habit} 
+                    <Form.Check inline key={`${habit}_2`}
                     type='checkbox'
                     onClick={() => handleFulfillChange(habit)}
                     style={{ fontSize: "14px"}}/>{habits[habit]}
@@ -56,7 +56,7 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
                 ))}
                 {checkHabit.map((habit) => (
                     <ListGroup.Item>
-                        <Form key={habit} 
+                        <Form key={`${habit}_3`}
                         style={{ fontSize: "12px"}}/><s>{habits[habit]} (완료)</s>
                     </ListGroup.Item>
                     ))
@@ -107,8 +107,6 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
                   fulfilledHabits: fulfillHabit
               })
           .then((res) => {
-              console.log(res);
-              
           }).catch((error) => {
               // 추후 수정예정
               console.log(error)
