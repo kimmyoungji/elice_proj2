@@ -27,7 +27,7 @@ api.interceptors.request.use(
     // 4xx 범위의 에러를 캐치(404말고는 거의 없을 것)
     if (request.status >= 400 && request.status < 500) {
       console.log(`잘못된 요청입니다. ${request.status}`);
-      alert("잘못된 요청입니다.");
+      //alert("잘못된 요청입니다.");
     }
 
     return request;
@@ -50,20 +50,20 @@ api.interceptors.response.use(
     if (error.response && error.response.status) {
       switch (error.response.status) {
         case 400:
-          console.log("400 Bad Request");
-          alert("요청을 다시 확인해주세요.");
+          console.log("400 Bad Request. 요청을 다시 확인해주세요.");
+          //alert("요청을 다시 확인해주세요.");
           break;
         case 401:
-          console.log("401 Unauthorized");
-          alert("인증이 필요합니다.");
+          console.log("401 Unauthorized. 인증이 필요합니다.");
+          //console.log("인증이 필요합니다.");
           break;
         case 403:
-          console.log("403 Forbidden");
-          alert("접근 권한이 없습니다.");
+          console.log("403 Forbidden. 접근 권한이 없습니다.");
+          //alert("접근 권한이 없습니다.");
           break;
         case 404:
-          console.log("404 Not Found");
-          alert("존재하지 않는 페이지입니다.");
+          console.log("404 Not Found. 존재하지 않는 페이지입니다.");
+          //alert("존재하지 않는 페이지입니다.");
           break;
         default:
           return Promise.reject(error);
