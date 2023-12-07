@@ -5,7 +5,6 @@ import { UserStateContext } from "../../Context/UserStateContext";
 
 const UserPage = () => {
   const { user } = useContext(UserStateContext);
-  console.log(user);
 
   const fetchData = async () => {
     try {
@@ -20,10 +19,10 @@ const UserPage = () => {
   }, []);
 
   const userInfo = {
-    userName: user.username,
+    userName: user && user.username,
     userImg:
       "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-    userEmail: user.email,
+    userEmail: user && user.email,
     password: "",
     passwordCheck: "",
   };
