@@ -36,7 +36,7 @@ usersRouter.post("/login", async (req, res, next) => {
         username: user.username,
         email: user.email,
         level: user.level,
-        imgurl: user.img_url,
+        img_url: user.img_url,
       },
     });
   } catch (err) {
@@ -63,17 +63,14 @@ usersRouter.get("/user", isLoggedIn, async (req, res, next) => {
     const user_id = req.currentUserId;
 
     // user_id로 사용자정보 가져오기
-    let user = await usersService.getUserById(user_id);
+    let [ user ] = await usersService.getUserById(user_id);
     const level = await userService.setAndgetUserLevel(user_id);
     user.level = level;
 
     // 응답
     res.status(200).send({
       message: "DB 데이터 조회 성공",
-      username: user.username,
-      email: user.email,
-      level: user.level,
-      imgurl: user.img_url,
+      user
     });
   } catch (err) {
     next(err);
@@ -139,21 +136,23 @@ usersRouter.put(
       if (toUpdate.password) {
         toUpdate.password = await bcrypt.hash(toUpdate.password, 10);
       }
-      const userProfile = req.file.location;
-      if (userProfile) {
+      console.log(req.file);
+      if (req.file) {
+        const userProfile = req.file.location;
         // "https://turtine-image.s3.ca-central-1.amazonaws.com/ [img_url]" 으로 파일명만 저장해놓고 프론트에서 쓸 때 앞부분 붙여쓰기?
         // 주소를 그냥 통으로 저장하기?
         toUpdate.img_url = userProfile;
         //toUpdate.imgurl = userProfile.split("/")[3];
         console.log(toUpdate);
       }
+      
       // 현재 사용자 정보 수정하기
       await usersService.setUser(user_id, toUpdate);
 
       // 응답
       res.status(200).send({
         message: "DB 데이터 수정 성공",
-        imgurl: userProfile,
+        // img_url: userProfile,
       });
     } catch (err) {
       next(err);
