@@ -31,7 +31,7 @@ export default function App() {
       .then((res) => {
         const data = res.user[0];
         console.log(res);
-        setUser(...user, data);
+        setUser({...user, data});
       })
       .catch(() => {
         console.log("쿠키 없음❌");

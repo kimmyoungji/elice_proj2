@@ -39,12 +39,11 @@ export default function LoginPage() {
       .post("/users/login", { email, password })
       .then((res) => {
         const data = res.user;
-        setUser(...user, data);
+        setUser({...user, data});
         alert(`${data.username}님 환영합니다!`);
       })
       .catch((e) => {
-        console.log(e);
-        console.log("로그인 실패!", e.response.message);
+        console.log("로그인 실패!", e);
       });
 
 
