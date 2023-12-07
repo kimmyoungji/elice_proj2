@@ -4,6 +4,8 @@ import Navigation from "./components/common/header/Navigation";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import LoadingPage from "./components/common/header/LoadingPage";
 import api from "./components/utils/axiosConfig";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallBack from "./components/utils/errorBoundary"
 
 const IntroPage = React.lazy(() => import("./components/pages/IntroPage"));
 const LoginPage = React.lazy(() => import("./components/pages/LoginPage"));
@@ -19,6 +21,7 @@ const CalendarPage = React.lazy(() =>
 );
 const UserPage = React.lazy(() => import("./components/pages/UserPage"));
 
+
 export default function App() {
 
   const location = useLocation();
@@ -26,7 +29,7 @@ export default function App() {
   const dispatch = useContext(UserDispatchContext);
 
   useEffect(() => {
-    if (location.pathname === '/community' || location.pathname === '/') return;
+    if (location.pathname === '/community' || location.pathname === '/' || location.pathname === '/register') return;
     api.get("/users/user")
       .then((res) => {
         const user = res.user[0];
@@ -36,15 +39,18 @@ export default function App() {
         });
       })
       .catch(() => {
+        alert('로그인 해주세요');
         console.log("쿠키 없음❌")
         navigate("/login");
       })
   },[location.pathname])
 
+  
 
   return (
     <>
-        <Navigation />
+      <Navigation />
+        {/* <ErrorBoundary FallbackComponent={ErrorFallBack}> */}
         <Suspense fallback={<LoadingPage/>}>
           <Routes>
             <Route path="/" element={<IntroPage />} />
@@ -57,6 +63,7 @@ export default function App() {
             <Route path="*" element={<IntroPage />} />
           </Routes>
         </Suspense>
-      </>
+        {/* </ErrorBoundary> */}
+    </>
   );
 }
