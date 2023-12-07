@@ -104,7 +104,7 @@ usersRouter.post("/", async (req, res, next) => {
   try {
     // 요청 바디 데이터 가져오기
     const { username, email, password } = req.body;
-    if (!password || !email || !password) {
+    if (!username || !email || !password) {
       throw new BadRequestError("필수적인 정보가 입력되지 않았습니다");
     }
 
@@ -137,13 +137,13 @@ usersRouter.put(
         throw new BadRequestError("수정할 수 없는 정보가 있습니다.");
       }
       if (toUpdate.password) {
-        toUpdate.password = await bcrypt.hash(password, 10);
+        toUpdate.password = await bcrypt.hash(toUpdate.password, 10);
       }
       const userProfile = req.file.location;
       if (userProfile) {
         // "https://turtine-image.s3.ca-central-1.amazonaws.com/ [img_url]" 으로 파일명만 저장해놓고 프론트에서 쓸 때 앞부분 붙여쓰기?
         // 주소를 그냥 통으로 저장하기?
-        toUpdate.imgurl = userProfile;
+        toUpdate.img_url = userProfile;
         //toUpdate.imgurl = userProfile.split("/")[3];
         console.log(toUpdate);
       }
