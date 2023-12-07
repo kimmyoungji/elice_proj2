@@ -30,7 +30,6 @@ export default function App() {
     api.get("/users/user")
       .then((res) => {
         const data = res.user;
-        console.log(res);
         setUser(data);
       })
       .catch(() => {
