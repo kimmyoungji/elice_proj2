@@ -8,39 +8,26 @@ dayjs.extend(weekOfYear);
 class fulfilledHabitsService {
   static async getCountsByWeeks(userId) {
     try {
-      //주차 계산
       const today = dayjs(); //오늘
-      //이번주 월~일
       const thisSat = today.endOf("week");
       const Sun4WsAgo = thisSat.startOf("week").subtract(4, "week");
-
-      //SELECT COUNT(habit_id) FROM fulfilled_habits WHERE user_id = user and date <= monday and date >=sunday;
       const dates = await fulfilled.findByDateRange(
         userId,
         Sun4WsAgo.utc(true).format("YYYY-MM-DD"),
         thisSat.utc(true).format("YYYY-MM-DD")
       );
-
       const weeks = dates.map((date) => {
-        return dayjs(date.date).week(); // 날짜주면
+        return dayjs(date.date).week();
       });
-
       let weeksCount = {};
-
       for (let i = Sun4WsAgo.week(); i <= thisSat.week(); ++i) {
         weeksCount[i] = 0;
       }
-
-      console.log(weeksCount);
-
       weeks.map((week) => {
         const temp = weeksCount[week];
         weeksCount[week] = temp + 1;
       });
-
       const values = Object.values(weeksCount);
-      console.log(values);
-
       let result = {};
       let startDate = Sun4WsAgo;
       values.map((val) => {
@@ -112,7 +99,8 @@ class fulfilledHabitsService {
         fulfilled.setTrx(trx);
         //{"fulfilledHabits": ["habit1","habit2","habit4"]}
 
-        const today = dayjs().format("YYYY-MM-DD");
+        const today = dayjs().utc(true).format("YYYY-MM-DD");
+        console.log(today);
         const data4check = {
           user_id: userId,
           date: today,
