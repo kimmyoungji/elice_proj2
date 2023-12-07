@@ -19,11 +19,6 @@ api.interceptors.request.use(
     if (request.data && request.data instanceof FormData) {
       request.headers["Content-Type"] = "multipart/form-data";
     }
-    //요청 data가 Object일 때
-    if (request.data && request.data instanceof Object) {
-      request.headers["Content-Type"] = "application/json";
-      request.data = JSON.stringify(request.data);
-    }
     // 4xx 범위의 에러를 캐치(404말고는 거의 없을 것)
     if (request.status >= 400 && request.status < 500) {
       console.log(`잘못된 요청입니다. ${request.status}`);
