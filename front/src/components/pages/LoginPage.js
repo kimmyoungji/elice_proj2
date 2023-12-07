@@ -38,7 +38,8 @@ export default function LoginPage() {
           alert(`${data.username}님 환영합니다!`);
         })
         .catch((e) => {
-          console.log("로그인 실패!", e);
+          console.log("로그인 실패!");
+          alert(e.response.data.message);
         });
 
 
