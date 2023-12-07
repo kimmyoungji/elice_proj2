@@ -7,14 +7,14 @@ import Eat from "../features/IntroContents/restaurant.png";
 import Toothbrush from "../features/IntroContents/toothbrush.png";
 import Logo from "../common/header/logo.png";
 import Chat from "../features/IntroContents/kakaotalk.png";
-import Chart from "../features/IntroContents/Chart";
+import { IntroChart } from "../common/Chart";
 import { useEffect, useState, useContext } from "react";
 import api from "../utils/axiosConfig";
 import { UserStateContext } from "../../Context/UserStateContext";
 
 
 export default function IntroPage() {
-  const user = useContext(UserStateContext);
+  const {user} = useContext(UserStateContext);
   const navigate = useNavigate();
   const [charts, setCharts] = useState();
 
@@ -63,7 +63,7 @@ export default function IntroPage() {
       <Row className="vh-100">
         <Col>
           <ScrollAniDiv>
-            {charts && (<Chart data={charts[0]}/>)}
+            {charts && (<IntroChart data={charts[0]}/>)}
           </ScrollAniDiv>
         </Col>
         <Col>
@@ -85,7 +85,7 @@ export default function IntroPage() {
         </Col>
         <Col>
           <ScrollAniDiv>
-            {charts && (<Chart data={charts[1]}/>)}
+            {charts && (<IntroChart data={charts[1]}/>)}
           </ScrollAniDiv>
         </Col>
       </Row>
@@ -139,12 +139,11 @@ export default function IntroPage() {
             <p>해양생물을 위해, 나를 위해</p>
             <p>환경 습관을 형성하기 위한 여정</p>
             <Button variant="primary" onClick={() => {
-              user ? navigate('/habit') : navigate('/login')
+              user === null ? navigate('/login') : navigate('/habit')
             }}>시작하기</Button>
           </ScrollAniDiv>
         </Col>
       </Row>
     </div>
-    
   );
 }
