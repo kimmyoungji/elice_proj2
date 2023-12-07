@@ -1,4 +1,15 @@
-const allowedExtensions = [".jpg", ".jpeg", ".png", ".gif", ".bmp"];
+const allowedExtensions = [
+  ".jpg",
+  ".JPG",
+  ".jpeg",
+  ".JPEG",
+  ".png",
+  ".PNG",
+  ".gif",
+  ".GIF",
+  ".bmp",
+  ".BMP",
+];
 
 function fileFilter(req, file, cb) {
   //파일명이 허용된 확장자로 끝나는지 확인
