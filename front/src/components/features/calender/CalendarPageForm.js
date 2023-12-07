@@ -97,7 +97,7 @@ const CalendarForm = ({ habitlist, checkdate }) => {
           const lastWeekCount = countData.lastWeek[2];
           const thisWeekCount = countData.thisWeek[2];
           const countDateArr = [];
-          Object.keys(countData).reverse().map((key) => 
+          countData && Object.keys(countData).reverse().map((key) => 
             countDateArr.push({
               'week': (key === "thisWeek" ? "이번주":
                     `${countData[key][0].substr(5,2)}/${countData[key][0].substr(8)}`
@@ -155,7 +155,7 @@ const CalendarForm = ({ habitlist, checkdate }) => {
         <Col className='calendar-box'>
           <Row className='full-calendar'>
             <FullCalendar
-                  defaultView="dayGridMonth" 
+                  initialView="dayGridMonth" 
                   plugins={[ dayGridPlugin, interactionPlugin ]}
                   eventContent={renderEventContent}
                   titleFormat={(date) => {
