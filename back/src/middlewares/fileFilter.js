@@ -3,7 +3,7 @@ const allowedExtensions = [".jpg", ".jpeg", ".png", ".gif", ".bmp"];
 function fileFilter(req, file, cb) {
   //파일명이 허용된 확장자로 끝나는지 확인
   const isAllowed = allowedExtensions.some((ext) =>
-    file.allowedExtensions.endsWith(ext)
+    file.originalname.endsWith(ext)
   );
 
   if (isAllowed) {

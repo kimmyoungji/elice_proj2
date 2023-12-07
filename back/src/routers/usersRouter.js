@@ -7,6 +7,7 @@ const {
   BadRequestError,
 } = require("../lib/custom-error.js");
 const userService = require("../services/usersService.js");
+const upload = require("../middlewares/multer");
 
 // GET /login
 usersRouter.post("/login", async (req, res, next) => {
@@ -114,24 +115,42 @@ usersRouter.post("/", async (req, res, next) => {
   }
 });
 
+// 이미지 업로드 테스트
+// usersRouter.post(
+//   "/imagetest",
+//   isLoggedIn,
+//   upload.single("file"),
+//   (req, res, next) => {
+//     const filePath = req.file.location;
+//     res.send(filePath);
+//   }
+// );
+
 // UPDATE
-usersRouter.put("/", isLoggedIn, async (req, res, next) => {
-  try {
-    // 요청 쿠키, 바디에서 값 받아오기
-    const user_id = req.currentUserId;
-    const toUpdate = { ...req.body };
+usersRouter.put(
+  "/",
+  isLoggedIn,
+  upload.single("file"),
+  async (req, res, next) => {
+    try {
+      // 요청 쿠키, 바디에서 값 받아오기
+      const user_id = req.currentUserId;
+      const toUpdate = { ...req.body };
+      const userProfile = req.file.location;
 
-    // 현재 사용자 정보 수정하기
-    await usersService.setUser(user_id, toUpdate);
+      // 현재 사용자 정보 수정하기
+      await usersService.setUser(user_id, toUpdate);
 
-    // 응답
-    res.status(200).send({
-      message: "DB 데이터 수정 성공",
-    });
-  } catch (err) {
-    next(err);
+      // 응답
+      res.status(200).send({
+        message: "DB 데이터 수정 성공",
+        file: userProfile,
+      });
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 // DELETE
 usersRouter.delete("/", isLoggedIn, async (req, res, next) => {
