@@ -36,7 +36,7 @@ usersRouter.post("/login", async (req, res, next) => {
         username: user.username,
         email: user.email,
         level: user.level,
-        img_url: user.img_url,
+        imgurl: user.img_url,
       },
     });
   } catch (err) {
@@ -140,8 +140,8 @@ usersRouter.put(
       if (userProfile) {
         // "https://turtine-image.s3.ca-central-1.amazonaws.com/ [img_url]" 으로 파일명만 저장해놓고 프론트에서 쓸 때 앞부분 붙여쓰기?
         // 주소를 그냥 통으로 저장하기?
-        toUpdate.img_url = userProfile;
-        //toUpdate.img_url = userProfile.split("/")[3];
+        toUpdate.imgurl = userProfile;
+        //toUpdate.imgurl = userProfile.split("/")[3];
         console.log(toUpdate);
       }
       // 현재 사용자 정보 수정하기
@@ -150,7 +150,7 @@ usersRouter.put(
       // 응답
       res.status(200).send({
         message: "DB 데이터 수정 성공",
-        file: userProfile,
+        imgurl: userProfile,
       });
     } catch (err) {
       next(err);
