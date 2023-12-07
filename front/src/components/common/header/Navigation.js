@@ -40,6 +40,9 @@ function Navigation() {
     [isLogin]
   );
 
+  const handleLogout = () => {
+    setLogout(true);
+  };
 
   useEffect(() => {
     if (logout) {
@@ -54,7 +57,7 @@ function Navigation() {
         .then((res) => {
           setUser(null);
       });
-    } setLogout(true);
+    } handleLogout();
   };
 
   const handleOffcanvasClose = () => {
