@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../utils/axiosConfig";
 // import axios from "axios";
@@ -93,44 +93,30 @@ const UserPageForm = (props) => {
     formData.append("file", form.userFormImg);
     formData.append("password", form.userFormPassword);
     formData.append("passwordcheck", form.userFormPasswordCheck);
-    // formData.append("data", new Blob([JSON.stringify(formData)], {type: 'application/json'}));
 
     // FormData 확인
-    for (let key of formData.keys()) {
-      console.log(key);
-    }
-    console.log("-----");
-    for (let value of formData.values()) {
-      console.log(value);
-    }
+    // for (let key of formData.keys()) {
+    //   console.log(key);
+    // }
+    // console.log("-----");
+    // for (let value of formData.values()) {
+    //   console.log(value);
+    // }
 
-    api({
-      method: "put",
-      url: "/users",
-      data: formData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
+    api.put("/users", formData)
       .then((res) => {
         console.log(res);
       })
       .catch((error) => {
         console.log(error);
+        alert('회원정보 수정에 실패했습니다. 다시 시도해주세요.')
       })
   };
 
   const deleteUser = () => {
-    api({
-      method: "delete",
-      url: "/users",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    api.delete("/users")
       .then((res) => {
         alert("탈퇴되었습니다. 감사합니다.");
-        // 쿠키 제거
         navigate("/");
       })
       .catch((error) => {

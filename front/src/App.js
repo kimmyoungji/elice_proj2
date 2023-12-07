@@ -39,7 +39,6 @@ export default function App() {
         });
       })
       .catch(() => {
-        alert('로그인 해주세요');
         console.log("쿠키 없음❌")
         navigate("/login");
       })

@@ -8,10 +8,8 @@ import { UserStateContext } from "../../../Context/UserStateContext";
 
 export default function HabitForm ({ habitList, selectedDate, selectedHabits }) {
     const { user } = useContext(UserStateContext);
-    console.log(user);
-    const userName = user.username;
-    const turtleLevel = user.level;
-    console.log(userName, turtleLevel);
+    const userName = user && user.username;
+    const turtleLevel = user && user.level;
     
     return (
         <>
