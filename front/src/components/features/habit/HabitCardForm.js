@@ -12,7 +12,7 @@ export default function HabitCardForm ({ userName, habits, selectedDate, selecte
 
   const handleFormSubmit = (selectedHabit, selectedDate) => {
       setSelectedHabit(selectedHabit);
-      setSelectDate(selectedDate);
+      setSelectDate(selectedDate-1);
       setStart(false);
       setRequest(false);
     };
