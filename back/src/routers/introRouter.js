@@ -5,7 +5,8 @@ const knex = require("../db/knex");
 //Knex Query Builder 사용하여 DB 연결
 router.get("/", async (req, res, next) => {
   try {
-    const result = await knex.select("*").from("intro");
+    const result = await knex("intro").select("*");
+    console.log(result[0].data);
     const data = JSON.parse(result[0].data); //json타입 으로 형변환
     console.log(data);
     res.status(200).json({

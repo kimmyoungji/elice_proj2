@@ -32,10 +32,17 @@ async function setDummyUserLevel(level, number) {
 }
 
 async function addDummyUsers(start, number) {
-  const newUsers = await makeDummyUsers(start, number);
-  console.log("newusers", newUsers);
-  await knex("users").insert(newUsers);
-  setDummyUserLevel(5, number);
+  try {
+    const newUsers = await makeDummyUsers(start, number);
+    await knex("users")
+      .insert(newUsers)
+      .then((res) => {
+        console.log("가짜 사용자 추가 성공!", res);
+      });
+    setDummyUserLevel(5, number);
+  } catch (err) {
+    throw err;
+  }
 }
 
 async function addDummyFulfilledH(number) {
@@ -110,8 +117,8 @@ async function addDummyPlannedH(number) {
         const newFh = {
           user_id: userIds[userIdIdx],
           habit_id: habitId,
-          start_date: start_date.utc(true).format(),
-          end_date: end_date.utc(true).format(),
+          start_date: start_date.utc(true).format("YYYY-MM-DD"),
+          end_date: end_date.utc(true).format("YYYY-MM-DD"),
         };
         pHabitArr.push(newFh);
         --count;
