@@ -88,19 +88,24 @@ const CalendarForm = ({ habitlist, checkdate }) => {
           params: {month: monthString},
       })
       .then((res) => {
+        console.log(res);
           const checkDates = res.dates;
           const checkDateObject = checkDates.map((date) => ({ date }));
           setCheckDate(checkDateObject);
 
-          const countDate = res.counts;
-          const lastWeekCount = countDate.lastWeek;
-          const thisWeekCount = countDate.thisWeek;
+          const countData = res.counts;
+          const lastWeekCount = countData.lastWeek[2];
+          const thisWeekCount = countData.thisWeek[2];
           const countDateArr = [];
-          Object.keys(countDate).map((key) => (
+          Object.keys(countData).reverse().map((key) => 
             countDateArr.push({
-              'week': key, "value": countDate[key]
+              'week': (key === "thisWeek" ? "이번주":
+                    `${countData[key][0].substr(5,2)}/${countData[key][0].substr(8)}`
+                    +'~'+`${countData[key][1].substr(5,2)}/${countData[key][1].substr(8)}`),
+              "value": countData[key][2]
             })
-          ))
+          )
+          console.log(countDateArr);
           setCharts(countDateArr);
           setLastWeekCount(lastWeekCount);
           setThisWeekCount(thisWeekCount);
