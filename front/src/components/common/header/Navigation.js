@@ -24,7 +24,6 @@ function Navigation() {
   const [isLogin, setIsLogin] = useState(false);
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const navigate = useNavigate();
-  console.log('Navigation user', user);
 
   useEffect(() => {
     if (user) {
