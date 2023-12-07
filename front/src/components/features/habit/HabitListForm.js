@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Card,
-  Container,
-  Col,
-  Row,
-  Modal,
-  Button,
-  Image,
-} from "react-bootstrap";
+import { Card, Container, Col, Row, Modal, Button, Image } from "react-bootstrap";
 
 const cheerUpTexts = [
   "같이 시작해봐요, 플라스틱 줄이기! 😊",
@@ -86,10 +78,7 @@ export default function HabitListForm({ habitList }) {
   const cards = Object.keys(habitList).map((key) => (
     <Col
       key={key}
-      xs={6}
-      sm={4}
-      md={6}
-      lg={4}
+      xs={6} sm={4} md={6} lg={4}
       className="mb-4"
       style={{ marginRight: "0" }}
     >
@@ -112,7 +101,9 @@ export default function HabitListForm({ habitList }) {
 
   return (
     <>
-      <Container className="text-center" style={{ marginTop: "40px" }}>
+      <Container
+        className="text-center"
+        style={{ marginTop: "40px" }}>
         <h2>{cheerUpTexts[randomIndex]}</h2>
         <h6 style={{ color: "grey", marginTop: "20px", marginBottom: "50px" }}>
           ▼ 아래로 내려서 습관들을 확인해보세요

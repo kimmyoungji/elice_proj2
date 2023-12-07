@@ -1,32 +1,23 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { Col, Row, Form, Button } from "react-bootstrap";
-import {
-  validateEmail,
-  validateUsername,
-  validatePassword,
-} from "../utils/validate";
+import { validateEmail, validateUsername, validatePassword } from "../utils/validate";
 import { api } from "../utils/axiosConfig";
+
 
 export default function RegisterPage() {
   const navigate = useNavigate();
 
-  //email, password, confirmPassword, Nickname 상태 생성
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPwd, setConfirmPwd] = useState("");
   const [username, setUsername] = useState("");
 
-  //이메일 형태 적합 여부 확인
   const isEmailValid = validateEmail(email);
-  // 비밀번호가 8글자 이상인지 여부 확인
   const isPasswordValid = validatePassword(password);
-  // 비밀번호와 확인용 비밀번호 일치 여부를 확인
   const isPasswordSame = password === confirmPwd;
-  // 닉네임 형태 및 길이 적합 여부를 확인.
   const isUsernameValid = validateUsername(username);
 
-  // 위 4개 조건이 모두 동시에 만족되는지 여부를 확인함.
   const isFormValid =
     isEmailValid && isPasswordValid && isPasswordSame && isUsernameValid;
 
@@ -34,7 +25,6 @@ export default function RegisterPage() {
     e.preventDefault();
 
     try {
-      // "user/register" 엔드포인트로 post요청함.
       await api.post("/users", {
         email,
         password,
@@ -49,6 +39,7 @@ export default function RegisterPage() {
       }
     }
   };
+
 
   return (
     <Row className="justify-content-md-center mt-5">
@@ -171,7 +162,6 @@ export default function RegisterPage() {
               <Button
                 variant="primary"
                 type="submit"
-                // onClick={handleSubmit}
                 disabled={!isFormValid}
               >
                 회원가입

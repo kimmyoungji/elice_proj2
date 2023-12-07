@@ -9,17 +9,12 @@ import ErrorFallBack from "./components/utils/errorBoundary";
 
 const IntroPage = React.lazy(() => import("./components/pages/IntroPage"));
 const LoginPage = React.lazy(() => import("./components/pages/LoginPage"));
-const RegisterPage = React.lazy(() =>
-  import("./components/pages/RegisterPage")
-);
+const RegisterPage = React.lazy(() => import("./components/pages/RegisterPage"));
 const HabitPage = React.lazy(() => import("./components/pages/HabitPage"));
-const CommunityPage = React.lazy(() =>
-  import("./components/pages/CommunityPage")
-);
-const CalendarPage = React.lazy(() =>
-  import("./components/pages/CalendarPage")
-);
+const CommunityPage = React.lazy(() => import("./components/pages/CommunityPage"));
+const CalendarPage = React.lazy(() => import("./components/pages/CalendarPage"));
 const UserPage = React.lazy(() => import("./components/pages/UserPage"));
+
 
 export default function App() {
   const location = useLocation();

@@ -14,7 +14,9 @@ export default function HabitForm({ habitList, selectedDate, selectedHabits }) {
     <>
       <Container className="habits-container">
         <Row>
-          <TurtleForm userName={userName} turtleLevel={turtleLevel} />
+          <TurtleForm
+            userName={userName}
+            turtleLevel={turtleLevel} />
           <HabitCardForm
             userName={userName}
             habits={habitList}
@@ -34,7 +36,10 @@ const TurtleForm = ({ userName, turtleLevel }) => {
     const turtleImg = require(`../../../assets/imgs/거북이${level}.png`);
     return (
       <Card.Body className="d-flex justify-content-center align-items-center">
-        <Card.Img src={turtleImg} alt="Card image" style={{ width: "70%" }} />
+        <Card.Img
+          src={turtleImg}
+          alt="Card image"
+          style={{ width: "70%" }} />
       </Card.Body>
     );
   };
@@ -48,7 +53,9 @@ const TurtleForm = ({ userName, turtleLevel }) => {
           onClick={() => navigate("/calendar")}
         />
       </Col>
-      <Col xs={12} sm={6} className="turtle-container">
+      <Col
+        xs={12} sm={6}
+        className="turtle-container">
         <Card style={{ height: "450px" }}>
           <Card.Body>
             <Card.Title>

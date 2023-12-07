@@ -34,7 +34,6 @@ export default function HabitPage() {
         setSelectedDate(date);
       }
     }).catch((error) => {
-      
     }).finally(() => {
       setIsLoading(false);
     });
@@ -51,8 +50,10 @@ export default function HabitPage() {
                 <Card.Title>
                     <span style={{ fontSize: "30px" }}>로딩중입니다</span>
                 </Card.Title>
-                <Image src={logo} alt="Logo image"
-                style={{ width: '70%', marginTop: "70px" }}/>       
+                <Image
+                  src={logo}
+                  alt="Logo image"
+                  style={{ width: '70%', marginTop: "70px" }}/>       
             </Card>
         </Container>}
       {selectedHabits !== null && <HabitForm

@@ -11,16 +11,13 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // 이메일, 패스워드 입력 시, 각 state에 저장
   const submitEmail = (e) => setEmail(e.target.value);
   const submitPassword = (e) => setPassword(e.target.value);
 
-  // 정규표현식으로 이메일 유효성 검사
   const regexp =
     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
   const validateEmail = (email) => email.match(regexp);
 
-  // 이메일, 패스워드 규칙 확인 (안내 문구 표시, 로그인 버튼 활성화)
   const isEmailValid = validateEmail(email);
   const isPasswordValid = password.length >= 8;
   const isAllValid = isEmailValid && isPasswordValid;
@@ -31,20 +28,18 @@ export default function LoginPage() {
     }
   },[user])
 
-  // 로그인 버튼 클릭 시, API post 요청
+
   const onClickLogin = (e) => {
     e.preventDefault();
-
-    api
-      .post("/users/login", { email, password })
-      .then((res) => {
-        const data = res.user;
-        setUser(data);
-        alert(`${data.username}님 환영합니다!`);
-      })
-      .catch((e) => {
-        console.log("로그인 실패!", e);
-      });
+    api.post("/users/login", { email, password })
+        .then((res) => {
+          const data = res.user;
+          setUser(data);
+          alert(`${data.username}님 환영합니다!`);
+        })
+        .catch((e) => {
+          console.log("로그인 실패!", e);
+        });
 
 
   };

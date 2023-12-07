@@ -5,10 +5,11 @@ import { Col, Button, Container, Image, Form, Row } from "react-bootstrap";
 import "./UserPage.css";
 import { UserContext } from "../../../Context/UserContext";
 
+
 const UserPageForm = (props) => {
   const { userInfo } = props;
   const { userName, userImg, userEmail, password, passwordCheck } = userInfo;
-  const [image, setImage] = useState(userImg); //filereader를 위한 image
+  const [image, setImage] = useState(userImg);
   const fileInput = useRef(null);
 
   const { user, setUser } = useContext(UserContext);

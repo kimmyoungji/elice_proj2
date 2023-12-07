@@ -15,8 +15,8 @@ const getDate = () => {
 }
 
 function CalendarPage() {
-  const [ habitList, setHabitList ] = useState({});
-  const [ isLoading, setIsLoading ] = useState(false);
+  const [habitList, setHabitList] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   let monthCheckDate = {};
 
   useEffect(() => {
@@ -40,10 +40,8 @@ function CalendarPage() {
             return acc;
             }, {})
           }));
-          // habitIds.map((habit) => habitList.habit1 = habit)
         }
     }).catch((error) => {
-        // 추후 수정예정
         console.log(error)
     }).finally(() => {
       setIsLoading(true);
@@ -58,7 +56,6 @@ function CalendarPage() {
         const checkDates = res.dates;
         monthCheckDate.current = checkDates;
     }).catch((error) => {
-        // 추후 수정예정
         console.log(error)
     }).finally(() => {
       setIsLoading(true);

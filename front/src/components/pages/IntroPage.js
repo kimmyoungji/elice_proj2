@@ -12,6 +12,7 @@ import { useEffect, useState, useContext } from "react";
 import api from "../utils/axiosConfig";
 import { UserContext } from "../../Context/UserContext";
 
+
 export default function IntroPage() {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();

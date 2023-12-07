@@ -8,7 +8,7 @@ const UserPage = () => {
 
   const fetchData = async () => {
     try {
-      const res = await api.get("users/user");
+      await api.get("users/user");
     } catch (error) {
       console.log(error);
     }

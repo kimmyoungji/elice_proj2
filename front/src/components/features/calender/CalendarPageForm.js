@@ -92,16 +92,15 @@ const CalendarForm = ({ habitlist, checkdate }) => {
           const checkDateObject = checkDates.map((date) => ({ date }));
           setCheckDate(checkDateObject);
 
+          console.log(res.counts);
           const countData = res.counts;
-          const lastWeekCount = countData.lastWeek[2];
-          const thisWeekCount = countData.thisWeek[2];
+          const lastWeekCount = Object.values(countData)[3];
+          const thisWeekCount = Object.values(countData)[4];
           const countDateArr = [];
-          countData && Object.keys(countData).reverse().map((key) => 
+          countData && Object.keys(countData).map((key) => 
             countDateArr.push({
-              'week': (key === "thisWeek" ? "이번주":
-                    `${countData[key][0].substr(5,2)}/${countData[key][0].substr(8)}`
-                    +'~'+`${countData[key][1].substr(5,2)}/${countData[key][1].substr(8)}`),
-              "value": countData[key][2]
+              'week': key,
+              "value": countData[key],
             })
           )
           setCharts(countDateArr);
@@ -114,38 +113,25 @@ const CalendarForm = ({ habitlist, checkdate }) => {
       })
   };
 
-  // const MyHabitData = () => {
-  //   return (
-  //     <>
-  //       <Card style={{ height: "200px" }}>
-  //         <Card.Title>
-  //           <h2>데이터 서비스</h2>
-  //         </Card.Title>
-  //       </Card>
-  //     </>
-  //   )
-  // }
 
-  
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     setScrollPosition(window.scrollY);
-  //   };
-  //   window.addEventListener('scroll', handleScroll);
-  // }, []);
+  const MyHabitData = () => {
+    const diffCount = thisWeekCount - lastWeekCount;
+    let text = '';
+    if (diffCount === 0) {
+      text = "지난주보다 더 열심히 실천해볼까요?";
+    } else if (diffCount > 0) {
+      text = "이번주는 지난주보다 실천을 많이 했어요 !!";
+    } else {
+      text = `${diffCount}회 남았어요😊`;
+    }
+    return (
+      <>
+        <h3>지난 주 {lastWeekCount}회 달성</h3>
+        <h3>{text}</h3>
+      </>
+    )
+  }
 
-
-  // // 추후 작업 - 데이터 서비스 부분
-  // // 한 번만 API 요청하도록
-  // useEffect(() => {
-  //   const { offsetHeight } = document.documentElement;
-  //   if (!scroll && window.innerHeight >= Math.floor(offsetHeight - scrollPosition)) {
-  //     console.log('API 요청');
-  //     setScroll(true);
-  //   }
-  // }, [scroll, scrollPosition]);
-
-  
 
   return (
     <>
@@ -171,7 +157,9 @@ const CalendarForm = ({ habitlist, checkdate }) => {
                   height="550px"
                 />
           </Row>
-          <Card className="calendar-text" style={{ width: '30rem', height: "300px" }}>
+          <Card
+            className="calendar-text"
+            style={{ width: '30rem', height: "300px" }}>
             <ListGroup variant="flush">
               {Object.keys(habitList).map((key) => (
                 <ListGroup.Item key={key}>
@@ -185,16 +173,15 @@ const CalendarForm = ({ habitlist, checkdate }) => {
       <Container
         className='text-center'
         style={{ marginTop: '30px'}}>
-        <h3>지난 주 {lastWeekCount}회 달성</h3>
-        {(lastWeekCount - thisWeekCount) > 0 ?
-        <h3>{lastWeekCount - thisWeekCount}회 남았어요😊</h3>
-        : <h3>이번주는 지난주보다 실천을 많이 했어요 !!</h3>}
+        <MyHabitData/>
         <h6 style={{ color: "grey", marginTop: '30px' }}>
             ▼ 아래에서 나만의 Data를 확인해보세요
         </h6><br />
         {/* {scroll && <MyHabitData/>} */}
       </Container>
-      <Container className="d-flex justify-content-center" style={{ marginBottom: "30px"}}>
+      <Container
+        className="d-flex justify-content-center"
+        style={{ marginBottom: "30px"}}>
         {charts && <CalendarChart data={charts}/>}
       </Container>
       </>}
