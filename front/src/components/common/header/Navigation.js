@@ -20,22 +20,23 @@ const sideMenus = [
 
 
 function Navigation() {
-  const user = useContext(UserStateContext);
-  const [isLogin, setIsLogin] = useState(true);
+  const { user } = useContext(UserStateContext);
+  const [isLogin, setIsLogin] = useState(false);
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const navigate = useNavigate();
+  console.log('Navigation user', user);
 
   useEffect(() => {
-    if (!user) {
-    setIsLogin(false);
+    if (user) {
+    setIsLogin(true);
     }
-  }, [])
+  }, [user])
 
   const [filteredNavMenus, filteredSideMenus, loginSideMenus] = useMemo(
     () => [
       navMenus.filter((menu) => menu.public !== isLogin),
-      sideMenus.filter((menu) => menu.public === isLogin),
       sideMenus.filter((menu) => menu.public !== isLogin),
+      sideMenus.filter((menu) => menu.public === isLogin),
     ], [isLogin]
   );
 
