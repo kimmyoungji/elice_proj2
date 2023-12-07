@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import api from "../../utils/axiosConfig";
 import { Col, Button, Container, Image, Form, Row } from "react-bootstrap";
 import "./UserPage.css";
-import { validatePassword } from "../../utils/validate";
 import { UserDispatchContext } from "../../../Context/UserStateContext";
 
 const UserPageForm = (props) => {
@@ -95,7 +94,7 @@ const UserPageForm = (props) => {
     }
     const formData = new FormData();
     formData.append("username", form.userFormName);
-    formData.append("file", form.userFormImg);
+    formData.append("file", (form.userFormImg ? form.userFormImg : userImg ));
     formData.append("password", form.userFormPassword);
 
     // FormData 확인
@@ -114,12 +113,14 @@ const UserPageForm = (props) => {
           username: form.userFormName,
           email: userEmail,
           // level: level,
-          imgurl: form.userFormImg
+          img_url: form.userFormImg
       };
         dispatch({
             type: "USERINFO_EDIT",
             payload: userinfo,
           });
+        alert('회원정보 수정이 완료되었습니다.');
+        navigate('/userpage');
       })
       .catch((error) => {
         console.log(error);

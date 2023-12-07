@@ -6,6 +6,11 @@ export const UserDispatchContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
   const [userState, dispatch] = useReducer(LoginReducer, {user : null});
+  // const [user, setUser] = useState(null);
+  // const contextValue = {
+  //     user: null,
+  //     setUser: null,
+  // };
 
   return (
     <UserStateContext.Provider value={userState}>

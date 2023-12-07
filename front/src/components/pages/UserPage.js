@@ -20,7 +20,7 @@ const UserPage = () => {
 
   const userInfo = {
     userName: user && user.username,
-    userImg: user && (user.imgurl ? user.imgurl :
+    userImg: user && (user.img_url ? user.img_url :
       "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
     userEmail: user && user.email,
     password: "",

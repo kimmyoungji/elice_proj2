@@ -41,6 +41,11 @@ function Navigation() {
 
   const dispatch = useContext(UserDispatchContext);
 
+  // useEffect(() => {
+  //   if (user) {
+  //     navigate('/');
+  //   }
+  // }, [user])
 
   const handleClick = (e) => {
     const label = e.target.innerText;
@@ -82,7 +87,7 @@ function Navigation() {
         </Nav>
         <Navbar.Toggle>
           <Image
-            src={user ? (user.imgurl ? user.imgurl : profile) : profile}
+            src={user ? (user.img_url ? user.img_url : profile) : profile}
             alt="profile"
             roundedCircle
             height="30"

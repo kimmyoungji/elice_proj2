@@ -27,10 +27,12 @@ export default function App() {
   const location = useLocation();
   const dispatch = useContext(UserDispatchContext);
 
+  // const {user, setUser} = useContest(UserContext);
+
   const cookieCheck = () => {
     api.get("/users/user")
       .then((res) => {
-        const user = res.user[0];
+        const user = res.user;
         console.log(res);
         dispatch({
           type: "COOKIE_CHECK",
