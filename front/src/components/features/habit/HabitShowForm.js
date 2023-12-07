@@ -117,7 +117,7 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
           }).catch((error) => {
               console.log(error)
           }).finally(() => {
-            alert('실천 완료 !😊');
+            fulfillHabit && alert('실천 완료 !😊');
             setCheckHabit(checkHabit);
             setCheck(false);
             getDoneHabit();
@@ -133,7 +133,7 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
                 </Card.Title>
                 <div style={{ color: "grey", marginBottom: '20px', fontSize: "80%" }}>
                     실천한 습관을 선택해주세요 !</div>
-                <div>실천 종료까지  <b style={{ color: "red", fontSize: "120%"}}>D-{selectedDate}</b></div>
+                <div>실천 종료까지  <b style={{ color: "red", fontSize: "120%"}}>D-{selectedDate-1}</b></div>
                 {/* api 요청 없이 추가한 습관들 리스트 그대로 가져와서 띄우기 */}
                 {!request && <ListGroup style={{ position: 'relative', width: '100%', fontSize: "83%", marginTop: "40px"}}>
                     {getSelectedHabit}

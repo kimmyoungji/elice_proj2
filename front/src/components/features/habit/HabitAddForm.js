@@ -111,7 +111,7 @@ export default function HabitAddForm ({ userName, habits, onSubmit }) {
                     </ListGroup>
                     <div className="d-flex justify-content-center">
                         <Button className="select-button" variant="primary" size="lg"
-                            onClick={handleSelectButton}
+                            onClick={() => handleSelectButton()}
                             style={{ width: "30%", fontSize: '13px', margin: "10px"}}>
                                 선택완료
                         </Button>
