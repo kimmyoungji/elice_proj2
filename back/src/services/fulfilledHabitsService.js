@@ -30,9 +30,11 @@ class fulfilledHabitsService {
 
       let weeksCount = {};
 
-      for (let i = mon4WsAgo.week(); i <= thisSun.week(); ++i) {
+      for (let i = mon4WsAgo.week() - 1; i <= thisSun.week() - 1; ++i) {
         weeksCount[i] = 0;
       }
+
+      console.log(weeksCount);
 
       weeks.map((week) => {
         const temp = weeksCount[week];
