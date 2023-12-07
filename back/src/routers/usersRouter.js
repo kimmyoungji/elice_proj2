@@ -137,6 +137,7 @@ usersRouter.put(
       const user_id = req.currentUserId;
       const toUpdate = { ...req.body };
       const userProfile = req.file.location;
+      toUpdate[image] = userProfile;
 
       // 현재 사용자 정보 수정하기
       await usersService.setUser(user_id, toUpdate);
