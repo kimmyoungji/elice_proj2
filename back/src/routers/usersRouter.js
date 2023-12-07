@@ -70,7 +70,10 @@ usersRouter.get("/user", isLoggedIn, async (req, res, next) => {
     // 응답
     res.status(200).send({
       message: "DB 데이터 조회 성공",
-      user,
+      username: user.username,
+      email: user.email,
+      level: user.level,
+      imgurl: user.img_url,
     });
   } catch (err) {
     next(err);
