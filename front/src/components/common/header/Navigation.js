@@ -42,10 +42,10 @@ function Navigation() {
 
 
   useEffect(() => {
-    if (logout) {
+    if (!isLogin) {
       navigate('/');
     }
-  },[logout])
+  },[isLogin])
 
   const handleClick = (e) => {
     const label = e.target.innerText;
@@ -54,7 +54,6 @@ function Navigation() {
         .then((res) => {
           setUser(null);
       });
-      setLogout(true);
     }
   };
 
