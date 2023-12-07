@@ -94,7 +94,7 @@ const UserPageForm = (props) => {
     }
     const formData = new FormData();
     formData.append("username", form.userFormName);
-    formData.append("file", (form.userFormImg ? form.userFormImg : userImg ));
+    formData.append("file", form.userFormImg);
     formData.append("password", form.userFormPassword);
 
     // FormData 확인
