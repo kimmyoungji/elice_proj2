@@ -30,7 +30,7 @@ function Navigation() {
     user ? setIsLogin(true) : setIsLogin(false);
   }, [user])
 
-  const [filteredNavMenus, filteredSideMenus, loginSideMenus] = useMemo(
+  const [filteredNavMenus, publicSideMenus, loginSideMenus] = useMemo(
     () => [
       navMenus.filter((menu) => menu.public !== isLogin),
       sideMenus.filter((menu) => menu.public === true),
@@ -48,7 +48,6 @@ function Navigation() {
       .then((res) => {
         console.log(res.data);
         dispatch({ type: "LOGOUT" });
-        navigate('/', {replace:true});
       });
     }
   };
@@ -103,7 +102,7 @@ function Navigation() {
             </Offcanvas.Header>
             <Offcanvas.Body>
               <Nav className="justify-content-end flex-grow-1 pe-3">
-                {(isLogin ? loginSideMenus : filteredSideMenus).map((menu, index) => (
+                {(isLogin ? loginSideMenus : publicSideMenus).map((menu, index) => (
                   <Nav.Link
                     key={`nav-menu-${index}`}
                     onClick={(e) => {
