@@ -94,7 +94,7 @@ const UserPageForm = (props) => {
     }
     const formData = new FormData();
     formData.append("username", form.userFormName);
-    formData.append("file", (form.userFormImg ? form.userFormImg : userImg ));
+    formData.append("file", form.userFormImg);
     formData.append("password", form.userFormPassword);
 
     // FormData 확인
@@ -106,30 +106,32 @@ const UserPageForm = (props) => {
     //   console.log(value);
     // }
 
-    api.put("/users", formData)
+    api
+      .put("/users", formData)
       .then((res) => {
         console.log(res);
         const userinfo = {
           username: form.userFormName,
           email: userEmail,
           // level: level,
-          img_url: form.userFormImg
-      };
+          img_url: form.userFormImg,
+        };
         dispatch({
-            type: "USERINFO_EDIT",
-            payload: userinfo,
-          });
-        alert('회원정보 수정이 완료되었습니다.');
-        navigate('/userpage');
+          type: "USERINFO_EDIT",
+          payload: userinfo,
+        });
+        alert("회원정보 수정이 완료되었습니다.");
+        navigate("/userpage");
       })
       .catch((error) => {
         console.log(error);
-        alert('회원정보 수정에 실패했습니다. 다시 시도해주세요.')
-      })
+        alert("회원정보 수정에 실패했습니다. 다시 시도해주세요.");
+      });
   };
 
   const deleteUser = () => {
-    api.delete("/users")
+    api
+      .delete("/users")
       .then((res) => {
         alert("탈퇴되었습니다. 감사합니다.");
         navigate("/");
