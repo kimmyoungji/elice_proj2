@@ -51,19 +51,19 @@ api.interceptors.response.use(
       switch (error.response.status) {
         case 400:
           console.log("400 Bad Request");
-          alert("요청을 다시 확인해주세요.");
+          // alert("요청을 다시 확인해주세요.");
           break;
         case 401:
           console.log("401 Unauthorized");
-          alert("인증이 필요합니다.");
+          // alert("인증이 필요합니다.");
           break;
         case 403:
           console.log("403 Forbidden");
-          alert("접근 권한이 없습니다.");
+          // alert("접근 권한이 없습니다.");
           break;
         case 404:
           console.log("404 Not Found");
-          alert("존재하지 않는 페이지입니다.");
+          // alert("존재하지 않는 페이지입니다.");
           break;
         default:
           return Promise.reject(error);
