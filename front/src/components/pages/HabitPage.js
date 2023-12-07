@@ -20,9 +20,7 @@ export default function HabitPage() {
   const [selectedDate, setSelectedDate] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  // 사용자가 계획한 습관이 있는지 확인
-  // if yes -> 계획한 습관 띄우기
-  // if no -> 추가하기 버튼 띄우기
+
   useEffect(() => {
     setIsLoading(true);
     api.get("/planned-habits")

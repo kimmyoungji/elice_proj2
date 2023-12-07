@@ -17,7 +17,7 @@ export default function UserTurtleCard({ turtleCard }) {
       className="mb-5 mx-3 p-0 col-4"
       style={{ width: "21rem" }} 
     >
-        <Card.Header>{turtleCard.username}의 거북이</Card.Header>
+        <Card.Header>{turtleCard.username}의 거북잉</Card.Header>
       {turtleCard.level >= 1 && turtleCard.level <= 5 && getTurtleImage(turtleCard.level)}
       </Card>
   );

@@ -24,8 +24,8 @@ function Navigation() {
   const { user, setUser } = useContext(UserContext);
   const [isLogin, setIsLogin] = useState(false);
   const [showOffcanvas, setShowOffcanvas] = useState(false);
+  const [logout, setLogout] = useState(false);
   const navigate = useNavigate();
-  console.log("Navigation user", user);
 
   useEffect(() => {
     user ? setIsLogin(true) : setIsLogin(false);
@@ -40,20 +40,24 @@ function Navigation() {
     [isLogin]
   );
 
+  const handlelogout = () => {
+    setLogout(true);
+  }
+
   useEffect(() => {
-    if (!user) {
+    if (logout) {
       navigate('/');
     }
-  },[user])
+  },[logout])
 
   const handleClick = (e) => {
     const label = e.target.innerText;
     if (label === "로그아웃") {
       api.get("/users/logout")
         .then((res) => {
-          console.log(res.data);
           setUser(null);
       });
+      handlelogout();
     }
   };
 

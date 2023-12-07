@@ -23,7 +23,7 @@ const UserPage = React.lazy(() => import("./components/pages/UserPage"));
 
 export default function App() {
   const location = useLocation();
-  const {user, setUser} = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   useEffect(() => {
     if (location.pathname === "/register" || location.pathname === "/login") return;

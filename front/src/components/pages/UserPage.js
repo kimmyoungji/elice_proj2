@@ -9,7 +9,6 @@ const UserPage = () => {
   const fetchData = async () => {
     try {
       const res = await api.get("users/user");
-      console.log(res);
     } catch (error) {
       console.log(error);
     }

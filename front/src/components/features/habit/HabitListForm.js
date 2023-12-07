@@ -60,7 +60,7 @@ export default function HabitListForm({ habitList }) {
             alt="Habit image"
             style={{ width: "200px", height: "200px" }}
           />
-          <p className="mt-3">{habitDesc[selectedHabit.key]}</p>
+          <span className="mt-3">{habitDesc[selectedHabit.key]}</span>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Close</Button>

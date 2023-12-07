@@ -22,38 +22,6 @@ const UserPageForm = (props) => {
     userFormPasswordCheck: passwordCheck,
   });
 
-  // 다른 page에서도 filereader 필요하면 따로 컴포넌트로
-  // const onChange = (e) => {
-  //     handleInputChange(e)
-  //     const uploadFile = e.target.files[0]
-
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //         setImage(reader.result)
-  //     }
-  //     if (uploadFile) {
-  //         reader.readAsDataURL(uploadFile)
-  //     } else {
-  //         return
-  //     }
-  // }
-
-  // const handleInputChange = (e) => {
-  //     if (e.target.type === "file") {
-  //         const id = "userFormImg";
-  //         const value = e.target.files[0];
-  //         setForm((prevData) => ({
-  //             ...prevData,
-  //             [id]: value,
-  //             }));
-  //     } else {
-  //         const { id, value } = e.target;
-  //         setForm((prevData) => ({
-  //         ...prevData,
-  //         [id]: value,
-  //         }));
-  //     }
-  //   };
 
   // createObjectURL 방식
   const onImageChange = (e) => {
@@ -97,19 +65,10 @@ const UserPageForm = (props) => {
     formData.append("file", form.userFormImg);
     formData.append("password", form.userFormPassword);
 
-    // FormData 확인
-    // for (let key of formData.keys()) {
-    //   console.log(key);
-    // }
-    // console.log("-----");
-    // for (let value of formData.values()) {
-    //   console.log(value);
-    // }
 
     api
       .put("/users", formData)
       .then((res) => {
-        console.log(res);
         const userinfo = {
           username: form.userFormName,
           email: userEmail,
@@ -137,7 +96,6 @@ const UserPageForm = (props) => {
       .catch((error) => {
         console.log(error);
       })
-      .finally(() => {});
   };
 
   return (
