@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import HabitForm from '../features/habit/HabitPageForm';
 import HabitListForm from '../features/habit/HabitListForm';
 import { Card, Container, Image } from 'react-bootstrap';
 import logo from "../common/header/logo.png"
 import api from "../utils/axiosConfig";
-import { UserStateContext } from "../../Context/UserStateContext";
 
 
 const habitList = {
@@ -21,8 +20,7 @@ export default function HabitPage() {
   const [selectedDate, setSelectedDate] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  const user = useContext(UserStateContext);
-  console.log('쿠키 user', user);
+  
 
   // 사용자가 계획한 습관이 있는지 확인
   // if yes -> 계획한 습관 띄우기
@@ -46,10 +44,7 @@ export default function HabitPage() {
     });
   }, [])
   
-  const userInfo = {
-    userName : user.username,
-    turtleLevel: user.level
-  }
+  
 
   return (
     <>
@@ -65,7 +60,6 @@ export default function HabitPage() {
             </Card>
         </Container>}
       {selectedHabits !== null && <HabitForm
-            userInfo={userInfo}
             habitList={habitList}
             selectedDate={selectedDate}
             selectedHabits={selectedHabits}

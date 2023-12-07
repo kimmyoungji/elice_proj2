@@ -34,13 +34,13 @@ export default function LoginPage() {
       { email, password })
       .then((res) => {
         const user = res.user;
-        // localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('user', JSON.stringify(user));
 
         // 쿠키 생성
-        const exdate = new Date();
-        exdate.setDate(exdate.getDate() + 1);
-        const cookie_value = JSON.stringify(user) + '; expires=' + exdate.toUTCString();
-        document.cookie = 'user=' + cookie_value;
+        // const exdate = new Date();
+        // exdate.setDate(exdate.getDate() + 1);
+        // const cookie_value = JSON.stringify(user) + '; expires=' + exdate.toUTCString();
+        // document.cookie = 'user=' + cookie_value;
         dispatch({
           type: "LOGIN_SUCCESS",
           payload: user,

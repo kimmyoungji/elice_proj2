@@ -24,9 +24,11 @@ export function CalendarChart ({data}) {
   const keys = Object.keys(data[0]);
 
   return (
-      <BarChart width={700} height={200} data={data}>
-        <XAxis dataKey={keys[0]} />
-        <YAxis domain={['dataMin - 0.0', 'dataMax + 1.0']}/>
+      <BarChart width={1000} height={300} data={data}>
+        <XAxis dataKey={keys[0]} 
+        label={{ value: '개', offset: 30, angle: 0, position: 'bottom' }}/>
+        <YAxis domain={['dataMin - 0.0', 'dataMax + 1.0']}
+        label={{ value: '개', offset: 30, angle: 0, position: 'top' }}/>
         <Bar name="일별데이터" dataKey={keys[1]} fill="#82ca9d" /> 
       </BarChart>
   );
