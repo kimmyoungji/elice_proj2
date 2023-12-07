@@ -36,6 +36,7 @@ usersRouter.post("/login", async (req, res, next) => {
         username: user.username,
         email: user.email,
         level: user.level,
+        img_url: user.img_url,
       },
     });
   } catch (err) {
@@ -115,17 +116,6 @@ usersRouter.post("/", async (req, res, next) => {
     next(err);
   }
 });
-
-// 이미지 업로드 테스트
-// usersRouter.post(
-//   "/imagetest",
-//   isLoggedIn,
-//   upload.single("file"),
-//   (req, res, next) => {
-//     const filePath = req.file.location;
-//     res.send(filePath);
-//   }
-// );
 
 // UPDATE
 usersRouter.put(
