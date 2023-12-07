@@ -11,27 +11,25 @@ class fulfilledHabitsService {
       //주차 계산
       const today = dayjs(); //오늘
       //이번주 월~일
-      const thisSat = today.endOf("week");
-      console.log(thisSat);
-      const sun4WsAgo = thisSat.subtract(4, "week").add(1, "day");
+      const thisSun = today.endOf("week").add(1, "day");
+      console.log(thisSun);
+      const sun4WsAgo = thisSun.subtract(4, "week").add(1, "day");
       console.log(sun4WsAgo);
 
       //SELECT COUNT(habit_id) FROM fulfilled_habits WHERE user_id = user and date <= monday and date >=sunday;
       const dates = await fulfilled.findByDateRange(
         userId,
         sun4WsAgo.utc(true).format("YYYY-MM-DD"),
-        thisSat.utc(true).format("YYYY-MM-DD")
+        thisSun.utc(true).format("YYYY-MM-DD")
       );
 
       const weeks = dates.map((date) => {
         return dayjs(date.date).week();
       });
 
-      console.log(weeks);
-
       let weeksCount = {};
 
-      for (let i = sun4WsAgo.week(); i <= thisSat.week(); ++i) {
+      for (let i = sun4WsAgo.week(); i <= thisSun.week(); ++i) {
         weeksCount[i] = 0;
       }
 
@@ -41,7 +39,6 @@ class fulfilledHabitsService {
       });
 
       const values = Object.values(weeksCount);
-      console.log(values);
 
       let result = {};
       let startDate = sun4WsAgo;
