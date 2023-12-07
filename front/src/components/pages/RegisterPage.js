@@ -112,15 +112,7 @@ export default function RegisterPage() {
 
           <Form.Group controlId="registerConfirmPassword">
             <Form.Label>비밀번호 확인</Form.Label>
-            {!isPasswordSame ? (
-              <Form.Control
-                type="password"
-                autoComplete="off"
-                value={confirmPwd}
-                onChange={(e) => setConfirmPwd(e.target.value)}
-                className="bg-danger p-2 text-dark bg-opacity-10"
-              />
-            ) : (
+            {isPasswordSame && confirmPwd.length > 1 ? (
               <Form.Control
                 type="password"
                 autoComplete="off"
@@ -128,14 +120,22 @@ export default function RegisterPage() {
                 onChange={(e) => setConfirmPwd(e.target.value)}
                 className="bg-success p-2 text-dark bg-opacity-10"
               />
-            )}
-            {!isPasswordSame ? (
-              <Form.Text className="text-danger">
-                비밀번호가 일치하지 않습니다.
-              </Form.Text>
             ) : (
+              <Form.Control
+                type="password"
+                autoComplete="off"
+                value={confirmPwd}
+                onChange={(e) => setConfirmPwd(e.target.value)}
+                className="bg-danger p-2 text-dark bg-opacity-10"
+              />
+            )}
+            {isPasswordSame && confirmPwd.length > 1 ? (
               <Form.Text className="text-success">
                 비밀번호가 일치합니다.
+              </Form.Text>
+            ) : (
+              <Form.Text className="text-danger">
+                비밀번호가 일치하지 않습니다.
               </Form.Text>
             )}
           </Form.Group>
