@@ -12,24 +12,25 @@ class fulfilledHabitsService {
       const today = dayjs(); //오늘
       //이번주 월~일
       const thisSun = today.endOf("week").add(1, "day");
-      console.log(thisSun);
-      const sun4WsAgo = thisSun.subtract(4, "week").add(1, "day");
-      console.log(sun4WsAgo);
+      const mon4WsAgo = thisSun
+        .startOf("week")
+        .subtract(4, "week")
+        .add(1, "day");
 
       //SELECT COUNT(habit_id) FROM fulfilled_habits WHERE user_id = user and date <= monday and date >=sunday;
       const dates = await fulfilled.findByDateRange(
         userId,
-        sun4WsAgo.utc(true).format("YYYY-MM-DD"),
+        mon4WsAgo.utc(true).format("YYYY-MM-DD"),
         thisSun.utc(true).format("YYYY-MM-DD")
       );
 
       const weeks = dates.map((date) => {
-        return dayjs(date.date).week();
+        return dayjs(date.date).week(); // 날짜주면
       });
 
       let weeksCount = {};
 
-      for (let i = sun4WsAgo.week(); i <= thisSun.week(); ++i) {
+      for (let i = mon4WsAgo.week(); i <= thisSun.week(); ++i) {
         weeksCount[i] = 0;
       }
 
@@ -39,10 +40,11 @@ class fulfilledHabitsService {
       });
 
       const values = Object.values(weeksCount);
+      console.log(values);
 
       let result = {};
-      let startDate = sun4WsAgo;
-      values.map((val, i) => {
+      let startDate = mon4WsAgo;
+      values.map((val) => {
         let key = `${startDate.format("YYYY-MM-DD")}~`;
         startDate = startDate.add(6, "day");
         key = key + `${startDate.format("YYYY-MM-DD")}`;
