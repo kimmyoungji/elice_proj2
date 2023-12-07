@@ -21,8 +21,6 @@ const habits = {
 const CalendarForm = ({ habitlist, checkdate }) => {
   const [habitList, setHabitList] = useState(habitlist);
   const [checkDate, setCheckDate ] = useState(checkdate.current);
-  // const [scrollPosition, setScrollPosition] = useState(0);
-  // const [scroll, setScroll] = useState(false);
   const [charts, setCharts] = useState(false);
   const [lastWeekCount, setLastWeekCount] = useState(false);
   const [thisWeekCount, setThisWeekCount] = useState(false);
@@ -38,14 +36,12 @@ const CalendarForm = ({ habitlist, checkdate }) => {
     )
   }, [])
 
-  // 체크한 이미지 클릭
   const handleCheckClick = (event) => {
     const startDate = event._instance.range.start
     const month = (startDate.getMonth() + 1).toString().padStart(2, '0');;
     const date = startDate.getDate().toString().padStart(2, '0');;
     const clickFullDate = `${startDate.getFullYear()}-${month}-${date}`
     
-    // api 요청으로 받은 데이터로 변경
     api({
         method: 'get',
         url: "/fulfilled-habits",
@@ -61,7 +57,6 @@ const CalendarForm = ({ habitlist, checkdate }) => {
           }, {})
         }));
     }).catch((error) => {
-        // 추후 수정예정
         console.log(error)
     })
   };
@@ -92,7 +87,6 @@ const CalendarForm = ({ habitlist, checkdate }) => {
           const checkDateObject = checkDates.map((date) => ({ date }));
           setCheckDate(checkDateObject);
 
-          console.log(res.counts);
           const countData = res.counts;
           const lastWeekCount = Object.values(countData)[3];
           const thisWeekCount = Object.values(countData)[4];
@@ -108,7 +102,6 @@ const CalendarForm = ({ habitlist, checkdate }) => {
           setThisWeekCount(thisWeekCount);
         setRender(true);
       }).catch((error) => {
-          // 추후 수정예정
           console.log(error)
       })
   };
@@ -177,7 +170,6 @@ const CalendarForm = ({ habitlist, checkdate }) => {
         <h6 style={{ color: "grey", marginTop: '30px' }}>
             ▼ 아래에서 나만의 Data를 확인해보세요
         </h6><br />
-        {/* {scroll && <MyHabitData/>} */}
       </Container>
       <Container
         className="d-flex justify-content-center"
