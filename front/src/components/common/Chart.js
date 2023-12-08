@@ -26,7 +26,7 @@ export function CalendarChart ({data}) {
   return (
       <BarChart width={1000} height={300} data={data}>
         <XAxis dataKey={keys[0]}/>
-        <YAxis domain={['dataMin - 0.0', 'dataMax + 1.0']}/>
+        <YAxis domain={[0, 'dataMax + 1.0']}/>
         <Bar name="일별데이터" dataKey={keys[1]} fill="#82ca9d" /> 
       </BarChart>
   );
