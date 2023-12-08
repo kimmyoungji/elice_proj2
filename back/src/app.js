@@ -13,6 +13,11 @@ const {
   addDummyFulfilledH,
 } = require("./db/models/modelTestCodes/dummy_data");
 
+const {
+  dummy_fulfilled,
+  dummy_planned,
+} = require("./db/models/modelTestCodes/dummy_fulfilled");
+
 //라우터 가져오기
 const introRouter = require("./routers/introRouter");
 const usersRouter = require("./routers/usersRouter");
@@ -39,9 +44,10 @@ app.use(
 
 // knex 연결 test
 testKnex();
-// dummy_fulfilled(5000);
+// dummy_planned();
+// dummy_fulfilled();
 // addDummyUsers(1, 200);
-// addDummyPlannedH(1000);
+// addDummyPlannedH(500);
 // addDummyFulfilledH(5000);
 
 // 입력되는 형식
