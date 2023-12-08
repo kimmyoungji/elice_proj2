@@ -42,6 +42,61 @@ testKnex();
 // addDummyPlannedH(1000);
 // addDummyFulfilledH(5000);
 
+knex("fulfilled_habits")
+  .insert({
+    user_id: 200,
+    habit_id: "habit1",
+    date: dayjs().format(),
+  })
+  .then((res) => {
+    console.log(dayjs().format());
+    knex("fulfilled_habits").select("*").where("user_id", 202);
+    // .then(console.log);
+  });
+
+knex("fulfilled_habits")
+  .insert({
+    user_id: 200,
+    habit_id: "habit2",
+    date: dayjs().utc(true).format(),
+  })
+  .then((res) => {
+    console.log(dayjs().utc(true).format());
+    knex("fulfilled_habits").select("*").where("user_id", 202);
+    // .then(console.log);
+  });
+
+knex("fulfilled_habits")
+  .insert({
+    user_id: 200,
+    habit_id: "habit3",
+    date: dayjs().format("YYYY-MM-DD"),
+  })
+  .then((res) => {
+    console.log(dayjs().format("YYYY-MM-DD"));
+    knex("fulfilled_habits").select("*").where("user_id", 202);
+    // .then(console.log);
+  });
+
+knex("fulfilled_habits")
+  .insert({
+    user_id: 200,
+    habit_id: "habit4",
+    date: dayjs().utc(true).format("YYYY-MM-DD"),
+  })
+  .then((res) => {
+    console.log(dayjs().utc(true).format("YYYY-MM-DD"));
+    knex("fulfilled_habits")
+      .select("*")
+      .where("user_id", 200)
+      .then((res) => {});
+  });
+
+dayjs().format();
+dayjs().utc(true).format();
+dayjs().format("YYYY-MM-DD");
+dayjs().utc(true).format("YYYY-MM-DD");
+
 // 라우터
 app.use("/graphs", introRouter);
 app.use("/users", usersRouter);
