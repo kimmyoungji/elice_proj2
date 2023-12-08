@@ -24,7 +24,6 @@ class UsersModel {
       user_id = user_id ? user_id : minIdPacket[0][0].minId - 1; // Replace this with your actual user_id value
       limit = limit ? Number(limit) : 10;
       return this.knex("users")
-        .transacting(this.trx)
         .select("user_id AS userId", "username", "email", "level")
         .where("user_id", ">", user_id)
         .limit(limit);

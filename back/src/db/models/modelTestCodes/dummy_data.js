@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const dayjs = require("dayjs");
 async function makeDummyUsers(start, number) {
   const users = [];
-  for (let i = start; i <= number; i++) {
+  for (let i = start; i <= start + number; i++) {
     let password = `password${i < 10 ? "0" + i : i}`;
     password = await bcrypt.hash(password, 10);
     const username = `user${i < 10 ? "0" + i : i}`;
@@ -26,17 +26,14 @@ async function setDummyUserLevel(level, number) {
       .orderByRaw("RAND()")
       .limit(count);
     const randUserIdArr = randomUserId.map((userId) => userId.user_id);
-    console.log(randUserIdArr);
     await knex("users").update("level", i).whereIn("user_id", randUserIdArr);
   }
 }
 
 async function addDummyUsers(start, number) {
   const newUsers = await makeDummyUsers(start, number);
-  console.log("됨?");
   await knex("users").insert(newUsers);
   setDummyUserLevel(5, number);
-  console.log("됐나?");
 }
 
 async function addDummyFulfilledH(number) {
@@ -75,7 +72,7 @@ async function addDummyPlannedH(number) {
     const habitIdIdx = Math.floor(Math.random() * habitIds.length);
     const habitDateIdx = Math.floor(Math.random() * habitDates.length);
     const userIdx = Math.floor(Math.random() * randUserIdArr.length);
-    const start_date = getRandomDate(dayjs("2023-11-28"), dayjs(new Date()));
+    const start_date = getRandomDate(dayjs("2023-01-10"), dayjs(new Date()));
     const end_date = start_date.add(habitDates[habitDateIdx], "day");
     const newFh = {
       user_id: randUserIdArr[userIdx],
@@ -85,7 +82,6 @@ async function addDummyPlannedH(number) {
     };
     pHabitArr.push(newFh);
   }
-  console.log(pHabitArr);
   await knex("planned_habits").insert(pHabitArr);
 }
 

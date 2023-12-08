@@ -92,28 +92,32 @@ class userService {
         // DB: transaction 객체전달하기
         users.setTrx(trx);
         fulfilledHabits.setTrx(trx);
-        const count = await fulfilledHabits.countByUserId(user_id);
+        const countPacket = await fulfilledHabits.countByUserId(user_id);
+        let count = countPacket[0].count;
+
         let level = 1;
-        switch (count) {
-          case count >= 0:
-            level = 1;
+        switch (true) {
+          case count >= 75:
+            level = 5;
             break;
-          case count >= 10:
-            level = 2;
+          case count >= 50:
+            level = 4;
             break;
           case count >= 25:
             level = 3;
             break;
-          case count >= 45:
-            level = 4;
+          case count >= 10:
+            level = 2;
             break;
-          case count >= 70:
-            level = 5;
+          case count >= 5:
+            level = 1;
             break;
           default:
             level = 1;
         }
-        await users.updateLevel(user_id, level);
+        await users.updateLevel(user_id, level).then((res) => {
+          console.log(res, "레벨 업데이트 완료");
+        });
         return level;
       });
     } catch (err) {

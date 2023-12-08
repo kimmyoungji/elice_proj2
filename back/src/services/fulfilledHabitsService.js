@@ -71,7 +71,6 @@ class fulfilledHabitsService {
   static async getHabitsByDate(userId, date) {
     try {
       const result = await fulfilled.findByDate(userId, date);
-      console.log(result);
       return result.map((row) => row.habit_id);
     } catch (error) {
       console.error(error.stack);
@@ -82,10 +81,7 @@ class fulfilledHabitsService {
   static async getHabitsByToday(userId) {
     try {
       const today = dayjs().format();
-
-      console.log(today);
       const result = await fulfilled.findByDate(userId, today);
-      console.log(result);
       return result.map((row) => row.habit_id);
     } catch (error) {
       console.error(error.stack);
@@ -97,10 +93,8 @@ class fulfilledHabitsService {
     try {
       return await knex.transaction(async (trx) => {
         fulfilled.setTrx(trx);
-        //{"fulfilledHabits": ["habit1","habit2","habit4"]}
 
         const today = dayjs().format();
-        console.log(today);
         const data4check = {
           user_id: userId,
           date: today,
@@ -117,7 +111,6 @@ class fulfilledHabitsService {
             habit_id: id,
           }));
 
-        console.log("저장할 습관id", data);
         if (data.length) {
           await fulfilled.create(data);
         } else {
@@ -126,7 +119,6 @@ class fulfilledHabitsService {
       });
     } catch (error) {
       console.error(error.stack);
-      // await trx.rollback();
       throw error;
     }
   }
@@ -145,7 +137,6 @@ class fulfilledHabitsService {
       });
     } catch (error) {
       console.error(error.stack);
-      // await trx.rollback();
       throw error;
     }
   }

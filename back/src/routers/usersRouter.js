@@ -65,6 +65,7 @@ usersRouter.get("/user", isLoggedIn, async (req, res, next) => {
     // user_id로 사용자정보 가져오기
     let [user] = await usersService.getUserById(user_id);
     const level = await userService.setAndgetUserLevel(user_id);
+    console.log("Router", level);
     user.level = level;
 
     // 응답

@@ -90,7 +90,6 @@ class FulfilledHabitsModel {
   async create(data) {
     try {
       await this.knex("fulfilled_habits").transacting(this.trx).insert(data);
-      console.log("실천 기록이 잘 저장됨");
     } catch (error) {
       console.error("실천 습관을 저장하다가 뭔가 잘못됨", error.stack);
       throw new Error("실천한 습관을 DB에 저장하던 중 문제가 생겼습니다.");
@@ -103,7 +102,6 @@ class FulfilledHabitsModel {
         .transacting(this.trx)
         .where(data)
         .del();
-      console.log("달성 기록이 잘 삭제됨");
     } catch (error) {
       console.error("취소한 달성내역을 삭제하다가 뭔가 잘못됨", error.stack);
       throw new Error(

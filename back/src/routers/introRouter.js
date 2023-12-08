@@ -6,9 +6,7 @@ const knex = require("../db/knex");
 router.get("/", async (req, res, next) => {
   try {
     const result = await knex("intro").select("*");
-    console.log(result[0].data);
     const data = JSON.parse(result[0].data); //json타입 으로 형변환
-    console.log(data);
     res.status(200).json({
       message:
         "인포그래픽 데이터 전송 성공: [0]koreaTrashGraph, [1]worldOceanPlasticsGraph",
