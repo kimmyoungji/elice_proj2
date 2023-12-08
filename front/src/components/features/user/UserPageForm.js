@@ -92,7 +92,8 @@ const UserPageForm = (props) => {
   };
 
   const deleteUser = () => {
-    api
+    if (window.confirm("정말 탈퇴하시겠습니까? 😭")) {
+      api
       .delete("/users")
       .then((res) => {
         setUser(null);
@@ -102,6 +103,7 @@ const UserPageForm = (props) => {
       .catch((error) => {
         console.log(error);
       })
+    } return
   };
 
   return (
