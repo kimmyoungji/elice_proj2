@@ -67,7 +67,7 @@ async function addDummyFulfilledH(number) {
         const newFh = {
           user_id: randPh.user_id,
           habit_id: randPh.habit_id,
-          date: dayjs(randPh.start_date).add(1, "day").utc(true).format(),
+          date: dayjs(randPh.start_date).add(1, "day").format(),
         };
         console.log(newFh);
         fHabitArr.push(newFh);

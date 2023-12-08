@@ -13,8 +13,8 @@ class fulfilledHabitsService {
       const Sun4WsAgo = thisSat.startOf("week").subtract(4, "week");
       const dates = await fulfilled.findByDateRange(
         userId,
-        Sun4WsAgo.utc(true).format("YYYY-MM-DD"),
-        thisSat.utc(true).format("YYYY-MM-DD")
+        Sun4WsAgo.format("YYYY-MM-DD"),
+        thisSat.format("YYYY-MM-DD")
       );
       const weeks = dates.map((date) => {
         return dayjs(date.date).week();
@@ -50,10 +50,10 @@ class fulfilledHabitsService {
       //다음달 계산
       const nextMonth =
         dayjs(month).month() === 11 // 쿼리로 들어온 달이 12월이면
-          ? dayjs(month).add(1, "year").startOf("year").format("YYYY-MM-DD") //다음 해 01월
-          : dayjs(month).add(1, "month").startOf("month").format("YYYY-MM-DD"); // 아니면 같은 해 다음달
+          ? dayjs(month).add(1, "year").startOf("year").format() //다음 해 01월
+          : dayjs(month).add(1, "month").startOf("month").format(); // 아니면 같은 해 다음달
       //이번달 첫날
-      const thisMonth = dayjs(month).startOf("month").format("YYYY-MM-DD");
+      const thisMonth = dayjs(month).startOf("month").format();
       //이번달에 습관 실천할 날짜들 조회
       const resultMonth = await fulfilled.findByMonth(
         userId,
@@ -81,7 +81,7 @@ class fulfilledHabitsService {
 
   static async getHabitsByToday(userId) {
     try {
-      const today = dayjs().format("YYYY-MM-DD");
+      const today = dayjs().format();
 
       console.log(today);
       const result = await fulfilled.findByDate(userId, today);
@@ -99,7 +99,7 @@ class fulfilledHabitsService {
         fulfilled.setTrx(trx);
         //{"fulfilledHabits": ["habit1","habit2","habit4"]}
 
-        const today = dayjs().utc(true).format("YYYY-MM-DD");
+        const today = dayjs().format();
         console.log(today);
         const data4check = {
           user_id: userId,
@@ -135,7 +135,7 @@ class fulfilledHabitsService {
     try {
       return await knex.transaction(async (trx) => {
         fulfilled.setTrx(trx);
-        const today = dayjs().format("YYYY-MM-DD");
+        const today = dayjs().format();
         await Promise.all(
           habitIdArray.map(async (el) => {
             const data = { user_id: userId, habit_id: el, date: today };

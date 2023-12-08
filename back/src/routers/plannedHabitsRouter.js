@@ -17,6 +17,7 @@ plannedHabitsRouter.get("/", isLoggedIn, async (req, res, next) => {
     );
     const habitIds = plannedHabits.map((ph) => ph.habit_id);
     const habitDates = plannedHabits.map((ph) => {
+      console.log("ph.end_date", ph.end_date);
       return dayjs(ph.end_date).diff(dayjs(), "day");
     });
 

@@ -12,7 +12,7 @@ async function dummy_fulfilled(number) {
       .orderByRaw("RAND()")
       .limit(userLimit);
     console.log(randomUserIdPakets);
-    const startDate = dayjs("2023-08-15").format("YYYY-MM-DD");
+    const startDate = dayjs("2023-01-01").format();
     for (let i = 0; i < userLimit; i++) {
       let user = randomUserIdPakets[i].user_id;
       console.log(user);

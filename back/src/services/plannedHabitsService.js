@@ -53,8 +53,8 @@ class plannedHabitService {
             // planned_habit_id,
             user_id,
             habit_id: habitIds[i],
-            start_date: start_date.utc(true).format("YYYY-MM-DD"),
-            end_date: end_date.utc(true).format("YYYY-MM-DD"),
+            start_date: start_date.format(),
+            end_date: end_date.format(),
           };
           // DB: 새로운 데이터 추가
           await plannedHabits.create(newhabit);
