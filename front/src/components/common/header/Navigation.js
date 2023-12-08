@@ -15,7 +15,7 @@ const navMenus = [
 
 const sideMenus = [
   { href: "/userpage", label: "내 정보", public: false },
-  { href: "/", label: "로그아웃", public: false },
+  { href: null, label: "로그아웃", public: false },
   { href: "/login", label: "로그인", public: true },
   { href: "/register", label: "회원가입", public: true },
 ];
@@ -24,7 +24,6 @@ function Navigation() {
   const { user, setUser } = useContext(UserContext);
   const [isLogin, setIsLogin] = useState(false);
   const [showOffcanvas, setShowOffcanvas] = useState(false);
-  const [logout, setLogout] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,15 +39,12 @@ function Navigation() {
     [isLogin]
   );
 
-  const handleLogout = () => {
-    setLogout(true);
-  };
 
   useEffect(() => {
-    if (logout) {
+    if (!isLogin) {
       navigate('/');
     }
-  },[logout])
+  },[isLogin])
 
   const handleClick = (e) => {
     const label = e.target.innerText;
@@ -57,7 +53,7 @@ function Navigation() {
         .then((res) => {
           setUser(null);
       });
-    } handleLogout();
+    }
   };
 
   const handleOffcanvasClose = () => {
@@ -117,7 +113,7 @@ function Navigation() {
                     key={`nav-menu-${index}`}
                     onClick={(e) => {
                       handleClick(e);
-                      menu.href !== "/" && navigate(menu.href);                 
+                      menu.href && navigate(menu.href);                 
                       handleOffcanvasClose();
                     }}
                   >
