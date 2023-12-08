@@ -19,6 +19,8 @@ const usersRouter = require("./routers/usersRouter");
 const fulfilledHabitsRouter = require("./routers/fulfilledHabitsRouter");
 const plannedHabitsRouter = require("./routers/plannedHabitsRouter");
 const dayjs = require("dayjs");
+const tz = require("dayjs/plugin/timezone");
+dayjs.extend(tz);
 
 //라우터 가져오기
 const app = express();
@@ -42,60 +44,50 @@ testKnex();
 // addDummyPlannedH(1000);
 // addDummyFulfilledH(5000);
 
-knex("fulfilled_habits")
-  .insert({
-    user_id: 200,
+// 입력되는 형식
+console.log(dayjs().format());
+console.log(dayjs().utc(true).format());
+console.log(dayjs().format("YYYY-MM-DD"));
+console.log(dayjs().utc(true).format("YYYY-MM-DD"));
+
+// 저장되는 형식
+async function temp() {
+  await knex("fulfilled_habits").insert({
+    user_id: 100,
     habit_id: "habit1",
     date: dayjs().format(),
-  })
-  .then((res) => {
-    console.log(dayjs().format());
-    knex("fulfilled_habits").select("*").where("user_id", 202);
-    // .then(console.log);
   });
-
-knex("fulfilled_habits")
-  .insert({
-    user_id: 200,
+  await knex("fulfilled_habits").insert({
+    user_id: 100,
     habit_id: "habit2",
     date: dayjs().utc(true).format(),
-  })
-  .then((res) => {
-    console.log(dayjs().utc(true).format());
-    knex("fulfilled_habits").select("*").where("user_id", 202);
-    // .then(console.log);
   });
-
-knex("fulfilled_habits")
-  .insert({
-    user_id: 200,
+  await knex("fulfilled_habits").insert({
+    user_id: 100,
     habit_id: "habit3",
     date: dayjs().format("YYYY-MM-DD"),
-  })
-  .then((res) => {
-    console.log(dayjs().format("YYYY-MM-DD"));
-    knex("fulfilled_habits").select("*").where("user_id", 202);
-    // .then(console.log);
   });
-
-knex("fulfilled_habits")
-  .insert({
-    user_id: 200,
+  await knex("fulfilled_habits").insert({
+    user_id: 100,
     habit_id: "habit4",
     date: dayjs().utc(true).format("YYYY-MM-DD"),
-  })
-  .then((res) => {
-    console.log(dayjs().utc(true).format("YYYY-MM-DD"));
-    knex("fulfilled_habits")
-      .select("*")
-      .where("user_id", 200)
-      .then((res) => {});
   });
+}
 
-dayjs().format();
-dayjs().utc(true).format();
-dayjs().format("YYYY-MM-DD");
-dayjs().utc(true).format("YYYY-MM-DD");
+temp().then(async (res) => {
+  await knex("fulfilled_habits")
+    .select("*")
+    .where({ user_id: 100 })
+    .then((res) => {
+      console.log(res);
+      const dates = res.map((r) => r.date);
+      console.log(dates);
+      console.log(dayjs(dates[0]).format());
+      console.log(dayjs(dates[0]).tz("Asia/Seoul").format());
+    });
+});
+
+// 출력되는 형식
 
 // 라우터
 app.use("/graphs", introRouter);
