@@ -16,8 +16,6 @@ fulfilledRouter.get("/", isLoggedIn, async (req, res, next) => {
       const monthData = await fulfilledService.getDatesByMonth(userId, month);
       //주차별 실천한 습관 수 카운팅
       const weekData = await fulfilledService.getCountsByWeeks(userId);
-      console.log(monthData);
-      console.log(weekData);
       res.status(200).json({
         message: `${month}월에 습관을 실천한 날짜 목록 조회 성공`,
         dates: monthData,

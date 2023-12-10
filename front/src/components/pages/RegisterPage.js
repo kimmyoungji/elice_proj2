@@ -1,32 +1,23 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { Col, Row, Form, Button } from "react-bootstrap";
-import {
-  validateEmail,
-  validateUsername,
-  validatePassword,
-} from "../utils/validate";
+import { validateEmail, validateUsername, validatePassword } from "../utils/validate";
 import { api } from "../utils/axiosConfig";
+
 
 export default function RegisterPage() {
   const navigate = useNavigate();
 
-  //email, password, confirmPassword, Nickname 상태 생성
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPwd, setConfirmPwd] = useState("");
   const [username, setUsername] = useState("");
 
-  //이메일 형태 적합 여부 확인
   const isEmailValid = validateEmail(email);
-  // 비밀번호가 8글자 이상인지 여부 확인
   const isPasswordValid = validatePassword(password);
-  // 비밀번호와 확인용 비밀번호 일치 여부를 확인
   const isPasswordSame = password === confirmPwd;
-  // 닉네임 형태 및 길이 적합 여부를 확인.
   const isUsernameValid = validateUsername(username);
 
-  // 위 4개 조건이 모두 동시에 만족되는지 여부를 확인함.
   const isFormValid =
     isEmailValid && isPasswordValid && isPasswordSame && isUsernameValid;
 
@@ -34,7 +25,6 @@ export default function RegisterPage() {
     e.preventDefault();
 
     try {
-      // "user/register" 엔드포인트로 post요청함.
       await api.post("/users", {
         email,
         password,
@@ -49,6 +39,7 @@ export default function RegisterPage() {
       }
     }
   };
+
 
   return (
     <Row className="justify-content-md-center mt-5">
@@ -112,15 +103,7 @@ export default function RegisterPage() {
 
           <Form.Group controlId="registerConfirmPassword">
             <Form.Label>비밀번호 확인</Form.Label>
-            {!isPasswordSame ? (
-              <Form.Control
-                type="password"
-                autoComplete="off"
-                value={confirmPwd}
-                onChange={(e) => setConfirmPwd(e.target.value)}
-                className="bg-danger p-2 text-dark bg-opacity-10"
-              />
-            ) : (
+            {isPasswordSame && confirmPwd.length > 1 ? (
               <Form.Control
                 type="password"
                 autoComplete="off"
@@ -128,14 +111,22 @@ export default function RegisterPage() {
                 onChange={(e) => setConfirmPwd(e.target.value)}
                 className="bg-success p-2 text-dark bg-opacity-10"
               />
-            )}
-            {!isPasswordSame ? (
-              <Form.Text className="text-danger">
-                비밀번호가 일치하지 않습니다.
-              </Form.Text>
             ) : (
+              <Form.Control
+                type="password"
+                autoComplete="off"
+                value={confirmPwd}
+                onChange={(e) => setConfirmPwd(e.target.value)}
+                className="bg-danger p-2 text-dark bg-opacity-10"
+              />
+            )}
+            {isPasswordSame && confirmPwd.length > 1 ? (
               <Form.Text className="text-success">
                 비밀번호가 일치합니다.
+              </Form.Text>
+            ) : (
+              <Form.Text className="text-danger">
+                비밀번호가 일치하지 않습니다.
               </Form.Text>
             )}
           </Form.Group>
@@ -171,7 +162,6 @@ export default function RegisterPage() {
               <Button
                 variant="primary"
                 type="submit"
-                // onClick={handleSubmit}
                 disabled={!isFormValid}
               >
                 회원가입

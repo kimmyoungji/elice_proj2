@@ -20,11 +20,7 @@ export default function HabitPage() {
   const [selectedDate, setSelectedDate] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  
 
-  // 사용자가 계획한 습관이 있는지 확인
-  // if yes -> 계획한 습관 띄우기
-  // if no -> 추가하기 버튼 띄우기
   useEffect(() => {
     setIsLoading(true);
     api.get("/planned-habits")
@@ -38,7 +34,6 @@ export default function HabitPage() {
         setSelectedDate(date);
       }
     }).catch((error) => {
-      
     }).finally(() => {
       setIsLoading(false);
     });
@@ -55,8 +50,10 @@ export default function HabitPage() {
                 <Card.Title>
                     <span style={{ fontSize: "30px" }}>로딩중입니다</span>
                 </Card.Title>
-                <Image src={logo} alt="Logo image"
-                style={{ width: '70%', marginTop: "70px" }}/>       
+                <Image
+                  src={logo}
+                  alt="Logo image"
+                  style={{ width: '70%', marginTop: "70px" }}/>       
             </Card>
         </Container>}
       {selectedHabits !== null && <HabitForm

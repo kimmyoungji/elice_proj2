@@ -7,6 +7,8 @@ const {
   BadRequestError,
 } = require("../lib/custom-error.js");
 const userService = require("../services/usersService.js");
+const upload = require("../middlewares/multer");
+const bcrypt = require("bcrypt");
 
 // GET /login
 usersRouter.post("/login", async (req, res, next) => {
@@ -34,6 +36,7 @@ usersRouter.post("/login", async (req, res, next) => {
         username: user.username,
         email: user.email,
         level: user.level,
+        img_url: user.img_url,
       },
     });
   } catch (err) {
@@ -60,8 +63,9 @@ usersRouter.get("/user", isLoggedIn, async (req, res, next) => {
     const user_id = req.currentUserId;
 
     // user_id로 사용자정보 가져오기
-    let user = await usersService.getUserById(user_id);
-    const level = await userService.setAndGetUserLevel(user_id);
+    let [user] = await usersService.getUserById(user_id);
+    const level = await userService.setAndgetUserLevel(user_id);
+    console.log("Router", level);
     user.level = level;
 
     // 응답
@@ -98,7 +102,7 @@ usersRouter.post("/", async (req, res, next) => {
   try {
     // 요청 바디 데이터 가져오기
     const { username, email, password } = req.body;
-    if (!password || !email || !password) {
+    if (!username || !email || !password) {
       throw new BadRequestError("필수적인 정보가 입력되지 않았습니다");
     }
 
@@ -115,23 +119,37 @@ usersRouter.post("/", async (req, res, next) => {
 });
 
 // UPDATE
-usersRouter.put("/", isLoggedIn, async (req, res, next) => {
-  try {
-    // 요청 쿠키, 바디에서 값 받아오기
-    const user_id = req.currentUserId;
-    const toUpdate = { ...req.body };
+usersRouter.put(
+  "/",
+  isLoggedIn,
+  upload.single("file"),
+  async (req, res, next) => {
+    try {
+      // 요청 쿠키, 바디에서 값 받아오기
+      const user_id = req.currentUserId;
+      let { username, password } = req.body;
+      if (!username && !password) {
+        throw new BadRequestError("업데이트할 정보를 전달해주세요!");
+      }
 
-    // 현재 사용자 정보 수정하기
-    await usersService.setUser(user_id, toUpdate);
+      if (password) {
+        password = await bcrypt.hash(password, 10);
+      }
 
-    // 응답
-    res.status(200).send({
-      message: "DB 데이터 수정 성공",
-    });
-  } catch (err) {
-    next(err);
+      const img_url = req.file ? req.file.location : "";
+      const toUpdate = { username, password, img_url };
+      // 현재 사용자 정보 수정하기
+      await usersService.setUser(user_id, toUpdate);
+
+      // 응답
+      res.status(200).send({
+        message: "DB 데이터 수정 성공",
+      });
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 // DELETE
 usersRouter.delete("/", isLoggedIn, async (req, res, next) => {

@@ -4,6 +4,8 @@ const bcrypt = require("bcrypt");
 const knex = require("../db/knex");
 const UsersModel = require("../db/models/users");
 const users = new UsersModel(knex);
+const FulfilledHabitsModel = require("../db/models/fulfilledHabits");
+const fulfilledHabits = new FulfilledHabitsModel(knex);
 const { NotFoundError, INVALID_USER_Error } = require("../lib/custom-error");
 
 class userService {
@@ -84,13 +86,38 @@ class userService {
     }
   }
 
-  static async setAndGetUserLevel(user_id) {
+  static async setAndgetUserLevel(user_id) {
     try {
       return await knex.transaction(async (trx) => {
         // DB: transaction 객체전달하기
         users.setTrx(trx);
-        let level = await users.updateLevel(user_id);
+        fulfilledHabits.setTrx(trx);
+        const countPacket = await fulfilledHabits.countByUserId(user_id);
+        let count = countPacket[0].count;
 
+        let level = 1;
+        switch (true) {
+          case count >= 75:
+            level = 5;
+            break;
+          case count >= 50:
+            level = 4;
+            break;
+          case count >= 25:
+            level = 3;
+            break;
+          case count >= 10:
+            level = 2;
+            break;
+          case count >= 5:
+            level = 1;
+            break;
+          default:
+            level = 1;
+        }
+        await users.updateLevel(user_id, level).then((res) => {
+          console.log(res, "레벨 업데이트 완료");
+        });
         return level;
       });
     } catch (err) {
@@ -123,11 +150,17 @@ class userService {
 
   static async setUser(user_id, toUpdate) {
     try {
+      const { username } = toUpdate;
+      const exUsername = await users.findUsername(user_id);
+      const updateSet =
+        exUsername === username ? { password, img_url } : toUpdate;
+
       return await knex.transaction(async (trx) => {
         // DB: transaction 객체전달하기
         users.setTrx(trx);
         // DB: DB 데이터 수정하기
-        await users.update(user_id, toUpdate);
+
+        await users.update(user_id, updateSet);
       });
     } catch (err) {
       throw err;

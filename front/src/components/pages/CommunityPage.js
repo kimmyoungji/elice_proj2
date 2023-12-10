@@ -13,7 +13,6 @@ export default function CommunityPage() {
 
   const onIntersect = useCallback(([{isIntersecting}]) => {
     if (isIntersecting) {
-      // console.log(isIntersecting);
       setIsLoading(true);
       api
       .get(
@@ -22,13 +21,10 @@ export default function CommunityPage() {
           : "/users?limit=6"
       )
       .then((res) => {
-        // console.log("응답데이터:", res.users);
         turtleCards === undefined
           ? setTurtleCards(res.users)
           : setTurtleCards((prev) => [...prev].concat(res.users));
-        // console.log("카드데이터:", turtleCards);
         lastCusor.current = res.users[res.users.length - 1].userId;
-        // console.log("커서데이터:", lastCusor.current);
       })
       .catch((err) =>
         console.log(
@@ -53,7 +49,9 @@ export default function CommunityPage() {
       <CardWrapperDiv>
         {turtleCards &&
           turtleCards.map((turtleCard, idx) => (
-            <UserTurtleCard key={idx} turtleCard={turtleCard}/>
+            <UserTurtleCard
+              key={idx}
+              turtleCard={turtleCard}/>
           ))}
         <div ref={setTarget}></div>
         {setIsLoading && <LoadingCard />}

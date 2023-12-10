@@ -14,10 +14,10 @@ const getDate = () => {
 }
 
 export default function HabitShowForm ({ userName, habits, selectedDate, selectedHabit, request }) {
-    const [ check, setCheck ] = useState(false);
-    const [ selectHabit, setSelectHabit ]= useState(selectedHabit)
-    const [ checkHabit, setCheckHabit ] = useState([]);
-    const [ fulfillHabit, setFulfillHabit ] = useState([]);
+    const [check, setCheck] = useState(false);
+    const [selectHabit, setSelectHabit]= useState(selectedHabit)
+    const [checkHabit, setCheckHabit] = useState([]);
+    const [fulfillHabit, setFulfillHabit] = useState([]);
     const today = getDate();
   
     const handleFulfillChange = useCallback((key) => {
@@ -31,13 +31,15 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
     }, [])
   
     const getSelectedHabit = useMemo(() => {
-        return selectHabit.map((habit) => (
-            <ListGroup>
+        return selectHabit.map((habit, idx) => (
+            <ListGroup key={idx}>
                 <ListGroup.Item>
-                    <Form.Check inline key={habit} 
-                    type='checkbox'
-                    onClick={() => handleFulfillChange(habit)}
-                    style={{ fontSize: "14px"}}/>{habits[habit]}
+                    <Form.Check
+                        inline
+                        type='checkbox'
+                        onClick={() => handleFulfillChange(habit)}
+                        style={{ fontSize: "14px"}}/>
+                        {habits[habit]}
                 </ListGroup.Item>
             </ListGroup>
         ));
@@ -46,18 +48,21 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
   
     const getCheckedHabit = useMemo(() => {
         return <>
-                {selectHabit.map((habit) => (
-                <ListGroup.Item>
-                    <Form.Check inline key={habit} 
-                    type='checkbox'
-                    onClick={() => handleFulfillChange(habit)}
-                    style={{ fontSize: "14px"}}/>{habits[habit]}
+                {selectHabit.map((habit, idx) => (
+                <ListGroup.Item key={idx}>
+                    <Form.Check 
+                        inline
+                        type='checkbox'
+                        onClick={() => handleFulfillChange(habit)}
+                        style={{ fontSize: "14px"}}/>
+                        {habits[habit]}
                 </ListGroup.Item>
                 ))}
-                {checkHabit.map((habit) => (
-                    <ListGroup.Item>
-                        <Form key={habit} 
-                        style={{ fontSize: "12px"}}/><s>{habits[habit]} (완료)</s>
+                {checkHabit.map((habit, idx) => (
+                    <ListGroup.Item key={idx}>
+                        <Form
+                            style={{ fontSize: "12px"}}/>
+                            <s>{habits[habit]} (완료)</s>
                     </ListGroup.Item>
                     ))
                 }
@@ -82,7 +87,6 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
                   setSelectHabit(difference);
                 }
             }).catch((error) => {
-                // 추후 수정예정
                 console.log(error)
             }).finally(() => {
                 setCheck(true);
@@ -107,13 +111,10 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
                   fulfilledHabits: fulfillHabit
               })
           .then((res) => {
-              console.log(res);
-              
           }).catch((error) => {
-              // 추후 수정예정
               console.log(error)
           }).finally(() => {
-            alert('실천 완료 !😊');
+            fulfillHabit && alert('실천 완료 !😊');
             setCheckHabit(checkHabit);
             setCheck(false);
             getDoneHabit();
@@ -140,7 +141,9 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
                 </ListGroup>}
             </Card.Body>
             <div className="d-flex justify-content-center">
-                <Button className="select-button" variant="primary" size="lg"
+                <Button
+                    className="select-button"
+                    variant="primary" size="lg"
                     onClick={() => fulfilledButton()}
                     style={{ width: "30%", fontSize: '13px', margin: "10px"}}>
                         실천완료

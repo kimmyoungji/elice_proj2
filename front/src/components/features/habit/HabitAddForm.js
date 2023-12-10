@@ -2,10 +2,11 @@ import React, { useState, useMemo } from 'react';
 import { Card, Button, ListGroup, Form } from 'react-bootstrap';
 import api from "../../utils/axiosConfig";
 
+
 export default function HabitAddForm ({ userName, habits, onSubmit }) {
-    const [ addButton, setAddButton ] = useState(true);
-    const [ selectedHabit, setSelectedHabit ] = useState([]);
-    const [ selectedDate, setSelectedDate ] = useState(null);
+    const [addButton, setAddButton] = useState(true);
+    const [selectedHabit, setSelectedHabit] = useState([]);
+    const [selectedDate, setSelectedDate] = useState(null);
   
     const handleAddButton = () => {
         setAddButton(false);
@@ -27,8 +28,13 @@ export default function HabitAddForm ({ userName, habits, onSubmit }) {
   
     const getHabitList = useMemo(() => {
       return Object.keys(habits).map((key) => (
-        <ListGroup.Item key={key} eventKey={key}>
-                <Form.Check inline key={key} type="checkbox"
+        <ListGroup.Item
+            key={key}
+            eventKey={key}>
+            <Form.Check
+                inline
+                key={key}
+                type="checkbox"
                 onClick={() => handleCheckboxChange(key)}/>
             {habits[key]}
         </ListGroup.Item>
@@ -38,12 +44,13 @@ export default function HabitAddForm ({ userName, habits, onSubmit }) {
     const getDayList = useMemo(() => {
       return ["3일", "5일", "7일"].map((day) => (
         <ListGroup.Item key={day}>
-            <Form.Check key={day} 
-            label={day}
-            type='radio' name="group" 
-            onClick={() => handleRadioChange(day)}
-            style={{ fontSize: "14px"}}/>
-        </ListGroup.Item> // name="group"으로 group 이름이 같아야 중복 선택 안됨
+            <Form.Check
+                key={day} 
+                label={day}
+                type='radio' name="group" 
+                onClick={() => handleRadioChange(day)}
+                style={{ fontSize: "14px"}}/>
+        </ListGroup.Item>
     ));
     }, []);
   
@@ -58,14 +65,13 @@ export default function HabitAddForm ({ userName, habits, onSubmit }) {
               onSubmit(selectedHabit, selectedDate);
           }
   
-          // 새롭게 선택한 습관 추가하기
           api.post("/planned-habits", {
                   habitIds: selectedHabit,
                   habitDate: selectedDate
               }
           )
           .then((res) => {
-              console.log(res)
+              console.log('습관 추가 완료');
           }).catch((error) => {
               console.log(error)
           })
@@ -87,7 +93,7 @@ export default function HabitAddForm ({ userName, habits, onSubmit }) {
                 {addButton &&
                 <div className="d-flex justify-content-center" style={{ marginTop: '100px' }}>
                     <Button variant="primary" size="lg"
-                    onClick={() => handleAddButton()}>+
+                        onClick={() => handleAddButton()}>+
                     </Button>
                 </div>
                 }
@@ -105,9 +111,7 @@ export default function HabitAddForm ({ userName, habits, onSubmit }) {
                     </ListGroup>
                     <div className="d-flex justify-content-center">
                         <Button className="select-button" variant="primary" size="lg"
-                            onClick={() => {
-                                handleSelectButton();
-                            }}
+                            onClick={() => handleSelectButton()}
                             style={{ width: "30%", fontSize: '13px', margin: "10px"}}>
                                 선택완료
                         </Button>

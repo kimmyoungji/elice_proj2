@@ -18,7 +18,7 @@ const testKnex = async () => {
   //   },
   // ];
   // const result = await knex("users").insert(userArr);
-  const result = await knex.select("*").from("users").limit(7);
+  const result = await knex.raw("SHOW TABLES");
   if (result.length > 0) {
     console.log("Knex Successfully connected");
   }
