@@ -1,29 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import CalendarForm from '../features/calender/CalendarPageForm';
 import api from "../utils/axiosConfig";
+import getDate from "../utils/date";
 
-const getDate = () => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = (today.getMonth() + 1).toString().padStart(2, '0');
-  const day = today.getDate().toString().padStart(2, '0');
-
-  const monthString = year + '-' + month;
-  const dateString = year + '-' + month + '-' + day;
-
-  return [monthString, dateString];
-}
 
 function CalendarPage() {
   const [habitList, setHabitList] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   let monthCheckDate = {};
 
-  useEffect(() => {
-    api({
-        method: 'get',
-        url: "/fulfilled-habits",
-        params: {date: getDate()[1]},
+  const setDefaultData = async () => {
+    await api.get("/fulfilled-habits",{
+      params: {date: getDate()[1]},
     })
     .then((res) => {
         const habitIds = res.habitIds;
@@ -46,10 +34,8 @@ function CalendarPage() {
     }).finally(() => {
       setIsLoading(true);
     })
-    
-    api({
-        method: 'get',
-        url: "/fulfilled-habits",
+  
+    await api.get("/fulfilled-habits", {
         params: {month: getDate()[0]},
     })
     .then((res) => {
@@ -60,7 +46,8 @@ function CalendarPage() {
     }).finally(() => {
       setIsLoading(true);
     })
-  }, [])
+  }
+  useEffect(() => setDefaultData(), [])
   
   return (
     <>

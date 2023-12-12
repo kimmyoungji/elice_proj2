@@ -20,16 +20,14 @@ export default function HabitPage() {
   const [selectedDate, setSelectedDate] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-
-  useEffect(() => {
-    setIsLoading(true);
-    api.get("/planned-habits")
+  const setDefaultData = async () => {
+    await api.get("/planned-habits")
     .then((res) => {
-      const habitIds = res.habitIds;
+      const { habitIds, habitDates } = res;
       if (habitIds.length === 0) {
         setSelectedHabits( false );
       } else {
-        const date = res.habitDates[0];
+        const date = habitDates[0];
         setSelectedHabits( habitIds );
         setSelectedDate(date);
       }
@@ -37,6 +35,11 @@ export default function HabitPage() {
     }).finally(() => {
       setIsLoading(false);
     });
+  }
+
+  useEffect(() => {
+    setIsLoading(true);
+    setDefaultData()
   }, [])
   
   

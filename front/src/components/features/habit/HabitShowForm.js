@@ -1,17 +1,8 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { Card, Button, ListGroup, Form } from 'react-bootstrap';
 import api from "../../utils/axiosConfig";
+import getDate from "../../utils/date";
 
-const getDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = (today.getMonth() + 1).toString().padStart(2, '0');
-    const day = today.getDate().toString().padStart(2, '0');
-    
-    const dateString = year + '-' + month + '-' + day;
-    
-    return dateString;
-}
 
 export default function HabitShowForm ({ userName, habits, selectedDate, selectedHabit, request }) {
     const [check, setCheck] = useState(false);
@@ -106,8 +97,8 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
     }
   
 
-      const fulfilledButton = () => {
-          api.post("/fulfilled-habits", {
+      const fulfilledButton = async () => {
+          await api.post("/fulfilled-habits", {
                   fulfilledHabits: fulfillHabit
               })
           .then((res) => {
