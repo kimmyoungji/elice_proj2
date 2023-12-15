@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext, useMemo } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -7,24 +7,51 @@ import { Col, Container, Row, Card, ListGroup } from 'react-bootstrap';
 import './Calendar.css';
 import api from "../../utils/axiosConfig";
 import { CalendarChart } from "../../common/Chart";
+import { HabitContext } from "../../../Context/HabitContext";
+import getDate from "../../utils/date";
 
 
-const habits = {
-  habit1: "장바구니(에코백) 사용하기",
-  habit2: "음식 포장 시 다회용기 사용하기",
-  habit3: "텀블러나 머그컵 사용하기",
-  habit4: "플라스틱 빨대 안 쓰기",
-  habit5: "플라스틱 세척해서 분리배출하기",
-  habit6: "무라벨 제품 구매하기"
-}
+// const habits = {
+//   habit1: "장바구니(에코백) 사용하기",
+//   habit2: "음식 포장 시 다회용기 사용하기",
+//   habit3: "텀블러나 머그컵 사용하기",
+//   habit4: "플라스틱 빨대 안 쓰기",
+//   habit5: "플라스틱 세척해서 분리배출하기",
+//   habit6: "무라벨 제품 구매하기"
+// }
 
 const CalendarForm = ({ habitlist, checkdate }) => {
-  const [habitList, setHabitList] = useState(habitlist);
+  const [fulfillhabitList, setFulfillHabitList] = useState(habitlist); // habitlist
+
   const [checkDate, setCheckDate ] = useState(checkdate.current);
   const [charts, setCharts] = useState(false);
   const [lastWeekCount, setLastWeekCount] = useState(false);
   const [thisWeekCount, setThisWeekCount] = useState(false);
   const [render, setRender] = useState(false);
+  const { habit } = useContext(HabitContext);
+  const [ habitList, setHabitList ] = useState({});
+  console.log('Calendar habit', habit);
+
+  const setDefaultHabitList = useMemo(() => {
+    setHabitList(() =>
+      habit.reduce((acc, value) => {
+        acc[value.id] = value.text;
+        return acc;
+      }, {}))
+    
+    // 전역상태 사용할 경우
+    // setFulfillHabitList(() => ({
+    //   date: getDate()[1],
+    //   ...habit.reduce((acc, value) => {
+    //       if (value.done === true) {
+    //         acc[value.id] = value.text;
+    //       }
+    //       return acc;
+    //     }, {})
+    //   })
+    //     )
+  }, [])
+  console.log('시작 habitList', habitList);
 
   const renderEventContent = useCallback((eventInfo) => {
     return (
@@ -49,7 +76,8 @@ const CalendarForm = ({ habitlist, checkdate }) => {
     })
     .then((res) => {
         const habits = res.habitIds;
-        setHabitList(() => ({
+        // 이행한 습관리스트들
+        setFulfillHabitList(() => ({
           date: clickFullDate,
         ...habits.reduce((acc, habit, index) => {
           acc[`habit${index + 1}`] = habit;
@@ -74,7 +102,7 @@ const CalendarForm = ({ habitlist, checkdate }) => {
     const monthString = year + '-' + month;
 
     if (middleMonth === new Date().getMonth() + 1) {
-        setHabitList(habitlist)
+      setFulfillHabitList(fulfillhabitList)
     }
 
     api({
@@ -141,7 +169,7 @@ const CalendarForm = ({ habitlist, checkdate }) => {
                   eventBorderColor='transparent'
                   events={checkDate}
                   dateClick={(info) => {
-                    setHabitList(() => ({
+                    setFulfillHabitList(() => ({
                       date: info.dateStr,
                       habit: "달성한 습관이 없습니다😭"
                     }))
@@ -154,9 +182,9 @@ const CalendarForm = ({ habitlist, checkdate }) => {
             className="calendar-text"
             style={{ width: '30rem', height: "300px" }}>
             <ListGroup variant="flush">
-              {Object.keys(habitList).map((key) => (
+              {fulfillhabitList && Object.keys(fulfillhabitList).map((key) => (
                 <ListGroup.Item key={key}>
-                  {(key === "date" || key === "habit") ? habitList[key] : habits[habitList[key]]}
+                  {(key === "date" || key === "habit") ? fulfillhabitList[key] : habitList[key]}
                 </ListGroup.Item>))}
             </ListGroup>
           </Card>

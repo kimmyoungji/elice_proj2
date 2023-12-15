@@ -4,12 +4,15 @@ import App from "./App";
 import "bootstrap/dist/css/bootstrap.css";
 import { BrowserRouter } from "react-router-dom";
 import { UserProvider } from "./Context/UserContext";
+import { HabitProvider } from "./Context/HabitContext"
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <UserProvider>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <HabitProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </HabitProvider>
   </UserProvider>
 );

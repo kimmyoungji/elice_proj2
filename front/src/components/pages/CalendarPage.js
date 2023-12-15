@@ -10,6 +10,7 @@ function CalendarPage() {
   let monthCheckDate = {};
 
   const setDefaultData = async () => {
+    // 전역상태관리로 이 호출이 필요없어짐. -> 습관 선택한 직후에만...
     await api.get("/fulfilled-habits",{
       params: {date: getDate()[1]},
     })

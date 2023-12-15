@@ -1,7 +1,8 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useContext } from 'react';
 import { Card, Button, ListGroup, Form } from 'react-bootstrap';
 import api from "../../utils/axiosConfig";
 import getDate from "../../utils/date";
+import { HabitActionContext } from "../../../Context/HabitContext";
 
 
 export default function HabitShowForm ({ userName, habits, selectedDate, selectedHabit, request }) {
@@ -9,6 +10,7 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
     const [selectHabit, setSelectHabit]= useState(selectedHabit)
     const [checkHabit, setCheckHabit] = useState([]);
     const [fulfillHabit, setFulfillHabit] = useState([]);
+    const { fulfill } = useContext(HabitActionContext);
     const today = getDate();
   
     const handleFulfillChange = useCallback((key) => {
@@ -109,6 +111,10 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
             setCheckHabit(checkHabit);
             setCheck(false);
             getDoneHabit();
+            // done 수정
+            fulfillHabit.map((id) => {
+                fulfill(id)
+              });
           });
           
       }
