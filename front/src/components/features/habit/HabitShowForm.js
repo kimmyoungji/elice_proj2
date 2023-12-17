@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback, useContext } from 'react';
 import { Card, Button, ListGroup, Form } from 'react-bootstrap';
 import api from "../../utils/axiosConfig";
 import getDate from "../../utils/date";
-import { HabitActionContext } from "../../../Context/HabitContext";
+import { HabitActionContext, HabitContext } from "../../../Context/HabitContext";
 
 
 export default function HabitShowForm ({ userName, habits, selectedDate, selectedHabit, request }) {
@@ -11,6 +11,7 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
     const [checkHabit, setCheckHabit] = useState([]);
     const [fulfillHabit, setFulfillHabit] = useState([]);
     const { fulfill } = useContext(HabitActionContext);
+    const { habit } = useContext(HabitContext);
     const today = getDate();
   
     const handleFulfillChange = useCallback((key) => {
@@ -72,20 +73,38 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
             })
             .then((res) => {
                 const habitId = res.habitIds;
+                console.log('habitId', habitId);
                 if (!habitId) {
                   setCheckHabit(false);
                 } else {
                   let difference = selectedHabit.filter(x => !habitId.includes(x));
                   setCheckHabit(habitId);
                   setSelectHabit(difference);
+                  habitId.map((id) => {
+                    fulfill(id)
+                  });
                 }
             }).catch((error) => {
                 console.log(error)
             }).finally(() => {
                 setCheck(true);
             });
+            // DB문제로 test -> 원하는대로 구현 성공
+            // const habitId = ['habit1']
+            // console.log('habitId', habitId);
+            // if (!habitId) {
+            //     setCheckHabit(false);
+            // } else {
+            //     let difference = selectedHabit.filter(x => !habitId.includes(x));
+            //     setCheckHabit(habitId);
+            //     setSelectHabit(difference);
+            //     habitId.map((id) => {
+            //     fulfill(id)
+            //     });
+            // }
+            // setCheck(true);
         }
-          
+        console.log(habit);
   
         return (
           <>
@@ -118,6 +137,7 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
           });
           
       }
+    
     return (
         <>
             <Card.Body style={{ height: "100%" }}>

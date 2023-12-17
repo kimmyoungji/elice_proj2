@@ -5,6 +5,7 @@ import { Card, Container, Image } from 'react-bootstrap';
 import logo from "../common/header/logo.png"
 import api from "../utils/axiosConfig";
 import { HabitContext, HabitActionContext } from "../../Context/HabitContext";
+import useApi from "../../hooks/useApi";
 
 
 // const habitList = {
@@ -23,6 +24,7 @@ export default function HabitPage() {
   const { habit } = useContext(HabitContext);
   const { select } = useContext(HabitActionContext);
   const [ habitList, sethabitList ] = useState({});
+  const { result } = useApi('get', "/planned-habits",)
 
   const setDefaultHabitList = useMemo(() => {
       sethabitList(() =>
@@ -33,25 +35,37 @@ export default function HabitPage() {
   }, [])
 
   const setDefaultData = async () => {
-
-    await api.get("/planned-habits")
-    .then((res) => {
-      const { habitIds, habitDates } = res;
-      if (habitIds.length === 0) {
-        setSelectedHabits( false );
-      } else {
-        const date = habitDates[0];
-        habitIds.map((id) => {
-          select(id)
-        });
-        console.log('수정 끝')
-        setSelectedHabits( habitIds );
-        setSelectedDate(date);
+    // await api.get("/planned-habits")
+    // .then((res) => {
+    //   const { habitIds, habitDates } = res;
+    //   if (habitIds.length === 0) {
+    //     setSelectedHabits( false );
+    //   } else {
+    //     const date = habitDates[0];
+    //     habitIds.map((id) => {
+    //       select(id)
+    //     });
+    //     console.log('수정 끝')
+    //     setSelectedHabits( habitIds );
+    //     setSelectedDate(date);
+    //   }
+    // }).catch((error) => {
+    // }).finally(() => {
+    //   setIsLoading(false); // 로딩중 제거
+    // });
+    const { habitIds, habitDates } = result;
+    if (habitIds.length === 0) {
+      setSelectedHabits( false );
+    } else {
+      const date = habitDates[0];
+      habitIds.map((id) => {
+        select(id)
+      });
+      console.log('수정 끝')
+      setSelectedHabits( habitIds );
+      setSelectedDate(date);
       }
-    }).catch((error) => {
-    }).finally(() => {
-      setIsLoading(false); // 로딩중 제거
-    });
+    setIsLoading(false);
   }
 
   useEffect(() => {

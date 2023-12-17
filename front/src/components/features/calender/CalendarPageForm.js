@@ -21,7 +21,7 @@ import getDate from "../../utils/date";
 // }
 
 const CalendarForm = ({ habitlist, checkdate }) => {
-  const [fulfillhabitList, setFulfillHabitList] = useState(habitlist); // habitlist
+  const [fulfillhabitList, setFulfillHabitList] = useState({}); // habitlist
 
   const [checkDate, setCheckDate ] = useState(checkdate.current);
   const [charts, setCharts] = useState(false);
@@ -38,6 +38,20 @@ const CalendarForm = ({ habitlist, checkdate }) => {
         acc[value.id] = value.text;
         return acc;
       }, {}))
+
+    const fulfillHabits = habit.reduce((acc, value) => {
+      if (value.done === true) {
+        acc[value.id] = value.text;
+      }
+      return acc;
+    }, {})
+
+    const finalAccValue = Object.keys(fulfillHabits).length > 0 ? fulfillHabits : {habit: "달성한 습관이 없습니다😭"}
+
+    setFulfillHabitList(() => ({
+      date: getDate()[1],
+      ...finalAccValue
+    }));
     
     // 전역상태 사용할 경우
     // setFulfillHabitList(() => ({
@@ -48,9 +62,9 @@ const CalendarForm = ({ habitlist, checkdate }) => {
     //       }
     //       return acc;
     //     }, {})
-    //   })
-    //     )
+    //   }))
   }, [])
+
   console.log('시작 habitList', habitList);
 
   const renderEventContent = useCallback((eventInfo) => {
