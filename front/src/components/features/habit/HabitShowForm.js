@@ -1,23 +1,17 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useContext } from 'react';
 import { Card, Button, ListGroup, Form } from 'react-bootstrap';
 import api from "../../utils/axiosConfig";
+import getDate from "../../utils/date";
+import { HabitActionContext, HabitContext } from "../../../Context/HabitContext";
 
-const getDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = (today.getMonth() + 1).toString().padStart(2, '0');
-    const day = today.getDate().toString().padStart(2, '0');
-    
-    const dateString = year + '-' + month + '-' + day;
-    
-    return dateString;
-}
 
 export default function HabitShowForm ({ userName, habits, selectedDate, selectedHabit, request }) {
-    const [ check, setCheck ] = useState(false);
-    const [ selectHabit, setSelectHabit ]= useState(selectedHabit)
-    const [ checkHabit, setCheckHabit ] = useState([]);
-    const [ fulfillHabit, setFulfillHabit ] = useState([]);
+    const [check, setCheck] = useState(false);
+    const [selectHabit, setSelectHabit]= useState(selectedHabit)
+    const [checkHabit, setCheckHabit] = useState([]);
+    const [fulfillHabit, setFulfillHabit] = useState([]);
+    const { fulfill } = useContext(HabitActionContext);
+    const { habit } = useContext(HabitContext);
     const today = getDate();
   
     const handleFulfillChange = useCallback((key) => {
@@ -31,13 +25,15 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
     }, [])
   
     const getSelectedHabit = useMemo(() => {
-        return selectHabit.map((habit) => (
-            <ListGroup>
+        return selectHabit.map((habit, idx) => (
+            <ListGroup key={idx}>
                 <ListGroup.Item>
-                    <Form.Check inline key={`${habit}_1`}
-                    type='checkbox'
-                    onClick={() => handleFulfillChange(habit)}
-                    style={{ fontSize: "14px"}}/>{habits[habit]}
+                    <Form.Check
+                        inline
+                        type='checkbox'
+                        onClick={() => handleFulfillChange(habit)}
+                        style={{ fontSize: "14px"}}/>
+                        {habits[habit]}
                 </ListGroup.Item>
             </ListGroup>
         ));
@@ -46,18 +42,21 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
   
     const getCheckedHabit = useMemo(() => {
         return <>
-                {selectHabit.map((habit) => (
-                <ListGroup.Item>
-                    <Form.Check inline key={`${habit}_2`}
-                    type='checkbox'
-                    onClick={() => handleFulfillChange(habit)}
-                    style={{ fontSize: "14px"}}/>{habits[habit]}
+                {selectHabit.map((habit, idx) => (
+                <ListGroup.Item key={idx}>
+                    <Form.Check 
+                        inline
+                        type='checkbox'
+                        onClick={() => handleFulfillChange(habit)}
+                        style={{ fontSize: "14px"}}/>
+                        {habits[habit]}
                 </ListGroup.Item>
                 ))}
-                {checkHabit.map((habit) => (
-                    <ListGroup.Item>
-                        <Form key={`${habit}_3`}
-                        style={{ fontSize: "12px"}}/><s>{habits[habit]} (완료)</s>
+                {checkHabit.map((habit, idx) => (
+                    <ListGroup.Item key={idx}>
+                        <Form
+                            style={{ fontSize: "12px"}}/>
+                            <s>{habits[habit]} (완료)</s>
                     </ListGroup.Item>
                     ))
                 }
@@ -74,21 +73,38 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
             })
             .then((res) => {
                 const habitId = res.habitIds;
+                console.log('habitId', habitId);
                 if (!habitId) {
                   setCheckHabit(false);
                 } else {
                   let difference = selectedHabit.filter(x => !habitId.includes(x));
                   setCheckHabit(habitId);
                   setSelectHabit(difference);
+                  habitId.map((id) => {
+                    fulfill(id)
+                  });
                 }
             }).catch((error) => {
-                // 추후 수정예정
                 console.log(error)
             }).finally(() => {
                 setCheck(true);
             });
+            // DB문제로 test -> 원하는대로 구현 성공
+            // const habitId = ['habit1']
+            // console.log('habitId', habitId);
+            // if (!habitId) {
+            //     setCheckHabit(false);
+            // } else {
+            //     let difference = selectedHabit.filter(x => !habitId.includes(x));
+            //     setCheckHabit(habitId);
+            //     setSelectHabit(difference);
+            //     habitId.map((id) => {
+            //     fulfill(id)
+            //     });
+            // }
+            // setCheck(true);
         }
-          
+        console.log(habit);
   
         return (
           <>
@@ -102,22 +118,26 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
     }
   
 
-      const fulfilledButton = () => {
-          api.post("/fulfilled-habits", {
+      const fulfilledButton = async () => {
+          await api.post("/fulfilled-habits", {
                   fulfilledHabits: fulfillHabit
               })
           .then((res) => {
           }).catch((error) => {
-              // 추후 수정예정
               console.log(error)
           }).finally(() => {
-            alert('실천 완료 !😊');
+            fulfillHabit && alert('실천 완료 !😊');
             setCheckHabit(checkHabit);
             setCheck(false);
             getDoneHabit();
+            // done 수정
+            fulfillHabit.map((id) => {
+                fulfill(id)
+              });
           });
           
       }
+    
     return (
         <>
             <Card.Body style={{ height: "100%" }}>
@@ -138,7 +158,9 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
                 </ListGroup>}
             </Card.Body>
             <div className="d-flex justify-content-center">
-                <Button className="select-button" variant="primary" size="lg"
+                <Button
+                    className="select-button"
+                    variant="primary" size="lg"
                     onClick={() => fulfilledButton()}
                     style={{ width: "30%", fontSize: '13px', margin: "10px"}}>
                         실천완료
@@ -147,3 +169,4 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
         </>
     )
   }
+

@@ -1,16 +1,22 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../utils/axiosConfig";
+// import axios from "axios";
 import { Col, Button, Container, Image, Form, Row } from "react-bootstrap";
 import "./UserPage.css";
+import { UserContext } from "../../../Context/UserContext";
+
 
 const UserPageForm = (props) => {
   const { userInfo } = props;
   const { userName, userImg, userEmail, password, passwordCheck } = userInfo;
-  const [image, setImage] = useState(userImg); //filereader를 위한 image
+  const [image, setImage] = useState(userImg);
   const fileInput = useRef(null);
 
+  const { user, setUser } = useContext(UserContext);
+
   const navigate = useNavigate();
+  
 
   const [form, setForm] = useState({
     userFormName: userName,
@@ -19,38 +25,6 @@ const UserPageForm = (props) => {
     userFormPasswordCheck: passwordCheck,
   });
 
-  // 다른 page에서도 filereader 필요하면 따로 컴포넌트로
-  // const onChange = (e) => {
-  //     handleInputChange(e)
-  //     const uploadFile = e.target.files[0]
-
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //         setImage(reader.result)
-  //     }
-  //     if (uploadFile) {
-  //         reader.readAsDataURL(uploadFile)
-  //     } else {
-  //         return
-  //     }
-  // }
-
-  // const handleInputChange = (e) => {
-  //     if (e.target.type === "file") {
-  //         const id = "userFormImg";
-  //         const value = e.target.files[0];
-  //         setForm((prevData) => ({
-  //             ...prevData,
-  //             [id]: value,
-  //             }));
-  //     } else {
-  //         const { id, value } = e.target;
-  //         setForm((prevData) => ({
-  //         ...prevData,
-  //         [id]: value,
-  //         }));
-  //     }
-  //   };
 
   // createObjectURL 방식
   const onImageChange = (e) => {
@@ -81,47 +55,57 @@ const UserPageForm = (props) => {
 
   const editing = (e) => {
     e.preventDefault();
+    if (form.userFormPassword.length < 8) {
+      alert("비밀번호는 8자 이상이어야 합니다.");
+      return false;
+    }
     if (form.userFormPassword !== form.userFormPasswordCheck) {
       alert("비밀번호가 일치하지 않습니다.");
       return false;
     }
     const formData = new FormData();
-    formData.append("name", form.userFormName);
+    formData.append("username", form.userFormName);
     formData.append("file", form.userFormImg);
     formData.append("password", form.userFormPassword);
-    formData.append("passwordcheck", form.userFormPasswordCheck);
 
-    // FormData 확인
-    // for (let key of formData.keys()) {
-    //   console.log(key);
-    // }
-    // console.log("-----");
-    // for (let value of formData.values()) {
-    //   console.log(value);
-    // }
 
-    api.put("/users", formData)
+    api
+      .put("/users", formData)
       .then((res) => {
-        console.log(res);
+        const userinfo = {
+          username: form.userFormName,
+          email: userEmail,
+          img_url: form.userFormImg,
+        };
+        setUser(userinfo);
+        alert("회원정보 수정이 완료되었습니다.");
+        navigate("/userpage");
       })
-      .catch((error) => {
-        console.log(error);
-        alert('회원정보 수정에 실패했습니다. 다시 시도해주세요.')
-      })
+      .catch((err) => {
+        const error = err.response.data;
+        if (error.statusCode === 409) {
+          alert(error.message);
+        } else {
+          alert("회원정보 수정에 실패했습니다. 다시 시도해주세요.");
+        }
+      });
   };
 
   const deleteUser = () => {
-    api.delete("/users")
+    if (window.confirm("정말 탈퇴하시겠습니까? 😭")) {
+      api
+      .delete("/users")
       .then((res) => {
+        setUser(null);
         alert("탈퇴되었습니다. 감사합니다.");
         navigate("/");
       })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {});
-  };
-
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {});
+    };
+  }
   return (
     <>
       <Container className="mb-3 center-container mt-5">
@@ -197,3 +181,4 @@ const UserPageForm = (props) => {
 };
 
 export default UserPageForm;
+
