@@ -54,7 +54,18 @@ class User {
     }
 
     static async findByCursor(user_id, limit) {
-
+      return new Promise((res, rej) => {
+        const data = [user_id, parseInt(limit)]
+        const query = 'SELECT user_id AS userId, username, email, level FROM users LIMIT 0, ?'
+        db.query(query, limit, (error, data) => {
+          if (error) {
+            rej(error);
+          } else {
+            console.log('data', data);
+            res(data);
+          }
+        });
+      })
     }
 
     static async update(user_id, toUpdate) {

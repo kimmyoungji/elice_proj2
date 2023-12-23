@@ -1,12 +1,13 @@
 const db = require('../config/db');
 const selectQuery = 'SELECT * FROM fulfilled_habits'
 
-class FulfilledHabitsModel {
+class FulfilledHabits {
     // 이번달 습관 실천 날짜 조회
-    async findByMonth(userId, thisMonth, nextMonth) {
+    static async findByMonth(userId, thisMonth, nextMonth) {
       return new Promise((res, rej) => {
-        const query = `${selectQuery} WHERE user_id=? AND date >= ${thisMonth} AND date < ${nextMonth}`
-        db.query(query, userId, (error, data) => {
+        const data = [userId, thisMonth, nextMonth]
+        const query = `${selectQuery} WHERE user_id=? AND date >=? AND date < ?`
+        db.query(query, data, (error, data) => {
           if (error) {
             console.log("월별 달성 여부 불러오다가 뭔가 잘못됨", error)
             rej(error)
@@ -18,10 +19,12 @@ class FulfilledHabitsModel {
       })
     }
   
-    async findByDateRange(userId, startDate, endDate) {
+    static async findByDateRange(userId, startDate, endDate) {
+      console.log('startDate, endDate', startDate, endDate);
       return new Promise((res, rej) => {
-        const query = `${selectQuery} WHERE user_id=? AND BETWEEN ${startDate} AND ${endDate}`
-        db.query(query, userId, (error, data) => {
+        const data = [userId, startDate, endDate]
+        const query = `${selectQuery} WHERE user_id=? AND date BETWEEN ? AND ?`
+        db.query(query, data, (error, data) => {
           if (error) {
             console.log("주차별 실천 습관 수 불러오다가 뭔가 잘못됨", error)
             rej(error)
@@ -33,10 +36,12 @@ class FulfilledHabitsModel {
       })
     }
   
-    async findByDate(user_id, date) {
+    static async findByDate(user_id, date) {
+      console.log(date);
       return new Promise((res, rej) => {
+        const data = [user_id, date]
         const query = `${selectQuery} WHERE user_id=? AND date=?`
-        db.query(query, [user_id, date], (error, data) => {
+        db.query(query, data, (error, data) => {
             if (error) {
               console.log("요청한 일자의 달성 여부 불러오다가 뭔가 잘못됨", error)
               rej(error)
@@ -49,7 +54,7 @@ class FulfilledHabitsModel {
     }
 
     // 중복습관 확인?
-    async findExistingRecords(data) {
+    static async findExistingRecords(data) {
     //   try {
     //     return await this.knex
     //       .select("habit_id")
@@ -67,28 +72,35 @@ class FulfilledHabitsModel {
     //   }
     }
   
-    async countByUserId(user_id) {
-      try {
-        return await this.knex("fulfilled_habits")
-          .transacting(this.trx)
-          .count("*", { as: "count" })
-          .where("user_id", user_id);
-      } catch (err) {
-        throw err;
-      }
+    static async countByUserId(user_id) {
+      return new Promise((res, rej) => {
+        const query = `${selectQuery} WHERE user_id=?`
+        db.query(query, user_id, (error, data) => {
+            if (error) {
+              console.log("user의 count 불러오다가 잘못됨", error)
+              rej(error)
+            } else {
+              console.log('user의 개수 조회 성공', data)
+              res(data);
+            }
+          })
+      })
     }
   
-    async create(data) {
+    static async create(data) {
+      return new Promise((res, rej) => {
         const habit = [data.user_id, data.date, data.habit_id];
         const query = 'INSERT INTO fulfilled_habits (user_id, date, habit_id) VALUES (?, ?, ?)'
         db.query(query, habit, (error, data) => {
             if (error) {
               console.log("실천 습관을 저장하다가 뭔가 잘못됨", error)
+              rej(error)
             } else {
               console.log('이번달 습관 실천 날짜 조회 성공')
               res(data);
             }
           })
+        })
     }
   
     // async delete(data) {
@@ -106,5 +118,5 @@ class FulfilledHabitsModel {
     // }
   }
   
-module.exports = FulfilledHabitsModel;
+module.exports = FulfilledHabits;
   

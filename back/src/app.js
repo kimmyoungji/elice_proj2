@@ -43,7 +43,7 @@ app.use(
 );
 
 // 라우터
-// app.use("/graphs", introRouter);
+app.use("/graphs", introRouter);
 app.use("/users", userRouter);
 app.use("/planned-habits", plannedHabitsRouter);
 app.use("/fulfilled-habits", fulfilledHabitsRouter);

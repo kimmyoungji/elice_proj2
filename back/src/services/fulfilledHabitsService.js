@@ -1,17 +1,18 @@
-const FulfilledHabitsModel = require('../models/FulfilledHabits');
+const FulfilledHabits = require('../models/FulfilledHabits');
 const dayjs = require("dayjs");
 const weekOfYear = require("dayjs/plugin/weekOfYear.js");
 dayjs.extend(weekOfYear);
 
 const today = dayjs().format();
 
+
 class fulfilledHabitsService {
   static async getCountsByWeeks(userId) {
     try {
-      // const today = dayjs(); //오늘
+      const today = dayjs(); //오늘
       const thisSat = today.endOf("week");
       const Sun4WsAgo = thisSat.startOf("week").subtract(4, "week");
-      const dates = await fulfilled.findByDateRange(
+      const dates = await FulfilledHabits.findByDateRange(
         userId,
         Sun4WsAgo.format("YYYY-MM-DD"),
         thisSat.format("YYYY-MM-DD")
@@ -55,7 +56,7 @@ class fulfilledHabitsService {
       //이번달 첫날
       const thisMonth = dayjs(month).startOf("month").format();
       //이번달에 습관 실천할 날짜들 조회
-      const resultMonth = await FulfilledHabitsModel.findByMonth(
+      const resultMonth = await FulfilledHabits.findByMonth(
         userId,
         thisMonth,
         nextMonth
@@ -69,7 +70,7 @@ class fulfilledHabitsService {
 
   static async getHabitsByDate(userId, date) {
     try {
-      const result = await FulfilledHabitsModel.findByDate(userId, date);
+      const result = await FulfilledHabits.findByDate(userId, date);
       return result.map((row) => row.habit_id);
     } catch (error) {
       console.error(error.stack);
@@ -80,7 +81,7 @@ class fulfilledHabitsService {
   static async getHabitsByToday(userId) {
     try {
       // const today = dayjs().format();
-      const result = await FulfilledHabitsModel.findByDate(userId, today);
+      const result = await FulfilledHabits.findByDate(userId, today);
       return result.map((row) => row.habit_id);
     } catch (error) {
       console.error(error.stack);
@@ -89,26 +90,28 @@ class fulfilledHabitsService {
   }
 
   static async addFulfilledHabits(userId, checked) {
+    console.log('userId, checked', userId, checked)
     try {
         // const today = dayjs().format();
-        const data4check = {
-          user_id: userId,
-          date: today,
-          habit_id: checked.fulfilledHabits,
-        };
+        // const data4check = {
+        //   user_id: userId,
+        //   date: today,
+        //   habit_id: checked.fulfilledHabits,
+        // };
 
-        const exist = await FulfilledHabitsModel.findExistingRecords(data4check);
-        console.log("중복 습관id", exist);
+        // const exist = await FulfilledHabits.findExistingRecords(data4check);
+        // console.log("중복 습관id", exist);
         const data = checked.fulfilledHabits
-          .filter((el) => !exist.some((id) => id.habit_id === el))
+          // .filter((el) => !exist.some((id) => id.habit_id === el))
           .map((id) => ({
             user_id: userId,
             date: today,
             habit_id: id,
           }));
 
+        console.log('data', data[0]);
         if (data.length) {
-          await fulfilled.create(data);
+          await FulfilledHabits.create(data[0]);
         } else {
           console.log("오늘 새로 기록할 습관이 없습니다.");
         }
@@ -124,7 +127,7 @@ class fulfilledHabitsService {
         await Promise.all(
           habitIdArray.map(async (el) => {
             const data = { user_id: userId, habit_id: el, date: today };
-            await FulfilledHabitsModel.delete(data);
+            await FulfilledHabits.delete(data);
           })
         );
     } catch (error) {

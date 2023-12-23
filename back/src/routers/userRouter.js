@@ -56,7 +56,7 @@ userRouter.post('/login', async (req, res, next) => {
       }
 });
 
-// GET
+// 커뮤니티-모든 거북이 불러오기
 userRouter.get("/", isLoggedIn, async (req, res, next) => {
   try {
     // 요청 바디 데이터 가져오기

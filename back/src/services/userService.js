@@ -1,4 +1,5 @@
 const User = require('../models/Users');
+const FulfilledHabits = require('../models/FulfilledHabits');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -60,7 +61,7 @@ class userService {
             throw err;
         }
     }
-    ///
+
     static async getUsers(user_id, limit) {
         try {
             let userArr = await User.findByCursor(user_id, limit);
@@ -75,7 +76,7 @@ class userService {
 
     static async setAndgetUserLevel(user_id) {
         try {
-            const countPacket = await fulfilledHabits.countByUserId(user_id);
+            const countPacket = await FulfilledHabits.countByUserId(user_id);
             let count = countPacket[0].count;
     
             let level = 1;
