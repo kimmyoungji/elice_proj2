@@ -20,7 +20,6 @@ class FulfilledHabits {
     }
   
     static async findByDateRange(userId, startDate, endDate) {
-      console.log('startDate, endDate', startDate, endDate);
       return new Promise((res, rej) => {
         const data = [userId, startDate, endDate]
         const query = `${selectQuery} WHERE user_id=? AND date BETWEEN ? AND ?`

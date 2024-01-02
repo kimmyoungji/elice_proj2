@@ -69,7 +69,7 @@ export default function HabitShowForm ({ userName, habits, selectedDate, selecte
             api({
                 method: 'get',
                 url: "/fulfilled-habits",
-                params: {date: today},
+                params: {date: today[1]},
             })
             .then((res) => {
                 const habitId = res.habitIds;
