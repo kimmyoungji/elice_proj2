@@ -30,6 +30,8 @@ dayjs.extend(tz);
 //라우터 가져오기
 const app = express();
 
+console.log(process.env.SERVER_PORT);
+
 // 필요한 미들웨어 연결
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

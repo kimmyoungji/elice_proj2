@@ -7,6 +7,7 @@ const users = new UsersModel(knex);
 const FulfilledHabitsModel = require("../db/models/fulfilledHabits");
 const fulfilledHabits = new FulfilledHabitsModel(knex);
 const { NotFoundError, INVALID_USER_Error } = require("../lib/custom-error");
+require('dotenv').config()
 
 class userService {
   static async getAccessToken(user) {
