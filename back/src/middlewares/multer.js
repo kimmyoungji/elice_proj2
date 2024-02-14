@@ -6,7 +6,7 @@ const fileFilter = require("./fileFilter");
 
 const storage = multerS3({
   s3: s3Client,
-  bucket: "turtine-image",
+  bucket: "turtine-image2",
   acl: "public-read-write",
   key: (req, file, cb) => {
     const key = `${dayjs().format()}-${file.originalname}`;
