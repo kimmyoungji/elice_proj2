@@ -8,6 +8,7 @@ const FulfilledHabitsModel = require("../db/models/fulfilledHabits");
 const fulfilledHabits = new FulfilledHabitsModel(knex);
 const { NotFoundError, INVALID_USER_Error } = require("../lib/custom-error");
 
+
 class userService {
   static async getAccessToken(user) {
     return jwt.sign(

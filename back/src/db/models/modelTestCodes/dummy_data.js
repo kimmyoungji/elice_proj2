@@ -1,6 +1,8 @@
 const knex = require("../../knex");
 const bcrypt = require("bcrypt");
 const dayjs = require("dayjs");
+
+
 async function makeDummyUsers(start, number) {
   const users = [];
   for (let i = start; i <= start + number; i++) {
@@ -17,6 +19,7 @@ async function makeDummyUsers(start, number) {
   }
   return users;
 }
+
 
 async function setDummyUserLevel(level, number) {
   for (let i = 1; i <= level; ++i) {
@@ -38,14 +41,18 @@ async function addDummyUsers(start, number) {
 
 async function addDummyFulfilledH(number) {
   const fHabitArr = [];
-  const randomUserIdPakets = await knex("users")
+  // 모든 dummy사용자 정보 가져오기
+  const randomUserIdPakets = await knex("users") 
     .select("user_id")
-    .where("email", "like", "%daedo.com");
-  const randUserIdArr = randomUserIdPakets.map((randUser) => randUser.user_id);
-  const userIdx = Math.floor(Math.random() * randUserIdArr.length);
+    .where("email", "like", "%dummy.com");
+  //유저아이디만 추출
+  const randUserIdArr = randomUserIdPakets.map((randUser) => randUser.user_id); 
+  // 모든 습관 정보 가져오기
   const habitIdPackets = await knex("habits").select("habit_id");
+  // 모든 습관 정보 아이디 가져오기
   const habitIds = habitIdPackets.map((habit) => habit.habit_id);
   for (let i = 0; i < number; i++) {
+    const userIdx = Math.floor(Math.random() * randUserIdArr.length);
     const habitIdIdx = Math.floor(Math.random() * habitIds.length);
     const start_date = getRandomDate(dayjs("2023-11-28"), dayjs(new Date()));
     const newFh = {

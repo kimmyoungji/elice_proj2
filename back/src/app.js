@@ -1,22 +1,16 @@
-require("dotenv").config();
+const dotenv = require("dotenv");
+const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const errorMiddleware = require("./middlewares/errorMiddleware");
-
-const knex = require("./db/knex");
 const testKnex = require("./db/models/modelTestCodes/knex_test");
-
 const {
   addDummyUsers,
   addDummyPlannedH,
   addDummyFulfilledH,
 } = require("./db/models/modelTestCodes/dummy_data");
-
-const {
-  dummy_fulfilled,
-  dummy_planned,
-} = require("./db/models/modelTestCodes/dummy_fulfilled");
+dotenv.config({path: path.resolve(__dirname,"../.env")})
 
 //라우터 가져오기
 const introRouter = require("./routers/introRouter");
@@ -44,8 +38,6 @@ app.use(
 
 // knex 연결 test
 testKnex();
-// dummy_planned();
-// dummy_fulfilled();
 // addDummyUsers(1, 200);
 // addDummyPlannedH(500);
 // addDummyFulfilledH(5000);
@@ -59,9 +51,4 @@ app.use("/fulfilled-habits", fulfilledHabitsRouter);
 // 에러처리 미들웨어
 app.use(errorMiddleware);
 
-// Start the Express server
-app.listen(process.env.SERVER_PORT, () => {
-  console.log(
-    `Server is running on http://localhost:${process.env.SERVER_PORT}`
-  );
-});
+module.exports = app;

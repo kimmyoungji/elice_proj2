@@ -1,9 +1,11 @@
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
+const path = require("path");
+const dotenv = require("dotenv");
 const UsersModel = require("../db/models/users");
 const knex = require("../db/knex");
 const users = new UsersModel(knex);
 const { UnauthorizedError } = require("../lib/custom-error");
+dotenv.config({path: path.resolve(__dirname,"../../.env")})
 
 async function isLoggedIn(req, res, next) {
   try {
