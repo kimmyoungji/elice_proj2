@@ -1,8 +1,8 @@
-const app = require('./src/app'); // src 폴더의 app.js 파일을 가져옴
 const path = require("path");
 const dotenv = require("dotenv");
+const app = require('./src/app'); // src 폴더의 app.js 파일을 가져옴
 dotenv.config({path: path.resolve(__dirname,".env")})
-global.__basedir = path.resolve(__dirname);
+
 const PORT = process.env.SERVER_PORT || 5002;
 
 // 서버를 지정된 포트로 시작

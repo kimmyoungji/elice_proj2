@@ -1,15 +1,16 @@
-require("dotenv").config();
+const dotenv = require("dotenv");
+const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const errorMiddleware = require("./middlewares/errorMiddleware");
 const testKnex = require("./db/models/modelTestCodes/knex_test");
-
 const {
   addDummyUsers,
   addDummyPlannedH,
   addDummyFulfilledH,
 } = require("./db/models/modelTestCodes/dummy_data");
+dotenv.config({path: path.resolve(__dirname,"../.env")})
 
 //라우터 가져오기
 const introRouter = require("./routers/introRouter");

@@ -1,5 +1,7 @@
+const dotenv = require("dotenv");
+const path = require("path");
 const { S3Client } = require("@aws-sdk/client-s3");
-require('dotenv').config()
+dotenv.config({ path: path.resolve(__dirname,"../../.env") })
 
 module.exports = new S3Client({
   region: "ap-northeast-2",
