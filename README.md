@@ -10,9 +10,8 @@
 [1. 프로젝트 소개](#1-프로젝트-소개)<br/>
 [2. 프로젝트 사용도구 및 데이터](#2-프로젝트-사용도구-및-데이터)<br/>
 [3. 프로젝트 기능 설명](#3-프로젝트-기능-설명)<br/>
-[4. 프로젝트 구성도](#4-프로젝트-구성도)<br/>
-[5. 프로젝트 팀원 역할 분담](#5-프로젝트-팀원-역할-분담)<br/>
-[6. 버전](#6-버전)<br/>
+[4. 프로젝트 팀원 역할 분담](#5-프로젝트-팀원-역할-분담)<br/>
+[5. 버전](#6-버전)<br/>
 
 <br/>
 
@@ -29,70 +28,59 @@
 
 ## 2. 프로젝트 사용도구 및 데이터
 ### 사용 도구 <br/>
- - 데이터분석: 
-  <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=Python&logoColor=white"/> <br/>
+ - 데이터분석: <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=Python&logoColor=white"/>
   
- - Front-end: 
-   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"/>
-   <img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=black"/> <br/>
+ - Front-end: <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"/> <img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=black"/>
 
- - Back-end: 
-   <img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white"/>
-   <img src="https://img.shields.io/badge/Express-000000?style=flat-square&logo=Express&logoColor=white"/>
-   <img src="https://img.shields.io/badge/mysql-4479A1?style=flat-square&logo=mysql&logoColor=white"/> <br/>
+ - Back-end: <img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white"/> <img src="https://img.shields.io/badge/Express-000000?style=flat-square&logo=Express&logoColor=white"/> <img src="https://img.shields.io/badge/mysql-4479A1?style=flat-square&logo=mysql&logoColor=white"/>
 
-### 사용 라이브러리 <br/>
- - 데이터분석: 
-   <img src="https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas&logoColor=white"/>
-   <img src="https://img.shields.io/badge/matplotlib-0ABF53?style=flat-square&logo=multer&logoColor=white"/> <br/>
+### 사용 라이브러리
+ - 데이터분석: <img src="https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas&logoColor=white"/> <img src="https://img.shields.io/badge/matplotlib-0ABF53?style=flat-square&logo=multer&logoColor=white"/>
 
- - Front-end: 
-   <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=flat-square&logo=Bootstrap&logoColor=white"/>
-   <img src="https://img.shields.io/badge/fullcalendar-7F2B7B?style=flat-square&logo=fullcalendar&logoColor=white"/> <br/>
+ - Front-end: <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=flat-square&logo=Bootstrap&logoColor=white"/> <img src="https://img.shields.io/badge/fullcalendar-7F2B7B?style=flat-square&logo=fullcalendar&logoColor=white"/>
 
- - Back-end: 
-   <img src="https://img.shields.io/badge/multer-FF9E0F?style=flat-square&logo=multer&logoColor=white"/>
-   <img src="https://img.shields.io/badge/amazons3-569A31?style=flat-square&logo=amazons3&logoColor=white"/> <br/>
+ - Back-end: <img src="https://img.shields.io/badge/multer-FF9E0F?style=flat-square&logo=multer&logoColor=white"/> <img src="https://img.shields.io/badge/amazons3-569A31?style=flat-square&logo=amazons3&logoColor=white"/>
   
 ### 데이터셋
- 세계 플라스틱 폐기물 발생량 순위 (한국 순위 초점), 국내 전체 폐기물 중, 플라스틱 폐기물 비중 <br/>
+ 세계 플라스틱 폐기물 발생량 순위 (한국 순위 초점), 국내 전체 폐기물 중, 플라스틱 폐기물 비중
 
 <br/>
 
 ## 3. 프로젝트 기능 설명
 
   ### 주요 기능 (주된 활용성) 및 서브 기능
-  **1. 메인페이지**<br/>
+  **1. 메인페이지**
     - offset 기반 스크롤 애니메이션 설정
+  <img src="./demo_img/intro_page.gif" width="800px">
 
-  **2. 회원가입 & 로그인**<br/>
-    - 이메일, 닉네임 중복 확인<br/>
-    - 로그인 시, token 및 cookie로 유저 인증
+  **2. 회원가입 & 로그인**
+    - 이메일, 닉네임 중복 확인
+    - 로컬로그인, JWT토큰을 cookie로 저장
+  <img src="./demo_img/login_page.gif" width="800px">
 
-  **3. 프로필**<br/>
-    - 회원 탈퇴 기능<br/>
-    - 닉네임 변경 가능 및 중복 확인<br/>
+  **3. 프로필**
+    - 회원 탈퇴 기능
+    - 닉네임 변경 가능 및 중복 확인
     - multer-s3를 이용한 프로필 이미지 업로드, filereader api를 이용한 미리보기 구현
+   <img src="./demo_img/myinfo_page.gif" width="800px">
 
-  **4. 습관페이지**<br/>
-    - 상태관리를 통한 습관 create, update 및 read, checked 구현<br/>
+  **4. 습관페이지**
+    - 상태관리를 통한 습관 create, update 및 read, checked 구현
     - Query문으로 데이터 취합, 유저 등급 책정 및 캐릭터화
+  <img src="./demo_img/dailyHabit_page.gif" width="800px">
 
-  **5. 캘린더**<br/>
-    - FullCalendar 라이브러리 이용하여 습관 완료 일자 시각화<br/>
+  **5. 캘린더**
+    - FullCalendar 라이브러리 이용하여 습관 완료 일자 시각화
     - Recharts 라이브러리 이용하여 주간 달성 현황 차트화
+  <img src="./demo_img/calender_page.gif" width="800px">
 
-  **6. 커뮤니티**<br/>
-    - 랜덤 유저의 등급을 캐릭터로 노출<br/><br/>
+  **6. 커뮤니티**
+    - 랜덤 유저의 등급을 캐릭터로 노출
+  <img src="./demo_img/community_page.gif" width="800px">
 
-  
-  ### 프로젝트만의 차별점, 기대 효과
-  - 쉽게 실천 가능한 습관 예시 제공으로 진입장벽 해소<br/>
-  - 습관 달성 정도에 따른 등급 상승으로 동기 부여<br/>
-  - 지속 기간 설정으로 습관 형성 유도<br/>
+<br/>
 
-
-## 5. 프로젝트 팀원 역할 분담
+## 4. 프로젝트 팀원 역할 분담
 | 이름 | 담당 업무 | 상세 | 
 | ------ | ------ | ---- | 
 | 양민정 | 팀장/프론트엔드 개발 | 캐릭터디자인 / 개인정보페이지 구현 / 이미지업로드기능구현 / 커뮤니티페이지 구현 |
@@ -101,7 +89,7 @@
 | 김명지 | 백엔드 개발 | 로컬로그인 구현 / userMVP 구현 / planned_habits_MVP구현 / RDS생성및 연결 / 트랜젝션 추가 |
 | 김혜연| 백엔드 개발/데이터 분석 | fulfilled_habits_MVP구현 / S3이미지업로드 기능 구현 |
 
-## 6. 버전
+## 5. 버전
   - 0.0.1
 
 
