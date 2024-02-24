@@ -47,36 +47,35 @@
 <br/>
 
 ## 3. 프로젝트 기능 설명
+### 주요 기능 (주된 활용성) 및 서브 기능
+#### **1. 메인페이지**
+- offset 기반 스크롤 애니메이션 설정
+<img src="./demo_img/intro_page.gif" width="800px">
 
-  ### 주요 기능 (주된 활용성) 및 서브 기능
-  **1. 메인페이지**
-    - offset 기반 스크롤 애니메이션 설정
-  <img src="./demo_img/intro_page.gif" width="800px">
+#### **2. 회원가입 & 로그인**
+- 이메일, 닉네임 중복 확인
+- 로컬로그인, JWT토큰을 cookie로 저장
+<img src="./demo_img/login_page.gif" width="800px">
 
-  **2. 회원가입 & 로그인**
-    - 이메일, 닉네임 중복 확인
-    - 로컬로그인, JWT토큰을 cookie로 저장
-  <img src="./demo_img/login_page.gif" width="800px">
+#### **3. 프로필**
+- 회원 탈퇴 기능
+- 닉네임 변경 가능 및 중복 확인
+- multer-s3를 이용한 프로필 이미지 업로드, filereader api를 이용한 미리보기 구현
+<img src="./demo_img/myinfo_page.gif" width="800px">
 
-  **3. 프로필**
-    - 회원 탈퇴 기능
-    - 닉네임 변경 가능 및 중복 확인
-    - multer-s3를 이용한 프로필 이미지 업로드, filereader api를 이용한 미리보기 구현
-   <img src="./demo_img/myinfo_page.gif" width="800px">
+#### **4. 습관페이지**
+- 상태관리를 통한 습관 create, update 및 read, checked 구현
+- Query문으로 데이터 취합, 유저 등급 책정 및 캐릭터화
+<img src="./demo_img/dailyHabit_page.gif" width="800px">
 
-  **4. 습관페이지**
-    - 상태관리를 통한 습관 create, update 및 read, checked 구현
-    - Query문으로 데이터 취합, 유저 등급 책정 및 캐릭터화
-  <img src="./demo_img/dailyHabit_page.gif" width="800px">
+#### **5. 캘린더**
+- FullCalendar 라이브러리 이용하여 습관 완료 일자 시각화
+- Recharts 라이브러리 이용하여 주간 달성 현황 차트화
+<img src="./demo_img/calender_page.gif" width="800px">
 
-  **5. 캘린더**
-    - FullCalendar 라이브러리 이용하여 습관 완료 일자 시각화
-    - Recharts 라이브러리 이용하여 주간 달성 현황 차트화
-  <img src="./demo_img/calender_page.gif" width="800px">
-
-  **6. 커뮤니티**
-    - 랜덤 유저의 등급을 캐릭터로 노출
-  <img src="./demo_img/community_page.gif" width="800px">
+#### **6. 커뮤니티**
+- 랜덤 유저의 등급을 캐릭터로 노출
+<img src="./demo_img/community_page.gif" width="800px">
 
 <br/>
 
@@ -86,7 +85,7 @@
 | 양민정 | 팀장/프론트엔드 개발 | 캐릭터디자인 / 개인정보페이지 구현 / 이미지업로드기능구현 / 커뮤니티페이지 구현 |
 | 전성혜 | 프론트엔드 개발 | 로그인페이지구현 |
 | 최유림 | 프론트엔드 개발/데이터 분석 | 습관선택페이지 구현 / 달성습관조회페이지 구현 |
-| 김명지 | 백엔드 개발 | 로컬로그인 구현 / userMVP 구현 / planned_habits_MVP구현 / RDS생성및 연결 / 트랜젝션 추가 |
+| 김명지 | 백엔드 개발 | 로컬로그인 구현 / userMVP 구현 / planned_habits_MVP구현 / RDS생성및 연결 / 트랜젝션 추가 / 커뮤니티페이지 쿼리최적화|
 | 김혜연| 백엔드 개발/데이터 분석 | fulfilled_habits_MVP구현 / S3이미지업로드 기능 구현 |
 
 ## 5. 버전
