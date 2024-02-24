@@ -1,4 +1,4 @@
-# 🐢 TURTINE
+# 🐢 TURTINE: 플라스택 사용을 줄이는 환경 습관 형성앱
 
 
   **TURTINE**은 turtle과 routine의 합성어로, 거북이처럼 느려도 환경을 위한 습관을 형성해 나가자는 뜻입니다.<br/>
@@ -8,61 +8,56 @@
 ## 프로젝트 구성 안내
 ### **목차**<br/>
 [1. 프로젝트 소개](#1-프로젝트-소개)<br/>
-[2. 프로젝트 목표](#2-프로젝트-목표)<br/>
+[2. 프로젝트 사용도구 및 데이터](#2-프로젝트-사용도구-및-데이터)<br/>
 [3. 프로젝트 기능 설명](#3-프로젝트-기능-설명)<br/>
 [4. 프로젝트 구성도](#4-프로젝트-구성도)<br/>
 [5. 프로젝트 팀원 역할 분담](#5-프로젝트-팀원-역할-분담)<br/>
 [6. 버전](#6-버전)<br/>
 
-## 1. 프로젝트 소개
+<br/>
 
-### 기술 스택 <br/>
- - 데이터분석 <br/>
+## 1. 프로젝트 소개
+### 1) turtine이란? 
+- 국내 플라스틱 사용량을 줄이기위한, 환경습관형성 앱
+### 2) 해결하고자 하는 과제 및 목표
+- 플라스틱 배출량을 줄이는 환경습관을 형성할 수 있도록 도와주는 서비스 구현하기
+### 3) 프로젝트 차별점
+- **캐릭터 활용**: 플라스틱에 고통받는 해양생물 중 바다거북을 메인 캐릭터로 채용하여 진입장벽 최소화 및 친근감 형성
+- **챌린지 형식**: 최근 트렌드인  "GOD生"살기, 챌린지등의 컨텐츠와 접목하여 환경 보호도 갓생의 일부로 정착할 수 있도록 시도
+
+<br/>
+
+## 2. 프로젝트 사용도구 및 데이터
+### 사용 도구 <br/>
+ - 데이터분석: 
   <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=Python&logoColor=white"/> <br/>
   
- - Front-end <br/>
+ - Front-end: 
    <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"/>
    <img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=black"/> <br/>
 
- - Back-end <br/>
+ - Back-end: 
    <img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white"/>
    <img src="https://img.shields.io/badge/Express-000000?style=flat-square&logo=Express&logoColor=white"/>
    <img src="https://img.shields.io/badge/mysql-4479A1?style=flat-square&logo=mysql&logoColor=white"/> <br/>
 
-### 라이브러리 <br/>
- - 데이터분석 <br/>
+### 사용 라이브러리 <br/>
+ - 데이터분석: 
    <img src="https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas&logoColor=white"/>
    <img src="https://img.shields.io/badge/matplotlib-0ABF53?style=flat-square&logo=multer&logoColor=white"/> <br/>
 
- - Front-end <br/>
+ - Front-end: 
    <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=flat-square&logo=Bootstrap&logoColor=white"/>
    <img src="https://img.shields.io/badge/fullcalendar-7F2B7B?style=flat-square&logo=fullcalendar&logoColor=white"/> <br/>
 
- - Back-end <br/>
+ - Back-end: 
    <img src="https://img.shields.io/badge/multer-FF9E0F?style=flat-square&logo=multer&logoColor=white"/>
    <img src="https://img.shields.io/badge/amazons3-569A31?style=flat-square&logo=amazons3&logoColor=white"/> <br/>
   
 ### 데이터셋
  세계 플라스틱 폐기물 발생량 순위 (한국 순위 초점), 국내 전체 폐기물 중, 플라스틱 폐기물 비중 <br/>
 
-
-
-## 2. 프로젝트 목표
-
-  ### 데이터를 통해 도출된 인사이트
-  - 세계 플라스틱 배출량 데이터: 우리나라가 인구수 및 국가 면적 대비 상위권(n위)에 위치함을 확인
-  - 국내 쓰레기 분류별 배출량 데이터: 국내에서 배출되는 쓰레기 중 플라스틱이 n%을 차지함을 확인
-
-  ### 해결하고자 하는 과제 및 목표
-  **국내 플라스틱 폐기물 배출량의 감소**<br/>
-  - 최대한 많은 사람들이 해당 앱을 통해 국내 플라스틱 배출량 감소에 동참할 수 있도록 함
-  - 보다 친환경적인 행위들이 자연스레 습관으로 굳어질 수 있도록 함
-
-  ### 프로젝트 아이디어
-  - 플라스틱에 고통받는 해양생물 중 바다거북을 메인 캐릭터로 채용하여 진입장벽 최소화 및 친근감 형성
-  - 최근 트렌드인  "GOD生"살기, 챌린지등의 컨텐츠와 접목하여 환경 보호도 갓생의 일부로 정착할 수 있도록 시도
-
-
+<br/>
 
 ## 3. 프로젝트 기능 설명
 
@@ -97,45 +92,14 @@
   - 지속 기간 설정으로 습관 형성 유도<br/>
 
 
-## 4. 프로젝트 구성도
-### 메인페이지
-![서비스소개](/uploads/13688b812645cdd86d8f85e267386a0a/서비스소개.png)<br/>
-### 회원가입 & 로그인 & 프로필
-![login](/uploads/9198a4d834ac532964c96b301480a9aa/login.png)<br/>
-### 습관페이지
-![traking](/uploads/29735e5b9315364f427333a79f57e30a/traking.png)<br/>
-### 캘린더 / 커뮤니티
-![etc](/uploads/cc183557cf56009e1788ccfb7e47cae0/etc.png)<br/>
-
-
 ## 5. 프로젝트 팀원 역할 분담
-| 이름 | 담당 업무 |
-| ------ | ------ |
-| 양민정 | 팀장/프론트엔드 개발 |
-| 전성혜 | 프론트엔드 개발 |
-| 최유림 | 프론트엔드 개발/데이터 분석 |
-| 김명지 | 백엔드 개발 |
-| 김혜연| 백엔드 개발/데이터 분석 |
-
-**멤버별 responsibility**
-
-1. 팀장 
-
-- 기획 단계: 구체적인 설계와 지표에 따른 프로젝트 제안서 작성
-- 개발 단계: 팀원간의 일정 등 조율 + 프론트 개발
-- 수정 단계: 기획, 스크럼 진행, 코치님 피드백 반영해서 수정
-
-2. 프론트엔드 
-
-- 기획 단계: 큰 주제에서 문제 해결 아이디어 도출, 데이터 수집, 와이어프레임 작성
-- 개발 단계: 와이어프레임을 기반으로 구현, 데이터 처리 및 시각화 담당, UI 디자인 완성
-- 수정 단계: 피드백 반영해서 프론트 디자인 수정
-
- 3. 백엔드 & 데이터 담당  
-
-- 기획 단계: 기획 데이터 분석을 통해 해결하고자 하는 문제를 정의
-- 개발 단계: 웹 서버 사용자가 직접 백엔드에 저장할수 있는 기능 구현, 데이터 베이스 구축 및 API 활용, 데이터 분석 개념 총동원하기
-- 수정 단계: 코치님 피드백 반영해서 분석 / 시각화 방식 수정<br/>
+| 이름 | 담당 업무 | 상세 | 
+| ------ | ------ | ---- | 
+| 양민정 | 팀장/프론트엔드 개발 | 캐릭터디자인 / 개인정보페이지 구현 / 이미지업로드기능구현 / 커뮤니티페이지 구현 |
+| 전성혜 | 프론트엔드 개발 | 로그인페이지구현 |
+| 최유림 | 프론트엔드 개발/데이터 분석 | 습관선택페이지 구현 / 달성습관조회페이지 구현 |
+| 김명지 | 백엔드 개발 | 로컬로그인 구현 / userMVP 구현 / planned_habits_MVP구현 / RDS생성및 연결 / 트랜젝션 추가 |
+| 김혜연| 백엔드 개발/데이터 분석 | fulfilled_habits_MVP구현 / S3이미지업로드 기능 구현 |
 
 ## 6. 버전
   - 0.0.1
